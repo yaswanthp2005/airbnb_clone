@@ -22,4 +22,7 @@ export const apiRoutes = {
   health: "/health",
   healthEcho: "/health/echo",
   healthNotFound: "/health/__not_found__",
+  authRegister: "/auth/register",
+  authLogin: "/auth/login",
+  authMe: "/auth/me",
 } as const;

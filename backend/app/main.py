@@ -8,6 +8,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.config import settings
 from app.core.init_db import init_database
+from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
 
 
@@ -33,6 +34,7 @@ app.add_middleware(
 )
 
 app.include_router(health_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1")
 
 
 @app.exception_handler(StarletteHTTPException)

@@ -8,7 +8,9 @@ import { toast } from "sonner";
 import { t } from "@/common/i18n";
 import { API_BASE_URL } from "@/constants";
 import { camelToSnake } from "@/utils/camelToSnake";
-import { clearAuthStorage, getAuthToken } from "@/utils/storage";
+import { notifyUnauthorized } from "@/utils/authEvents";
+import { clearAuthSession } from "@/utils/authSession";
+import { getAuthToken } from "@/utils/storage";
 import { snakeToCamel } from "@/utils/snakeToCamel";
 
 declare module "axios" {
@@ -83,7 +85,16 @@ const getErrorMessage = (error: AxiosError<{ message?: string }>): string => {
 
 const handleErrorResponse = (error: AxiosError): Promise<never> => {
   if (error.response?.status === 401) {
-    clearAuthStorage();
+    const requestUrl = error.config?.url ?? "";
+    const isAuthAttempt =
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/register");
+
+    clearAuthSession();
+
+    if (!isAuthAttempt) {
+      notifyUnauthorized();
+    }
   }
 
   if (error.response?.data && !(error.response.data instanceof Blob)) {
