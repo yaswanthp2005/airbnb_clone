@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,9 +7,21 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.core.config import settings
+from app.core.init_db import init_database
 from app.routers.health import router as health_router
 
-app = FastAPI(title=settings.app_name, debug=settings.debug)
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_database()
+    yield
+
+
+app = FastAPI(
+    title=settings.app_name,
+    debug=settings.debug,
+    lifespan=lifespan,
+)
 
 origins = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
 app.add_middleware(
