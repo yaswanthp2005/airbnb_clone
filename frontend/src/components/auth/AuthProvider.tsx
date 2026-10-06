@@ -67,7 +67,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     if (isMeError && hasToken) {
       clearAuthSession();
-      setTokenVersion(version => version + 1);
     }
   }, [hasToken, isMeError]);
 
@@ -115,7 +114,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [closeAuthModal, logoutMutation]);
 
   const isBootstrapping = hasToken && isMeLoading && !user;
-  const isAuthenticated = hasToken && Boolean(user);
+  const isAuthenticated = hasToken && Boolean(user) && !isMeError;
 
   const value = useMemo<AuthContextValue>(
     () => ({

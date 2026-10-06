@@ -9,6 +9,9 @@ export const routes = {
   wishlists: `${BASE}/wishlists`,
   hosting: `${BASE}/hosting`,
   account: `${BASE}/account`,
+  messages: `${BASE}/messages`,
+  identityVerification: `${BASE}/identity-verification`,
+  comingSoon: `${BASE}/coming-soon/:slug`,
 } as const;
 
 export const listingRoute = (listingId: string | number) =>
@@ -16,6 +19,9 @@ export const listingRoute = (listingId: string | number) =>
 
 export const bookingRoute = (bookingId: string | number) =>
   `${BASE}/bookings/${bookingId}`;
+
+export const comingSoonRoute = (slug: string) =>
+  routes.comingSoon.replace(":slug", encodeURIComponent(slug));
 
 /** Paths relative to `NEXT_PUBLIC_API_BASE_URL` (include leading segment only). */
 export const apiRoutes = {

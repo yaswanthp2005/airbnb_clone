@@ -1,9 +1,10 @@
-import HealthClientDemo from "@/components/health/HealthClientDemo";
+import PageContainer from "@/components/layout/PageContainer";
+import ListingGridSkeleton from "@/components/listings/ListingGridSkeleton";
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col">
-      <HealthClientDemo />
-    </main>
+    <PageContainer className="pb-16 pt-6">
+      <ListingGridSkeleton />
+    </PageContainer>
   );
 }

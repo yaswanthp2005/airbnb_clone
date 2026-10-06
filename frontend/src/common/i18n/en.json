@@ -1,15 +1,102 @@
 {
   "common": {
     "appName": "Airbnb Clone",
+    "brandName": "airbnb",
     "loading": "Loading…",
     "cancel": "Cancel",
     "save": "Save",
     "somethingWentWrong": "Something went wrong. Please try again."
   },
   "nav": {
+    "stays": "Stays",
     "hostYourHome": "Airbnb your home",
+    "switchToHosting": "Switch to hosting",
+    "languageAndRegion": "Choose a language and region",
+    "mainMenu": "Main navigation menu",
     "trips": "Trips",
-    "wishlists": "Wishlists"
+    "wishlists": "Wishlists",
+    "messages": "Messages",
+    "account": "Account",
+    "identityVerification": "Identity verification",
+    "helpCentre": "Help Centre",
+    "logIn": "Log in",
+    "signUp": "Sign up",
+    "logOut": "Log out"
+  },
+  "search": {
+    "anywhere": "Anywhere",
+    "anyWeek": "Any week",
+    "addGuests": "Add guests",
+    "search": "Search"
+  },
+  "categories": {
+    "label": "Categories",
+    "scrollLeft": "Previous categories",
+    "scrollRight": "Next categories",
+    "filters": "Filters",
+    "trending": "Trending",
+    "beachfront": "Beachfront",
+    "cabins": "Cabins",
+    "amazingViews": "Amazing views",
+    "villas": "Villas",
+    "treehouses": "Treehouses",
+    "farms": "Farms",
+    "rooms": "Rooms",
+    "camping": "Camping",
+    "lake": "Lake",
+    "amazingPools": "Amazing pools",
+    "houseboats": "Houseboats",
+    "heritage": "Heritage",
+    "mansions": "Mansions",
+    "countryside": "Countryside",
+    "tropical": "Tropical",
+    "skiing": "Skiing",
+    "islands": "Islands",
+    "desert": "Desert",
+    "arctic": "Arctic"
+  },
+  "footer": {
+    "support": "Support",
+    "hosting": "Hosting",
+    "company": "Airbnb",
+    "links": {
+      "helpCentre": "Help Centre",
+      "airCover": "AirCover",
+      "antiDiscrimination": "Anti-discrimination",
+      "disabilitySupport": "Disability support",
+      "cancellationOptions": "Cancellation options",
+      "neighbourhoodConcern": "Report neighbourhood concern",
+      "hostYourHome": "Airbnb your home",
+      "airCoverForHosts": "AirCover for Hosts",
+      "hostingResources": "Hosting resources",
+      "communityForum": "Community forum",
+      "hostingResponsibly": "Hosting responsibly",
+      "hostingClass": "Join a free Hosting class",
+      "newsroom": "Newsroom",
+      "newFeatures": "New features",
+      "careers": "Careers",
+      "investors": "Investors",
+      "emergencyStays": "Airbnb.org emergency stays"
+    },
+    "copyright": "© {{year}} Airbnb Clone, Inc.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "sitemap": "Sitemap",
+    "companyDetails": "Company details",
+    "language": "English (IN)",
+    "currency": "₹ INR"
+  },
+  "comingSoon": {
+    "title": "Coming soon",
+    "description": "We're still building this part of the experience. Check back shortly.",
+    "messagesTitle": "Messages",
+    "messagesDescription": "Chat with hosts and guests about your trips. Messaging is coming soon.",
+    "identityTitle": "Identity verification",
+    "identityDescription": "Verify your identity to book and host with confidence. This feature is coming soon.",
+    "backHome": "Back to home"
+  },
+  "home": {
+    "listingsLoading": "Loading stays"
   },
   "auth": {
     "signIn": "Sign in",
@@ -57,12 +144,5 @@
     "unauthorized": "You need to sign in to continue",
     "validationFailed": "Validation failed",
     "network": "Network error. Check your connection."
-  },
-  "dev": {
-    "healthTitle": "API client checks",
-    "healthStatus": "Status: {{status}} · {{appName}}",
-    "triggerSuccessToast": "Test success toast (POST echo)",
-    "triggerErrorToast": "Test error toast",
-    "echoResult": "Echo sample field: {{value}}"
   }
 }
