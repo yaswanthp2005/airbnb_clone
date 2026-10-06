@@ -27,7 +27,46 @@
     "anywhere": "Anywhere",
     "anyWeek": "Any week",
     "addGuests": "Add guests",
-    "search": "Search"
+    "search": "Search",
+    "where": "Where",
+    "when": "When",
+    "who": "Who",
+    "searchDestinations": "Search destinations",
+    "addDates": "Add dates",
+    "clear": "Clear",
+    "suggestedDestinations": "Suggested destinations",
+    "suggestionTitle": "{{city}}, {{state}}",
+    "staysCountOne": "1 stay",
+    "staysCountOther": "{{count}} stays",
+    "noMatches": "No destinations match “{{query}}”",
+    "popular": {
+      "goa": "For beaches and nightlife",
+      "jaipur": "For sights like Hawa Mahal",
+      "manali": "Great for mountain escapes",
+      "udaipur": "For lakeside palaces",
+      "kochi": "For backwaters and seafood",
+      "rishikesh": "For yoga and river rafting"
+    },
+    "guests": {
+      "adults": "Adults",
+      "adultsDescription": "Ages 13 or above",
+      "children": "Children",
+      "childrenDescription": "Ages 2–12",
+      "infants": "Infants",
+      "infantsDescription": "Under 2",
+      "pets": "Pets",
+      "petsDescription": "Don't count towards guests",
+      "decrease": "Decrease {{label}}",
+      "increase": "Increase {{label}}"
+    },
+    "summary": {
+      "guestsOne": "1 guest",
+      "guestsOther": "{{count}} guests",
+      "infantsOne": "1 infant",
+      "infantsOther": "{{count}} infants",
+      "petsOne": "1 pet",
+      "petsOther": "{{count}} pets"
+    }
   },
   "categories": {
     "label": "Categories",

@@ -37,7 +37,23 @@ export type ListingFilters = {
   propertyType: string[];
   amenities: number[];
   bedrooms?: number;
+  location?: string;
+  /** `yyyy-MM-dd` */
+  checkIn?: string;
+  /** `yyyy-MM-dd` */
+  checkOut?: string;
+  adults?: number;
+  children?: number;
+  infants?: number;
+  pets?: number;
   sort?: ListingSort;
+};
+
+export type LocationSuggestion = {
+  city: string;
+  state: string;
+  country: string;
+  listingCount: number;
 };
 
 export type Amenity = {

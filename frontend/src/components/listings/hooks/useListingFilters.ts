@@ -9,6 +9,10 @@ import { buildUrl } from "@/utils/buildUrl";
 
 import { filtersFromSearchParams, filtersToQuery } from "../utils";
 
+type SetFiltersOptions = {
+  scrollToTop?: boolean;
+};
+
 export const useListingFilters = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,10 +23,10 @@ export const useListingFilters = () => {
   );
 
   const setFilters = useCallback(
-    (nextFilters: ListingFilters) => {
+    (nextFilters: ListingFilters, { scrollToTop = false }: SetFiltersOptions = {}) => {
       router.push(
         buildUrl({ path: routes.home, query: filtersToQuery(nextFilters) }),
-        { scroll: false },
+        { scroll: scrollToTop },
       );
     },
     [router],

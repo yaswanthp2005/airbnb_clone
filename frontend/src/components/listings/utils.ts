@@ -1,5 +1,8 @@
+import { isAfter } from "date-fns";
+
 import { LISTING_FILTER_PARAMS } from "@/constants";
 import type { ListingFilters } from "@/types/listing";
+import { fromDateParam } from "@/utils/dateParam";
 
 type ReadableSearchParams = Pick<URLSearchParams, "get">;
 
@@ -21,6 +24,18 @@ const uniqueSorted = <T extends string | number>(values: T[]): T[] =>
   [...new Set(values)].sort((first, second) =>
     String(first).localeCompare(String(second), undefined, { numeric: true }),
   );
+
+const parseStayDates = (searchParams: ReadableSearchParams) => {
+  const checkIn = searchParams.get(LISTING_FILTER_PARAMS.checkIn);
+  const checkOut = searchParams.get(LISTING_FILTER_PARAMS.checkOut);
+  const checkInDate = fromDateParam(checkIn);
+  const checkOutDate = fromDateParam(checkOut);
+
+  if (!checkInDate || !checkOutDate || !isAfter(checkOutDate, checkInDate)) {
+    return { checkIn: undefined, checkOut: undefined };
+  }
+  return { checkIn: checkIn ?? undefined, checkOut: checkOut ?? undefined };
+};
 
 export const filtersFromSearchParams = (
   searchParams: ReadableSearchParams,
@@ -45,11 +60,24 @@ export const filtersFromSearchParams = (
         .filter(id => Number.isInteger(id) && id > 0),
     ),
     bedrooms: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.bedrooms)),
+    location: searchParams.get(LISTING_FILTER_PARAMS.location)?.trim() || undefined,
+    ...parseStayDates(searchParams),
+    adults: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.adults)),
+    children: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.children)),
+    infants: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.infants)),
+    pets: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.pets)),
   };
 };
 
 /** Query object for `buildUrl`; camelCase keys become the snake_case URL params. */
 export const filtersToQuery = (filters: ListingFilters) => ({
+  location: filters.location,
+  checkIn: filters.checkIn,
+  checkOut: filters.checkOut,
+  adults: filters.adults,
+  children: filters.children,
+  infants: filters.infants,
+  pets: filters.pets,
   category: filters.category,
   minPrice: filters.minPrice,
   maxPrice: filters.maxPrice,
@@ -63,6 +91,26 @@ export const countActiveFilters = (filters: ListingFilters): number =>
   filters.propertyType.length +
   filters.amenities.length +
   Number(filters.bedrooms !== undefined);
+
+export const hasSearchCriteria = (filters: ListingFilters): boolean =>
+  Boolean(
+    filters.location ||
+      filters.checkIn ||
+      filters.adults ||
+      filters.children ||
+      filters.infants ||
+      filters.pets,
+  );
+
+/** Resets what the Filters modal controls, keeping category and the search bar's values. */
+export const clearModalFilters = (filters: ListingFilters): ListingFilters => ({
+  ...filters,
+  minPrice: undefined,
+  maxPrice: undefined,
+  propertyType: [],
+  amenities: [],
+  bedrooms: undefined,
+});
 
 export const toggleValue = <T>(values: T[], value: T): T[] =>
   values.includes(value)

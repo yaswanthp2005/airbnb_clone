@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from enum import Enum
 from typing import Any, Optional
 
@@ -7,6 +8,10 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 
 DEFAULT_PAGE_SIZE = 20
 MAX_PAGE_SIZE = 50
+MAX_GUESTS = 50
+MAX_LOCATION_LENGTH = 100
+DEFAULT_LOCATION_SUGGESTIONS = 6
+MAX_LOCATION_SUGGESTIONS = 20
 
 
 class ListingSort(str, Enum):
@@ -37,6 +42,10 @@ class ListingFilterParams(BaseModel):
     property_type: list[str] = Field(default_factory=list)
     amenities: list[int] = Field(default_factory=list)
     bedrooms: Optional[int] = Field(default=None, ge=1, le=50)
+    location: Optional[str] = Field(default=None, max_length=MAX_LOCATION_LENGTH)
+    check_in: Optional[date] = None
+    check_out: Optional[date] = None
+    guests: Optional[int] = Field(default=None, ge=1, le=MAX_GUESTS)
     sort: ListingSort = ListingSort.recommended
     page: int = Field(default=1, ge=1)
     page_size: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE)
@@ -45,6 +54,13 @@ class ListingFilterParams(BaseModel):
     @classmethod
     def parse_csv(cls, value: Any) -> Any:
         return _split_csv(value)
+
+    @field_validator("location", mode="before")
+    @classmethod
+    def blank_location_to_none(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            return value.strip() or None
+        return value
 
     @model_validator(mode="after")
     def check_price_range(self) -> "ListingFilterParams":
@@ -55,6 +71,37 @@ class ListingFilterParams(BaseModel):
         ):
             raise ValueError("min_price must be less than or equal to max_price")
         return self
+
+    @model_validator(mode="after")
+    def check_dates(self) -> "ListingFilterParams":
+        if (self.check_in is None) != (self.check_out is None):
+            raise ValueError("check_in and check_out must be provided together")
+        if self.check_in and self.check_out and self.check_out <= self.check_in:
+            raise ValueError("check_out must be after check_in")
+        return self
+
+
+class LocationSuggestionParams(BaseModel):
+    q: str = Field(default="", max_length=MAX_LOCATION_LENGTH)
+    limit: int = Field(
+        default=DEFAULT_LOCATION_SUGGESTIONS, ge=1, le=MAX_LOCATION_SUGGESTIONS
+    )
+
+    @field_validator("q", mode="before")
+    @classmethod
+    def strip_query(cls, value: Any) -> Any:
+        return value.strip() if isinstance(value, str) else value
+
+
+class LocationSuggestion(BaseModel):
+    city: str
+    state: str
+    country: str
+    listing_count: int
+
+
+class LocationSuggestionsResponse(BaseModel):
+    data: list[LocationSuggestion]
 
 
 class FilterOptionsParams(BaseModel):

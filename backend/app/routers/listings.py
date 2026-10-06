@@ -10,9 +10,15 @@ from app.schemas.listing import (
     ListingCardOut,
     ListingFilterOptionsResponse,
     ListingFilterParams,
+    LocationSuggestionParams,
+    LocationSuggestionsResponse,
 )
 from app.schemas.pagination import PaginatedResponse
-from app.services.listing_service import get_filter_options, list_listings
+from app.services.listing_service import (
+    get_filter_options,
+    list_listings,
+    suggest_locations,
+)
 
 router = APIRouter(prefix="/listings", tags=["listings"])
 
@@ -32,3 +38,11 @@ def filter_options(
     db: Session = Depends(get_db_session),
 ) -> ListingFilterOptionsResponse:
     return ListingFilterOptionsResponse(data=get_filter_options(db, params.category))
+
+
+@router.get("/locations", response_model=LocationSuggestionsResponse)
+def locations(
+    params: Annotated[LocationSuggestionParams, Query()],
+    db: Session = Depends(get_db_session),
+) -> LocationSuggestionsResponse:
+    return LocationSuggestionsResponse(data=suggest_locations(db, params))
