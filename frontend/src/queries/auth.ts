@@ -57,6 +57,7 @@ export const useLogout = () => {
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: queryKeys.auth.all });
       queryClient.removeQueries({ queryKey: queryKeys.bookings.all });
+      queryClient.removeQueries({ queryKey: queryKeys.wishlist.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
     },
   });

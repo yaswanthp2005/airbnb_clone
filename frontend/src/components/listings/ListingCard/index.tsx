@@ -6,11 +6,10 @@ import { Heart, Star } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import { listingRoute } from "@/constants/routes";
-import { useAuth } from "@/hooks/useAuth";
+import { useWishlistToggle } from "@/hooks/useWishlistToggle";
 import { cn } from "@/lib/utils";
 import type { ListingSummary } from "@/types/listing";
 import { formatPrice } from "@/utils/formatPrice";
-import { runProtectedAction } from "@/utils/protectedAction";
 
 import PhotoCarousel from "./PhotoCarousel";
 
@@ -24,7 +23,7 @@ type ListingCardProps = {
 const RATING_DECIMALS = 2;
 
 const ListingCard = ({ listing, isEager = false, href }: ListingCardProps) => {
-  const { isAuthenticated, openAuthModal } = useAuth();
+  const toggleWishlist = useWishlistToggle();
   const location = t("listings.card.location", {
     city: listing.city,
     state: listing.state,
@@ -39,8 +38,7 @@ const ListingCard = ({ listing, isEager = false, href }: ListingCardProps) => {
   const handleWishlistClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    // Wishlist toggling lands with the wishlists feature; for now only gate on auth.
-    runProtectedAction(() => undefined, { isAuthenticated, openAuthModal });
+    toggleWishlist(listing.id, listing.isWishlisted);
   };
 
   return (

@@ -12,6 +12,7 @@ import { GALLERY_PHOTO_SIZES, galleryPhotoId } from "./constants";
 import ListingActions from "./ListingActions";
 
 type PhotoGalleryModalProps = {
+  listingId: number;
   title: string;
   photos: string[];
   isWishlisted: boolean;
@@ -63,6 +64,7 @@ const GalleryPhotos = ({ title, photos, startIndex }: GalleryPhotosProps) => {
 };
 
 const PhotoGalleryModal = ({
+  listingId,
   title,
   photos,
   isWishlisted,
@@ -82,7 +84,7 @@ const PhotoGalleryModal = ({
           <ChevronLeft className="size-5" aria-hidden="true" />
         </DialogClose>
         <DialogTitle className="sr-only">{t("listingDetail.photos.galleryTitle")}</DialogTitle>
-        <ListingActions title={title} isWishlisted={isWishlisted} />
+        <ListingActions listingId={listingId} title={title} isWishlisted={isWishlisted} />
       </header>
       <div className="min-h-0 flex-1 overflow-y-auto">
         {openIndex !== null ? (

@@ -48,6 +48,7 @@ export const LISTING_REVIEWS_STALE_TIME_MS = 5 * 60 * 1000;
 export const UNAVAILABLE_DATES_STALE_TIME_MS = 60 * 1000;
 export const REVIEWS_PAGE_SIZE = 6;
 export const BOOKINGS_PAGE_SIZE = 12;
+export const WISHLIST_PAGE_SIZE = 20;
 export const BOOKINGS_STALE_TIME_MS = 60 * 1000;
 
 export const HTTP_STATUS = {

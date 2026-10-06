@@ -188,7 +188,7 @@ def _wishlisted_ids(
     return set(rows)
 
 
-def _to_card(listing: Listing, is_wishlisted: bool) -> ListingCardOut:
+def to_listing_card(listing: Listing, is_wishlisted: bool) -> ListingCardOut:
     return ListingCardOut(
         id=listing.id,
         title=listing.title,
@@ -224,7 +224,7 @@ def list_listings(
     wishlisted = _wishlisted_ids(db, user, [listing.id for listing in listings])
 
     return PaginatedResponse[ListingCardOut](
-        items=[_to_card(listing, listing.id in wishlisted) for listing in listings],
+        items=[to_listing_card(listing, listing.id in wishlisted) for listing in listings],
         total=total,
         page=params.page,
         page_size=params.page_size,
