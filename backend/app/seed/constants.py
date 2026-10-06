@@ -6,7 +6,7 @@ DEMO_PASSWORD = "Demo@12345"
 
 SEED_PHOTO_URLS: tuple[str, ...] = (
     "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=80",
-    "https://images.unsplash.com/photo-1613490493574-7fea3538811e?w=1200&q=80",
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80",
     "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80",
     "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80",

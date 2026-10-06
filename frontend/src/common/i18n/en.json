@@ -34,6 +34,7 @@
     "scrollLeft": "Previous categories",
     "scrollRight": "Next categories",
     "filters": "Filters",
+    "filtersApplied": "Filters, {{count}} applied",
     "trending": "Trending",
     "beachfront": "Beachfront",
     "cabins": "Cabins",
@@ -97,6 +98,54 @@
   },
   "home": {
     "listingsLoading": "Loading stays"
+  },
+  "listings": {
+    "card": {
+      "location": "{{city}}, {{state}}",
+      "subtitleOne": "{{propertyType}} · {{bedrooms}} bedroom",
+      "subtitleOther": "{{propertyType}} · {{bedrooms}} bedrooms",
+      "perNight": "night",
+      "new": "New",
+      "ratingLabel": "Rated {{rating}} out of 5 from {{count}} reviews",
+      "photoAlt": "{{title}} — photo {{current}} of {{total}}",
+      "previousPhoto": "Previous photo",
+      "nextPhoto": "Next photo",
+      "saveToWishlist": "Save to wishlist",
+      "removeFromWishlist": "Remove from wishlist"
+    },
+    "empty": {
+      "title": "No exact matches",
+      "description": "Try changing or removing some of your filters, or browse a different category.",
+      "noListings": "There are no stays to show right now. Check back soon.",
+      "removeFilters": "Remove all filters"
+    },
+    "error": {
+      "title": "We couldn't load stays",
+      "description": "Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "filters": {
+      "title": "Filters",
+      "close": "Close filters",
+      "priceRange": "Price range",
+      "priceRangeDescription": "Nightly prices before fees and taxes",
+      "minimum": "Minimum",
+      "maximum": "Maximum",
+      "minimumPrice": "Minimum price",
+      "maximumPrice": "Maximum price",
+      "priceAndAbove": "{{price}}+",
+      "propertyType": "Property type",
+      "bedrooms": "Bedrooms",
+      "any": "Any",
+      "orMore": "{{count}}+",
+      "amenities": "Amenities",
+      "showMore": "Show more",
+      "showLess": "Show less",
+      "clearAll": "Clear all",
+      "showStays": "Show stays",
+      "showStaysOne": "Show 1 stay",
+      "showStaysOther": "Show {{count}} stays"
+    }
   },
   "auth": {
     "signIn": "Sign in",

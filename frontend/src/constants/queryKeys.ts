@@ -11,6 +11,10 @@ export const queryKeys = {
     all: ["listings"] as const,
     list: (filters: Record<string, unknown>) =>
       [...queryKeys.listings.all, "list", filters] as const,
+    count: (filters: Record<string, unknown>) =>
+      [...queryKeys.listings.all, "count", filters] as const,
+    filterOptions: (category?: string) =>
+      [...queryKeys.listings.all, "filterOptions", category ?? null] as const,
     detail: (id: string | number) =>
       [...queryKeys.listings.all, "detail", id] as const,
   },
