@@ -12,8 +12,8 @@ export const DEFAULT_PAGE_SIZE = 20;
 
 export const SEARCH_DEBOUNCE_MS = 400;
 
-/** Mock checkout fee rates (INR); used when displaying price breakdowns. */
-export const SERVICE_FEE_RATE = 0.14;
+/** Guest service fee, charged on nights + cleaning fee (see `utils/pricing`). */
+export const SERVICE_FEE_RATE = 0.12;
 export const CLEANING_FEE_DEFAULT = 500;
 
 export const CATEGORY_QUERY_PARAM = "category";
@@ -43,6 +43,10 @@ export const LISTINGS_STALE_TIME_MS = 5 * 60 * 1000;
 export const LISTING_FILTER_OPTIONS_STALE_TIME_MS = 30 * 60 * 1000;
 export const FILTERS_PREVIEW_DEBOUNCE_MS = 400;
 export const INFINITE_SCROLL_ROOT_MARGIN = "600px";
+export const LISTING_DETAIL_STALE_TIME_MS = 5 * 60 * 1000;
+export const LISTING_REVIEWS_STALE_TIME_MS = 5 * 60 * 1000;
+export const UNAVAILABLE_DATES_STALE_TIME_MS = 60 * 1000;
+export const REVIEWS_PAGE_SIZE = 6;
 export const LISTING_IMAGE_SIZES =
   "(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw";
 /** Cards rendered with eager images (roughly the first visible row). */

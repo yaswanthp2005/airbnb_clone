@@ -232,5 +232,109 @@
     "unauthorized": "You need to sign in to continue",
     "validationFailed": "Validation failed",
     "network": "Network error. Check your connection."
+  },
+  "listingDetail": {
+    "share": "Share",
+    "save": "Save",
+    "saved": "Saved",
+    "linkCopied": "Link copied",
+    "close": "Close",
+    "back": "Back",
+    "photos": {
+      "showAll": "Show all photos",
+      "alt": "{{title}} — photo {{index}} of {{total}}",
+      "openPhoto": "Open photo {{index}} of {{total}}",
+      "galleryTitle": "Photo tour"
+    },
+    "overview": {
+      "heading": "Entire {{propertyType}} in {{city}}, {{country}}",
+      "guestsOne": "1 guest",
+      "guestsOther": "{{count}} guests",
+      "bedroomsOne": "1 bedroom",
+      "bedroomsOther": "{{count}} bedrooms",
+      "bedsOne": "1 bed",
+      "bedsOther": "{{count}} beds",
+      "bathsOne": "1 bath",
+      "bathsOther": "{{count}} baths",
+      "reviewsOne": "1 review",
+      "reviewsOther": "{{count}} reviews",
+      "new": "New",
+      "noReviews": "No reviews yet"
+    },
+    "host": {
+      "hostedBy": "Hosted by {{name}}",
+      "yearsHostingOne": "1 year hosting",
+      "yearsHostingOther": "{{count}} years hosting",
+      "newHost": "New host",
+      "meetYourHost": "Meet your host",
+      "host": "Host",
+      "reviews": "Reviews",
+      "rating": "Rating",
+      "yearsHosting": "Years hosting",
+      "listingsOne": "1 listing",
+      "listingsOther": "{{count}} listings",
+      "avatarAlt": "{{name}}'s profile photo"
+    },
+    "description": {
+      "showMore": "Show more",
+      "aboutThisSpace": "About this space"
+    },
+    "amenities": {
+      "title": "What this place offers",
+      "showAllOne": "Show 1 amenity",
+      "showAllOther": "Show all {{count}} amenities"
+    },
+    "availability": {
+      "selectCheckIn": "Select check-in date",
+      "selectCheckOut": "Select checkout date",
+      "addDatesHint": "Add your travel dates for exact pricing",
+      "minimumStay": "Minimum stay: 1 night",
+      "nightsIn": "{{nights}} in {{city}}",
+      "nightsOne": "1 night",
+      "nightsOther": "{{count}} nights",
+      "dateRange": "{{start}} – {{end}}",
+      "clearDates": "Clear dates"
+    },
+    "booking": {
+      "perNight": "night",
+      "checkIn": "Check-in",
+      "checkOut": "Checkout",
+      "addDate": "Add date",
+      "guests": "Guests",
+      "reserve": "Reserve",
+      "notChargedYet": "You won't be charged yet",
+      "nightlyLine": "{{price}} x {{nights}}",
+      "cleaningFee": "Cleaning fee",
+      "serviceFee": "Service fee",
+      "totalBeforeTaxes": "Total before taxes",
+      "datesUnavailable": "Those dates aren't available. Pick different dates.",
+      "maxGuestsNote": "This place has a maximum of {{count}} guests, not including infants.",
+      "addDatesForPrices": "Add dates for prices",
+      "selectDates": "Select dates"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "overallRating": "Overall rating",
+      "starsLabel": "{{count}} stars",
+      "ratedLabel": "Rated {{rating}} out of 5",
+      "showMore": "Show more reviews",
+      "loadingMore": "Loading reviews…",
+      "noReviews": "No reviews (yet)",
+      "noReviewsDescription": "This place doesn't have any reviews. Be one of the first guests to stay.",
+      "yearsOnAirbnbOne": "1 year on Airbnb",
+      "yearsOnAirbnbOther": "{{count}} years on Airbnb",
+      "newToAirbnb": "New to Airbnb"
+    },
+    "location": {
+      "title": "Where you'll be",
+      "place": "{{city}}, {{state}}, {{country}}",
+      "exactLocationNote": "Exact location provided after booking.",
+      "mapTitle": "Map showing the approximate location of {{city}}"
+    },
+    "unavailable": {
+      "title": "We can't find this place",
+      "description": "It may have been removed, or the link might be wrong.",
+      "backHome": "Back to home"
+    }
   }
 }

@@ -4,8 +4,10 @@ import { useMemo } from "react";
 
 import { t } from "@/common/i18n";
 import { INFINITE_SCROLL_ROOT_MARGIN, LISTING_EAGER_IMAGE_COUNT } from "@/constants";
+import { listingRoute } from "@/constants/routes";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useListingsInfinite } from "@/queries/listings";
+import { buildUrl } from "@/utils/buildUrl";
 
 import {
   EMPTY_LISTING_FILTERS,
@@ -17,7 +19,7 @@ import ListingCard from "./ListingCard";
 import ListingCardSkeleton from "./ListingCardSkeleton";
 import ListingGridSkeleton from "./ListingGridSkeleton";
 import ListingsEmptyState from "./ListingsEmptyState";
-import { countActiveFilters, hasSearchCriteria } from "./utils";
+import { countActiveFilters, hasSearchCriteria, stayQuery } from "./utils";
 
 const ListingsFeed = () => {
   const { filters, setFilters } = useListingFilters();
@@ -35,6 +37,7 @@ const ListingsFeed = () => {
     () => data?.pages.flatMap(page => page.items) ?? [],
     [data],
   );
+  const listingQuery = useMemo(() => stayQuery(filters), [filters]);
 
   const sentinelRef = useIntersectionObserver<HTMLDivElement>({
     onIntersect: fetchNextPage,
@@ -82,6 +85,7 @@ const ListingsFeed = () => {
           <ListingCard
             key={listing.id}
             listing={listing}
+            href={buildUrl({ path: listingRoute(listing.id), query: listingQuery })}
             isEager={index < LISTING_EAGER_IMAGE_COUNT}
           />
         ))}

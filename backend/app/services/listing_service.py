@@ -1,25 +1,36 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 
+from fastapi import HTTPException, status
 from sqlalchemy import ColumnElement, Select, case, false, func, or_, select
 from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm.interfaces import ORMOption
 
-from app.models import Amenity, Booking, Listing, ListingAmenity, WishlistItem
+from app.models import Amenity, Booking, Listing, ListingAmenity, Review, WishlistItem
 from app.models.user import User
 from app.schemas.listing import (
+    DEFAULT_AVAILABILITY_WINDOW_DAYS,
     AmenityOut,
     ListingCardOut,
+    ListingDetailOut,
     ListingFilterOptions,
     ListingFilterParams,
+    ListingHostOut,
     ListingSort,
     LocationSuggestion,
     LocationSuggestionParams,
+    RatingCount,
+    UnavailableDatesParams,
 )
 from app.schemas.pagination import PaginatedResponse
 
 PRICE_HISTOGRAM_BUCKETS = 40
+
+LISTING_NOT_FOUND_MESSAGE = "Listing not found"
+
+RATING_SCALE = (5, 4, 3, 2, 1)
 
 BOOKING_STATUS_CONFIRMED = "confirmed"
 
@@ -225,6 +236,113 @@ def list_listings(
         page_size=params.page_size,
         has_next=params.page * params.page_size < total,
     )
+
+
+def get_listing_or_404(db: Session, listing_id: int, *options: ORMOption) -> Listing:
+    listing = db.get(Listing, listing_id, options=options)
+    if listing is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=LISTING_NOT_FOUND_MESSAGE
+        )
+    return listing
+
+
+def _host_out(db: Session, host: User) -> ListingHostOut:
+    listing_count, review_count, rating_avg = db.execute(
+        select(
+            func.count(func.distinct(Listing.id)),
+            func.count(Review.id),
+            func.avg(Review.rating),
+        )
+        .select_from(Listing)
+        .outerjoin(Review, Review.listing_id == Listing.id)
+        .where(Listing.host_id == host.id)
+    ).one()
+    return ListingHostOut(
+        id=host.id,
+        name=host.name,
+        avatar_url=host.avatar_url,
+        bio=host.bio,
+        joined_at=host.created_at,
+        listing_count=listing_count,
+        review_count=review_count,
+        rating_avg=round(float(rating_avg or 0), 2),
+    )
+
+
+def _rating_breakdown(db: Session, listing_id: int) -> list[RatingCount]:
+    counts = dict(
+        db.execute(
+            select(Review.rating, func.count())
+            .where(Review.listing_id == listing_id)
+            .group_by(Review.rating)
+        ).all()
+    )
+    return [RatingCount(rating=rating, count=counts.get(rating, 0)) for rating in RATING_SCALE]
+
+
+def get_listing_detail(
+    db: Session, listing_id: int, user: Optional[User]
+) -> ListingDetailOut:
+    listing = get_listing_or_404(
+        db,
+        listing_id,
+        selectinload(Listing.photos),
+        selectinload(Listing.amenity_links).selectinload(ListingAmenity.amenity),
+        selectinload(Listing.host),
+    )
+    amenities = sorted(
+        (link.amenity for link in listing.amenity_links), key=lambda amenity: amenity.name
+    )
+    return ListingDetailOut(
+        id=listing.id,
+        title=listing.title,
+        description=listing.description,
+        property_type=listing.property_type,
+        city=listing.city,
+        state=listing.state,
+        country=listing.country,
+        latitude=listing.latitude,
+        longitude=listing.longitude,
+        price_per_night=listing.price_per_night,
+        cleaning_fee=listing.cleaning_fee,
+        max_guests=listing.max_guests,
+        bedrooms=listing.bedrooms,
+        beds=listing.beds,
+        bathrooms=listing.bathrooms,
+        rating_avg=float(listing.rating_avg),
+        review_count=listing.review_count,
+        rating_breakdown=_rating_breakdown(db, listing.id),
+        photos=[photo.url for photo in listing.photos],
+        amenities=[AmenityOut.model_validate(amenity) for amenity in amenities],
+        host=_host_out(db, listing.host),
+        is_wishlisted=listing.id in _wishlisted_ids(db, user, [listing.id]),
+    )
+
+
+def get_unavailable_dates(
+    db: Session, listing_id: int, params: UnavailableDatesParams
+) -> list[date]:
+    """Booked nights: a stay from check_in to check_out occupies every night before check_out."""
+    get_listing_or_404(db, listing_id)
+    start = params.start_date or date.today()
+    end = params.end_date or start + timedelta(days=DEFAULT_AVAILABILITY_WINDOW_DAYS)
+
+    bookings = db.execute(
+        select(Booking.check_in, Booking.check_out).where(
+            Booking.listing_id == listing_id,
+            Booking.status == BOOKING_STATUS_CONFIRMED,
+            Booking.check_in < end,
+            Booking.check_out > start,
+        )
+    )
+    nights: set[date] = set()
+    for check_in, check_out in bookings:
+        night, last = max(check_in, start), min(check_out, end)
+        while night < last:
+            nights.add(night)
+            night += timedelta(days=1)
+    return sorted(nights)
 
 
 def _price_histogram(prices: list[int], min_price: int, max_price: int) -> list[int]:

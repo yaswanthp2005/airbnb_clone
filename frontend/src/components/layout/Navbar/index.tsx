@@ -23,6 +23,7 @@ type NavbarProps = {
   activeSearchSection: SearchSection | null;
   onActiveSearchSectionChange: (section: SearchSection | null) => void;
   onOpenSearch: (section: SearchSection) => void;
+  containerWidth?: "default" | "narrow";
 };
 
 const roundHoverClass =
@@ -33,13 +34,14 @@ const Navbar = ({
   activeSearchSection,
   onActiveSearchSectionChange,
   onOpenSearch,
+  containerWidth,
 }: NavbarProps) => {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
   const requireAuth = useRequireAuth();
 
   return (
-    <PageContainer>
+    <PageContainer width={containerWidth}>
       <div className="grid h-20 grid-cols-[1fr_auto_1fr] items-center gap-4">
         <div className="flex items-center">
           <Logo />

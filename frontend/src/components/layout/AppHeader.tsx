@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import CategoryBar from "@/components/layout/CategoryBar";
 import Navbar from "@/components/layout/Navbar";
 import type { SearchSection } from "@/components/search/constants";
-import { routes } from "@/constants/routes";
+import { LISTING_ROUTE_PREFIX, routes } from "@/constants/routes";
 import { useScrollCollapse } from "@/hooks/useScrollCollapse";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ const AppHeader = () => {
   const pathname = usePathname();
   const isCollapsed = useScrollCollapse();
   const isHome = pathname === routes.home;
+  const isListingPage = pathname.startsWith(LISTING_ROUTE_PREFIX);
   const headerRef = useRef<HTMLElement>(null);
   const [activeSearchSection, setActiveSearchSection] = useState<SearchSection | null>(null);
   const [isSearchForcedOpen, setIsSearchForcedOpen] = useState(false);
@@ -68,6 +69,7 @@ const AppHeader = () => {
             activeSearchSection={isExpanded ? activeSearchSection : null}
             onActiveSearchSectionChange={handleActiveSearchSectionChange}
             onOpenSearch={openSearch}
+            containerWidth={isListingPage ? "narrow" : "default"}
           />
         </div>
         {isHome ? (

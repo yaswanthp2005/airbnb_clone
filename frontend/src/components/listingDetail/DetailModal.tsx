@@ -1,0 +1,39 @@
+"use client";
+
+import { X } from "lucide-react";
+
+import { t } from "@/common/i18n";
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
+
+type DetailModalProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  children: React.ReactNode;
+};
+
+const DetailModal = ({ open, onOpenChange, title, children }: DetailModalProps) => (
+  <Dialog open={open} onOpenChange={onOpenChange}>
+    <DialogContent
+      showCloseButton={false}
+      className="flex max-h-[calc(100dvh-4rem)] w-full flex-col gap-0 overflow-hidden rounded-xl bg-white p-0 shadow-card sm:max-w-[780px]"
+    >
+      <header className="flex h-16 shrink-0 items-center px-4">
+        <DialogClose
+          aria-label={t("listingDetail.close")}
+          className="flex size-8 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-muted"
+        >
+          <X className="size-4" strokeWidth={2.5} aria-hidden="true" />
+        </DialogClose>
+      </header>
+      <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-10">
+        <DialogTitle className="mb-6 text-[26px] font-semibold leading-8 text-ink">
+          {title}
+        </DialogTitle>
+        {children}
+      </div>
+    </DialogContent>
+  </Dialog>
+);
+
+export default DetailModal;

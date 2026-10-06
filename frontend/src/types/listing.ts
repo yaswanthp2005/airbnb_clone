@@ -69,3 +69,59 @@ export type ListingFilterOptions = {
   propertyTypes: string[];
   amenities: Amenity[];
 };
+
+export type ListingHost = {
+  id: number;
+  name: string;
+  avatarUrl?: string | null;
+  bio?: string | null;
+  joinedAt: string;
+  listingCount: number;
+  reviewCount: number;
+  ratingAvg: number;
+};
+
+export type RatingCount = {
+  rating: number;
+  count: number;
+};
+
+export type ListingDetail = {
+  id: number;
+  title: string;
+  description: string;
+  propertyType: string;
+  city: string;
+  state: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  pricePerNight: number;
+  cleaningFee: number;
+  maxGuests: number;
+  bedrooms: number;
+  beds: number;
+  bathrooms: number;
+  ratingAvg: number;
+  reviewCount: number;
+  ratingBreakdown: RatingCount[];
+  photos: string[];
+  amenities: Amenity[];
+  host: ListingHost;
+  isWishlisted: boolean;
+};
+
+export type Reviewer = {
+  id: number;
+  name: string;
+  avatarUrl?: string | null;
+  joinedAt: string;
+};
+
+export type Review = {
+  id: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  guest: Reviewer;
+};

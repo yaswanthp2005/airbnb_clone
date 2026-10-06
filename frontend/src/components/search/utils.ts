@@ -83,15 +83,28 @@ export const formatGuestSummary = (counts: GuestCounts): string | undefined => {
     .join(", ");
 };
 
+export type GuestBoundsOptions = {
+  /** Cap on adults + children (a listing's `maxGuests`). */
+  maxGuests?: number;
+  minAdults?: number;
+};
+
 /** Children, infants and pets need an accompanying adult, so adults can't drop below one while they're present. */
-export const guestBounds = (counts: GuestCounts, key: GuestKey) => {
+export const guestBounds = (
+  counts: GuestCounts,
+  key: GuestKey,
+  { maxGuests = MAX_GUESTS, minAdults = 0 }: GuestBoundsOptions = {},
+) => {
   const hasDependants = counts.children + counts.infants + counts.pets > 0;
-  const guestsLeft = MAX_GUESTS - totalGuests(counts);
+  const guestsLeft = maxGuests - totalGuests(counts);
   const seatForAutoAdult = counts.adults === 0 ? 1 : 0;
 
   switch (key) {
     case "adults":
-      return { min: hasDependants ? 1 : 0, max: counts.adults + guestsLeft };
+      return {
+        min: Math.max(minAdults, hasDependants ? 1 : 0),
+        max: counts.adults + guestsLeft,
+      };
     case "children":
       return { min: 0, max: counts.children + guestsLeft - seatForAutoAdult };
     case "infants":
@@ -105,8 +118,9 @@ export const updateGuestCount = (
   counts: GuestCounts,
   key: GuestKey,
   delta: number,
+  options?: GuestBoundsOptions,
 ): GuestCounts => {
-  const { min, max } = guestBounds(counts, key);
+  const { min, max } = guestBounds(counts, key, options);
   const next = { ...counts, [key]: Math.min(Math.max(counts[key] + delta, min), max) };
   if (key !== "adults" && next[key] > 0 && next.adults === 0) {
     next.adults = 1;

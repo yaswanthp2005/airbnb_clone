@@ -1,11 +1,13 @@
 import apiClient from "@/api/client";
 import { apiRoutes } from "@/constants/routes";
 import type {
+  ListingDetail,
   ListingFilterOptions,
   ListingFilters,
   ListingSummary,
   LocationSuggestion,
   PaginatedResponse,
+  Review,
 } from "@/types/listing";
 import { buildUrl } from "@/utils/buildUrl";
 
@@ -24,6 +26,26 @@ type FilterOptionsResponseBody = {
 
 type LocationSuggestionsResponseBody = {
   data: LocationSuggestion[];
+};
+
+type ListingDetailResponseBody = {
+  data: ListingDetail;
+};
+
+type UnavailableDatesResponseBody = {
+  data: string[];
+};
+
+export type GetListingReviewsParams = {
+  page: number;
+  pageSize: number;
+};
+
+export type GetUnavailableDatesParams = {
+  /** `yyyy-MM-dd` */
+  startDate?: string;
+  /** `yyyy-MM-dd` */
+  endDate?: string;
 };
 
 /** Infants and pets don't count towards a listing's guest capacity. */
@@ -60,6 +82,43 @@ export const getLocationSuggestions = async (
   const { data } = await apiClient.get<LocationSuggestionsResponseBody>(
     buildUrl({ path: apiRoutes.listingLocations, query: { q: query } }),
     { skipToast: true },
+  );
+  return data.data;
+};
+
+/** The page renders its own not-found / error state, so no toast. */
+export const getListing = async (listingId: number): Promise<ListingDetail> => {
+  const { data } = await apiClient.get<ListingDetailResponseBody>(
+    buildUrl({ path: apiRoutes.listingDetail, pathParams: { id: listingId } }),
+    { skipToast: true },
+  );
+  return data.data;
+};
+
+export const getListingReviews = async (
+  listingId: number,
+  params: GetListingReviewsParams,
+): Promise<PaginatedResponse<Review>> => {
+  const { data } = await apiClient.get<PaginatedResponse<Review>>(
+    buildUrl({
+      path: apiRoutes.listingReviews,
+      pathParams: { id: listingId },
+      query: params,
+    }),
+  );
+  return data;
+};
+
+export const getListingUnavailableDates = async (
+  listingId: number,
+  params: GetUnavailableDatesParams = {},
+): Promise<string[]> => {
+  const { data } = await apiClient.get<UnavailableDatesResponseBody>(
+    buildUrl({
+      path: apiRoutes.listingUnavailableDates,
+      pathParams: { id: listingId },
+      query: params,
+    }),
   );
   return data.data;
 };
