@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { t } from "@/common/i18n";
 import { Button } from "@/components/ui/button";
@@ -41,15 +41,20 @@ const AuthModal = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
 
-  useEffect(() => {
-    if (!authModalOpen) {
-      setName("");
-      setEmail("");
-      setPassword("");
-      setPasswordConfirmation("");
-      setErrors({});
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPasswordConfirmation("");
+    setErrors({});
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      resetForm();
+      closeAuthModal();
     }
-  }, [authModalOpen]);
+  };
 
   const title = useMemo(
     () =>
@@ -100,14 +105,14 @@ const AuthModal = () => {
 
     if (authMode === "login") {
       await login({ email: email.trim(), password });
-      return;
+    } else {
+      await register({
+        name: name.trim(),
+        email: email.trim(),
+        password,
+      });
     }
-
-    await register({
-      name: name.trim(),
-      email: email.trim(),
-      password,
-    });
+    resetForm();
   };
 
   const switchMode = (mode: AuthMode) => {
@@ -116,7 +121,7 @@ const AuthModal = () => {
   };
 
   return (
-    <Dialog open={authModalOpen} onOpenChange={open => !open && closeAuthModal()}>
+    <Dialog open={authModalOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-[568px]">
         <DialogHeader className="border-b px-6 py-4 text-center">
           <DialogTitle className="text-base font-semibold">{title}</DialogTitle>
