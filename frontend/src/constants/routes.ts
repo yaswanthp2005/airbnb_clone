@@ -50,4 +50,6 @@ export const apiRoutes = {
   myBookings: "/bookings/me",
   bookingDetail: "/bookings/:id",
   bookingCancel: "/bookings/:id/cancel",
+  wishlist: "/wishlist",
+  wishlistItem: "/wishlist/:id",
 } as const;

@@ -73,7 +73,11 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
           <h1 className="text-[22px] font-semibold leading-7 text-ink md:text-[26px] md:leading-8">
             {listing.title}
           </h1>
-          <ListingActions title={listing.title} isWishlisted={listing.isWishlisted} />
+          <ListingActions
+            listingId={listing.id}
+            title={listing.title}
+            isWishlisted={listing.isWishlisted}
+          />
         </div>
         <PhotoGrid photos={listing.photos} onOpen={setGalleryIndex} />
 
@@ -122,6 +126,7 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
         onReserve={handleReserve}
       />
       <PhotoGalleryModal
+        listingId={listing.id}
         title={listing.title}
         photos={listing.photos}
         isWishlisted={listing.isWishlisted}

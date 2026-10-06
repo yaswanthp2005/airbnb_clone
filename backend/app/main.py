@@ -13,6 +13,7 @@ from app.routers.auth import router as auth_router
 from app.routers.bookings import router as bookings_router
 from app.routers.health import router as health_router
 from app.routers.listings import router as listings_router
+from app.routers.wishlist import router as wishlist_router
 
 
 @asynccontextmanager
@@ -40,6 +41,7 @@ app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(listings_router, prefix="/api/v1")
 app.include_router(bookings_router, prefix="/api/v1")
+app.include_router(wishlist_router, prefix="/api/v1")
 
 VALIDATION_FAILED_MESSAGE = "Validation failed"
 

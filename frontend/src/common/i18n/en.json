@@ -448,5 +448,15 @@
       "title": "We couldn't find that reservation",
       "description": "It may not exist, or it belongs to another account."
     }
+  },
+  "wishlists": {
+    "title": "Wishlists",
+    "countOne": "{{count}} saved stay",
+    "countOther": "{{count}} saved stays",
+    "empty": {
+      "title": "Create your first wishlist",
+      "description": "As you search, tap the heart icon to save your favourite places to stay.",
+      "action": "Start exploring"
+    }
   }
 }

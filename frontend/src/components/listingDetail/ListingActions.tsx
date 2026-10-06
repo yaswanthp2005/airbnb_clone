@@ -4,11 +4,11 @@ import { Heart, Share } from "lucide-react";
 import { toast } from "sonner";
 
 import { t } from "@/common/i18n";
-import { useAuth } from "@/hooks/useAuth";
+import { useWishlistToggle } from "@/hooks/useWishlistToggle";
 import { cn } from "@/lib/utils";
-import { runProtectedAction } from "@/utils/protectedAction";
 
 type ListingActionsProps = {
+  listingId: number;
   title: string;
   isWishlisted: boolean;
   className?: string;
@@ -17,8 +17,8 @@ type ListingActionsProps = {
 const actionClassName =
   "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-ink underline underline-offset-2 transition-colors hover:bg-surface-muted";
 
-const ListingActions = ({ title, isWishlisted, className }: ListingActionsProps) => {
-  const { isAuthenticated, openAuthModal } = useAuth();
+const ListingActions = ({ listingId, title, isWishlisted, className }: ListingActionsProps) => {
+  const toggleWishlist = useWishlistToggle();
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -34,9 +34,6 @@ const ListingActions = ({ title, isWishlisted, className }: ListingActionsProps)
     toast.success(t("listingDetail.linkCopied"));
   };
 
-  const handleSave = () =>
-    // Wishlist toggling lands with the wishlists feature; for now only gate on auth.
-    runProtectedAction(() => undefined, { isAuthenticated, openAuthModal });
 
   return (
     <div className={cn("flex shrink-0 items-center gap-1", className)}>
@@ -46,7 +43,7 @@ const ListingActions = ({ title, isWishlisted, className }: ListingActionsProps)
       </button>
       <button
         type="button"
-        onClick={handleSave}
+        onClick={() => toggleWishlist(listingId, isWishlisted)}
         aria-pressed={isWishlisted}
         className={actionClassName}
       >

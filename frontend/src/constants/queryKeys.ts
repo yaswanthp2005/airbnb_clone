@@ -9,8 +9,9 @@ export const queryKeys = {
   },
   listings: {
     all: ["listings"] as const,
+    lists: () => [...queryKeys.listings.all, "list"] as const,
     list: (filters: Record<string, unknown>) =>
-      [...queryKeys.listings.all, "list", filters] as const,
+      [...queryKeys.listings.lists(), filters] as const,
     count: (filters: Record<string, unknown>) =>
       [...queryKeys.listings.all, "count", filters] as const,
     filterOptions: (category?: string) =>
@@ -23,6 +24,10 @@ export const queryKeys = {
       [...queryKeys.listings.all, "reviews", id] as const,
     unavailableDates: (id: string | number) =>
       [...queryKeys.listings.all, "unavailableDates", id] as const,
+  },
+  wishlist: {
+    all: ["wishlist"] as const,
+    list: () => [...queryKeys.wishlist.all, "list"] as const,
   },
   bookings: {
     all: ["bookings"] as const,
