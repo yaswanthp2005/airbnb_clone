@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import en from "@/common/i18n/en.json";
 import Providers from "@/app/providers";
+import SiteHeader from "@/components/layout/SiteHeader";
 
 import "./globals.css";
 
@@ -29,7 +30,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <SiteHeader />
+          {children}
+        </Providers>
       </body>
     </html>
   );

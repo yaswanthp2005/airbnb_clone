@@ -6,17 +6,47 @@
     "save": "Save",
     "somethingWentWrong": "Something went wrong. Please try again."
   },
+  "nav": {
+    "hostYourHome": "Airbnb your home",
+    "trips": "Trips",
+    "wishlists": "Wishlists"
+  },
   "auth": {
     "signIn": "Sign in",
     "signUp": "Sign up",
+    "continue": "Continue",
     "email": "Email",
     "password": "Password",
     "logout": "Log out",
+    "signInRequired": "Sign in to view this page.",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "namePlaceholder": "Full name",
+    "passwordConfirmationPlaceholder": "Confirm password",
+    "modal": {
+      "openLabel": "Log in or sign up",
+      "loginTitle": "Log in",
+      "registerTitle": "Sign up",
+      "switchToRegister": "Create an account",
+      "switchToLogin": "Log in instead"
+    },
     "validation": {
+      "nameRequired": "Name is required",
       "emailRequired": "Email is required",
       "emailInvalid": "Enter a valid email address",
-      "passwordRequired": "Password is required"
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 8 characters",
+      "passwordConfirmationRequired": "Please confirm your password",
+      "passwordsMustMatch": "Passwords must match"
     }
+  },
+  "trips": {
+    "title": "Trips",
+    "empty": "No trips booked yet — when you do, they will show up here."
+  },
+  "hosting": {
+    "title": "Host your home",
+    "comingSoon": "Listing creation will be available in a later step."
   },
   "toast": {
     "successDefault": "Saved successfully",
