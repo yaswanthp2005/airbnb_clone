@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "Airbnb Clone",
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "save": "Save",
+    "somethingWentWrong": "Something went wrong. Please try again."
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "logout": "Log out",
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "passwordRequired": "Password is required"
+    }
+  },
+  "toast": {
+    "successDefault": "Saved successfully",
+    "errorDefault": "Request failed"
+  },
+  "error": {
+    "notFound": "Not found",
+    "unauthorized": "You need to sign in to continue",
+    "validationFailed": "Validation failed",
+    "network": "Network error. Check your connection."
+  },
+  "dev": {
+    "healthTitle": "API client checks",
+    "healthStatus": "Status: {{status}} · {{appName}}",
+    "triggerSuccessToast": "Test success toast (POST echo)",
+    "triggerErrorToast": "Test error toast",
+    "echoResult": "Echo sample field: {{value}}"
+  }
+}
