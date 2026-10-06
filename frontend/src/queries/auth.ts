@@ -29,6 +29,7 @@ export const useLogin = () => {
     onSuccess: session => {
       persistAuthSession(session.accessToken, session.user);
       queryClient.setQueryData(queryKeys.auth.session(), session.user);
+      queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
     },
   });
 };
@@ -41,6 +42,7 @@ export const useRegister = () => {
     onSuccess: session => {
       persistAuthSession(session.accessToken, session.user);
       queryClient.setQueryData(queryKeys.auth.session(), session.user);
+      queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
     },
   });
 };
@@ -54,6 +56,7 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: queryKeys.auth.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
     },
   });
 };

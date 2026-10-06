@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import PageContainer from "@/components/layout/PageContainer";
-import { CATEGORY_QUERY_PARAM } from "@/constants";
-import { routes } from "@/constants/routes";
+import FiltersModal from "@/components/listings/FiltersModal";
+import { useListingFilters } from "@/components/listings/hooks/useListingFilters";
+import { countActiveFilters } from "@/components/listings/utils";
 import { cn } from "@/lib/utils";
-import { buildUrl } from "@/utils/buildUrl";
 
 import CategoryTab from "./CategoryTab";
 import { CATEGORIES, DEFAULT_CATEGORY_KEY } from "./constants";
@@ -50,15 +50,18 @@ const ScrollArrow = ({ direction, isVisible, onClick }: ScrollArrowProps) => {
 };
 
 const CategoryBar = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const activeKey = searchParams.get(CATEGORY_QUERY_PARAM) ?? DEFAULT_CATEGORY_KEY;
+  const { filters, setFilters } = useListingFilters();
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const activeKey = filters.category ?? DEFAULT_CATEGORY_KEY;
+  const activeFilterCount = countActiveFilters(filters);
   const { ref, canScrollLeft, canScrollRight, scrollByStep } =
     useHorizontalScroll<HTMLDivElement>();
 
   const handleSelect = (key: string) => {
-    const query = key === DEFAULT_CATEGORY_KEY ? {} : { [CATEGORY_QUERY_PARAM]: key };
-    router.push(buildUrl({ path: routes.home, query }), { scroll: false });
+    setFilters({
+      ...filters,
+      category: key === DEFAULT_CATEGORY_KEY ? undefined : key,
+    });
   };
 
   return (
@@ -94,12 +97,36 @@ const CategoryBar = () => {
 
         <button
           type="button"
-          className="mb-2 flex h-12 shrink-0 items-center gap-2 rounded-xl border border-hairline px-4 text-xs font-semibold text-ink transition-colors hover:border-ink hover:bg-surface-muted"
+          onClick={() => setIsFiltersOpen(true)}
+          aria-label={
+            activeFilterCount > 0
+              ? t("categories.filtersApplied", { count: activeFilterCount })
+              : undefined
+          }
+          className={cn(
+            "relative mb-2 flex h-12 shrink-0 items-center gap-2 rounded-xl border px-4 text-xs font-semibold text-ink transition-colors hover:border-ink hover:bg-surface-muted",
+            activeFilterCount > 0 ? "border-ink bg-surface-muted" : "border-hairline",
+          )}
         >
           <SlidersHorizontal className="size-4" aria-hidden="true" />
           {t("categories.filters")}
+          {activeFilterCount > 0 ? (
+            <span
+              aria-hidden="true"
+              className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-ink text-[10px] font-bold text-white"
+            >
+              {activeFilterCount}
+            </span>
+          ) : null}
         </button>
       </div>
+
+      <FiltersModal
+        open={isFiltersOpen}
+        onOpenChange={setIsFiltersOpen}
+        filters={filters}
+        onApply={setFilters}
+      />
     </PageContainer>
   );
 };

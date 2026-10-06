@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -10,6 +11,7 @@ from app.core.config import settings
 from app.core.init_db import init_database
 from app.routers.auth import router as auth_router
 from app.routers.health import router as health_router
+from app.routers.listings import router as listings_router
 
 
 @asynccontextmanager
@@ -35,6 +37,7 @@ app.add_middleware(
 
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(listings_router, prefix="/api/v1")
 
 
 @app.exception_handler(StarletteHTTPException)
@@ -57,7 +60,7 @@ async def validation_exception_handler(
         status_code=422,
         content={
             "message": "Validation failed",
-            "errors": exc.errors(),
+            "errors": jsonable_encoder(exc.errors(), custom_encoder={Exception: str}),
         },
     )
 
