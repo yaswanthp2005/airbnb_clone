@@ -1,7 +1,9 @@
 """Password hashing and JWT helpers (used by auth flows)."""
 
+from __future__ import annotations
+
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from typing import Any, Optional
 
 import bcrypt
 from jose import JWTError, jwt
@@ -24,7 +26,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     )
 
 
-def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:
+def create_access_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:
     expire = datetime.now(timezone.utc) + (
         expires_delta
         or timedelta(minutes=settings.access_token_expire_minutes)
@@ -33,7 +35,7 @@ def create_access_token(subject: str, expires_delta: timedelta | None = None) ->
     return jwt.encode(payload, settings.secret_key, algorithm=ALGORITHM)
 
 
-def decode_access_token(token: str) -> dict[str, Any] | None:
+def decode_access_token(token: str) -> Optional[dict[str, Any]]:
     try:
         return jwt.decode(token, settings.secret_key, algorithms=[ALGORITHM])
     except JWTError:
