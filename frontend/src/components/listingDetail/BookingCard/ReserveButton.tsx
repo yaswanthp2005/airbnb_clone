@@ -5,9 +5,15 @@ type ReserveButtonProps = {
   disabled: boolean;
   onClick: () => void;
   className?: string;
+  label?: string;
 };
 
-const ReserveButton = ({ disabled, onClick, className }: ReserveButtonProps) => (
+const ReserveButton = ({
+  disabled,
+  onClick,
+  className,
+  label = t("listingDetail.booking.reserve"),
+}: ReserveButtonProps) => (
   <button
     type="button"
     disabled={disabled}
@@ -17,7 +23,7 @@ const ReserveButton = ({ disabled, onClick, className }: ReserveButtonProps) => 
       className,
     )}
   >
-    {t("listingDetail.booking.reserve")}
+    {label}
   </button>
 );
 

@@ -2,21 +2,20 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { addDays, addMonths, endOfMonth, startOfToday } from "date-fns";
+import { startOfToday } from "date-fns";
 
 import PageContainer from "@/components/layout/PageContainer";
-import { CALENDAR_MAX_MONTHS_AHEAD } from "@/components/search/constants";
-import { comingSoonRoute } from "@/constants/routes";
+import { bookRoute } from "@/constants/routes";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useListing, useListingUnavailableDates } from "@/queries/listings";
 import type { ListingDetail as ListingDetailData } from "@/types/listing";
-import { toDateParam } from "@/utils/dateParam";
+import { buildUrl } from "@/utils/buildUrl";
 import { calculatePriceBreakdown } from "@/utils/pricing";
 
 import AmenitiesSection from "./AmenitiesSection";
 import AvailabilitySection from "./AvailabilitySection";
 import BookingCard from "./BookingCard";
-import { DETAIL_COLUMNS_CLASS_NAME, RESERVE_COMING_SOON_SLUG } from "./constants";
+import { DETAIL_COLUMNS_CLASS_NAME } from "./constants";
 import Description from "./Description";
 import HostedBy from "./HostedBy";
 import { useBookingSelection } from "./hooks/useBookingSelection";
@@ -30,22 +29,13 @@ import MobileBookingBar from "./MobileBookingBar";
 import PhotoGalleryModal from "./PhotoGalleryModal";
 import PhotoGrid from "./PhotoGrid";
 import ReviewsSection from "./Reviews";
-import { isStayBookable } from "./utils";
+import { availabilityWindow, isStayBookable, selectionQuery } from "./utils";
 
 type ListingDetailProps = {
   listingId: number;
 };
 
 const NO_BOOKED_DATES: string[] = [];
-
-/** Covers every month the calendar can show (checkout may land the day after the last one). */
-const availabilityWindow = () => {
-  const today = startOfToday();
-  return {
-    startDate: toDateParam(today),
-    endDate: toDateParam(addDays(endOfMonth(addMonths(today, CALENDAR_MAX_MONTHS_AHEAD)), 1)),
-  };
-};
 
 const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
   const router = useRouter();
@@ -70,7 +60,9 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
 
   const handleReserve = () => {
     if (isBookable) {
-      requireAuth(() => router.push(comingSoonRoute(RESERVE_COMING_SOON_SLUG)));
+      requireAuth(() =>
+        router.push(buildUrl({ path: bookRoute(listing.id), query: selectionQuery(selection) })),
+      );
     }
   };
 

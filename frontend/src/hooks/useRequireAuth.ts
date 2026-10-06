@@ -10,7 +10,7 @@ export const useRequireAuth = () => {
   return useCallback(
     (action: () => void) => {
       if (!isAuthenticated) {
-        openAuthModal("login");
+        openAuthModal("login", action);
         return;
       }
       action();

@@ -4,19 +4,32 @@ import { X } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 type DetailModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
   children: React.ReactNode;
+  className?: string;
+  footer?: React.ReactNode;
 };
 
-const DetailModal = ({ open, onOpenChange, title, children }: DetailModalProps) => (
+const DetailModal = ({
+  open,
+  onOpenChange,
+  title,
+  children,
+  className,
+  footer,
+}: DetailModalProps) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent
       showCloseButton={false}
-      className="flex max-h-[calc(100dvh-4rem)] w-full flex-col gap-0 overflow-hidden rounded-xl bg-white p-0 shadow-card sm:max-w-[780px]"
+      className={cn(
+        "flex max-h-[calc(100dvh-4rem)] w-full flex-col gap-0 overflow-hidden rounded-xl bg-white p-0 shadow-card sm:max-w-[780px]",
+        className,
+      )}
     >
       <header className="flex h-16 shrink-0 items-center px-4">
         <DialogClose
@@ -32,6 +45,11 @@ const DetailModal = ({ open, onOpenChange, title, children }: DetailModalProps) 
         </DialogTitle>
         {children}
       </div>
+      {footer ? (
+        <footer className="flex shrink-0 items-center justify-between gap-4 border-t border-hairline px-6 py-4">
+          {footer}
+        </footer>
+      ) : null}
     </DialogContent>
   </Dialog>
 );

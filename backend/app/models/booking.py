@@ -22,13 +22,16 @@ if TYPE_CHECKING:
     from app.models.review import Review
     from app.models.user import User
 
+BOOKING_STATUS_CONFIRMED = "confirmed"
+BOOKING_STATUS_CANCELLED = "cancelled"
+
 
 class Booking(Base):
     __tablename__ = "bookings"
     __table_args__ = (
         CheckConstraint("check_out > check_in", name="ck_bookings_check_out_after_check_in"),
         CheckConstraint(
-            "status IN ('confirmed', 'cancelled')",
+            f"status IN ('{BOOKING_STATUS_CONFIRMED}', '{BOOKING_STATUS_CANCELLED}')",
             name="ck_bookings_status",
         ),
         Index("ix_bookings_listing_dates", "listing_id", "check_in", "check_out"),
@@ -48,7 +51,9 @@ class Booking(Base):
     cleaning_fee: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     service_fee: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     total_price: Mapped[int] = mapped_column(Integer, nullable=False)
-    status: Mapped[str] = mapped_column(String(20), nullable=False, default="confirmed")
+    status: Mapped[str] = mapped_column(
+        String(20), nullable=False, default=BOOKING_STATUS_CONFIRMED
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

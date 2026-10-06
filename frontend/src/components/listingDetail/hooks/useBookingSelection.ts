@@ -84,6 +84,12 @@ export const useBookingSelection = (maxGuests: number) => {
     [],
   );
 
+  const setGuests = useCallback(
+    (counts: GuestCounts) =>
+      setSelection(current => ({ ...current, ...clampGuests(counts, maxGuests) })),
+    [maxGuests],
+  );
+
   const changeGuests = useCallback(
     (key: GuestKey, delta: number) =>
       setSelection(current => ({
@@ -93,5 +99,11 @@ export const useBookingSelection = (maxGuests: number) => {
     [maxGuests],
   );
 
-  return { selection, setDates, changeGuests, guestLimits: { maxGuests, minAdults: MIN_ADULTS } };
+  return {
+    selection,
+    setDates,
+    setGuests,
+    changeGuests,
+    guestLimits: { maxGuests, minAdults: MIN_ADULTS },
+  };
 };
