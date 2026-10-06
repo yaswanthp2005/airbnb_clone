@@ -6,7 +6,7 @@ import axios, {
 import { toast } from "sonner";
 
 import { t } from "@/common/i18n";
-import { API_BASE_URL } from "@/constants";
+import { API_BASE_URL, HTTP_STATUS } from "@/constants";
 import { camelToSnake } from "@/utils/camelToSnake";
 import { notifyUnauthorized } from "@/utils/authEvents";
 import { clearAuthSession } from "@/utils/authSession";
@@ -84,7 +84,7 @@ const getErrorMessage = (error: AxiosError<{ message?: string }>): string => {
 };
 
 const handleErrorResponse = (error: AxiosError): Promise<never> => {
-  if (error.response?.status === 401) {
+  if (error.response?.status === HTTP_STATUS.unauthorized) {
     const requestUrl = error.config?.url ?? "";
     const isAuthAttempt =
       requestUrl.includes("/auth/login") ||

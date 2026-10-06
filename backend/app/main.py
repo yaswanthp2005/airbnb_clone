@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.core.config import settings
 from app.core.init_db import init_database
 from app.routers.auth import router as auth_router
+from app.routers.bookings import router as bookings_router
 from app.routers.health import router as health_router
 from app.routers.listings import router as listings_router
 
@@ -38,6 +39,17 @@ app.add_middleware(
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(listings_router, prefix="/api/v1")
+app.include_router(bookings_router, prefix="/api/v1")
+
+VALIDATION_FAILED_MESSAGE = "Validation failed"
+
+
+def _validation_message(errors: list[dict]) -> str:
+    """Surface model-level rules (e.g. "Checkout must be after check-in") as the message."""
+    first = errors[0] if errors else {}
+    if first.get("type") == "value_error" and first.get("ctx", {}).get("error"):
+        return str(first["ctx"]["error"])
+    return VALIDATION_FAILED_MESSAGE
 
 
 @app.exception_handler(StarletteHTTPException)
@@ -56,11 +68,12 @@ async def http_exception_handler(
 async def validation_exception_handler(
     _request: Request, exc: RequestValidationError
 ) -> JSONResponse:
+    errors = exc.errors()
     return JSONResponse(
         status_code=422,
         content={
-            "message": "Validation failed",
-            "errors": jsonable_encoder(exc.errors(), custom_encoder={Exception: str}),
+            "message": _validation_message(errors),
+            "errors": jsonable_encoder(errors, custom_encoder={Exception: str}),
         },
     )
 

@@ -6,17 +6,23 @@ import { usePathname } from "next/navigation";
 import CategoryBar from "@/components/layout/CategoryBar";
 import Navbar from "@/components/layout/Navbar";
 import type { SearchSection } from "@/components/search/constants";
-import { LISTING_ROUTE_PREFIX, routes } from "@/constants/routes";
+import {
+  BOOK_ROUTE_PREFIX,
+  BOOKING_ROUTE_PREFIX,
+  LISTING_ROUTE_PREFIX,
+  routes,
+} from "@/constants/routes";
 import { useScrollCollapse } from "@/hooks/useScrollCollapse";
 import { cn } from "@/lib/utils";
 
 const SCROLL_INTENT_EVENTS = ["wheel", "touchmove"] as const;
+const NARROW_ROUTE_PREFIXES = [LISTING_ROUTE_PREFIX, BOOK_ROUTE_PREFIX, BOOKING_ROUTE_PREFIX];
 
 const AppHeader = () => {
   const pathname = usePathname();
   const isCollapsed = useScrollCollapse();
   const isHome = pathname === routes.home;
-  const isListingPage = pathname.startsWith(LISTING_ROUTE_PREFIX);
+  const isNarrowPage = NARROW_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix));
   const headerRef = useRef<HTMLElement>(null);
   const [activeSearchSection, setActiveSearchSection] = useState<SearchSection | null>(null);
   const [isSearchForcedOpen, setIsSearchForcedOpen] = useState(false);
@@ -69,7 +75,7 @@ const AppHeader = () => {
             activeSearchSection={isExpanded ? activeSearchSection : null}
             onActiveSearchSectionChange={handleActiveSearchSectionChange}
             onOpenSearch={openSearch}
-            containerWidth={isListingPage ? "narrow" : "default"}
+            containerWidth={isNarrowPage ? "narrow" : "default"}
           />
         </div>
         {isHome ? (

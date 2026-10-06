@@ -5,10 +5,12 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
 import AuthModal from "@/components/auth/AuthModal";
+import { useIsHydrated } from "@/hooks/useIsHydrated";
 import {
   useLogin,
   useLogout,
@@ -30,7 +32,8 @@ export type AuthContextValue = {
   authModalOpen: boolean;
   authMode: AuthMode;
   isSubmitting: boolean;
-  openAuthModal: (mode?: AuthMode) => void;
+  /** `onAuthenticated` runs once the user logs in or signs up; dismissing the modal drops it. */
+  openAuthModal: (mode?: AuthMode, onAuthenticated?: () => void) => void;
   closeAuthModal: () => void;
   setAuthMode: (mode: AuthMode) => void;
   login: (payload: LoginInput) => Promise<void>;
@@ -48,6 +51,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [tokenVersion, setTokenVersion] = useState(0);
+  const pendingActionRef = useRef<(() => void) | null>(null);
+  const isHydrated = useIsHydrated();
 
   const hasToken = useMemo(() => {
     void tokenVersion;
@@ -72,6 +77,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     setUnauthorizedListener(() => {
+      pendingActionRef.current = null;
       setAuthMode("login");
       setAuthModalOpen(true);
       setTokenVersion(version => version + 1);
@@ -80,31 +86,41 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => setUnauthorizedListener(null);
   }, []);
 
-  const openAuthModal = useCallback((mode: AuthMode = "login") => {
-    setAuthMode(mode);
-    setAuthModalOpen(true);
-  }, []);
+  const openAuthModal = useCallback(
+    (mode: AuthMode = "login", onAuthenticated?: () => void) => {
+      pendingActionRef.current = onAuthenticated ?? null;
+      setAuthMode(mode);
+      setAuthModalOpen(true);
+    },
+    [],
+  );
 
   const closeAuthModal = useCallback(() => {
+    pendingActionRef.current = null;
     setAuthModalOpen(false);
   }, []);
+
+  const completeAuthentication = useCallback(() => {
+    const pendingAction = pendingActionRef.current;
+    setTokenVersion(version => version + 1);
+    closeAuthModal();
+    pendingAction?.();
+  }, [closeAuthModal]);
 
   const login = useCallback(
     async (payload: LoginInput) => {
       await loginMutation.mutateAsync(payload);
-      setTokenVersion(version => version + 1);
-      closeAuthModal();
+      completeAuthentication();
     },
-    [closeAuthModal, loginMutation],
+    [completeAuthentication, loginMutation],
   );
 
   const register = useCallback(
     async (payload: RegisterInput) => {
       await registerMutation.mutateAsync(payload);
-      setTokenVersion(version => version + 1);
-      closeAuthModal();
+      completeAuthentication();
     },
-    [closeAuthModal, registerMutation],
+    [completeAuthentication, registerMutation],
   );
 
   const logout = useCallback(() => {
@@ -113,7 +129,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     closeAuthModal();
   }, [closeAuthModal, logoutMutation]);
 
-  const isBootstrapping = hasToken && isMeLoading && !user;
+  // The token lives in localStorage, so the server (and hydration) can't know the session yet.
+  const isBootstrapping = !isHydrated || (hasToken && isMeLoading && !user);
   const isAuthenticated = hasToken && Boolean(user) && !isMeError;
 
   const value = useMemo<AuthContextValue>(

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 from datetime import date, datetime, time, timedelta, timezone
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -25,23 +25,15 @@ from app.seed.constants import (
     SEED_PHOTO_URLS,
 )
 from app.seed.data import CITY_SEEDS, SEED_USERS
+from app.services.pricing import quote_stay
 
-SERVICE_FEE_RATE = Decimal("0.12")
 REVIEW_POSTED_HOUR = 10
 RNG = random.Random(42)
 
 
-def _service_fee(subtotal: int) -> int:
-    return int(
-        (Decimal(subtotal) * SERVICE_FEE_RATE).quantize(Decimal("1"), ROUND_HALF_UP)
-    )
-
-
 def _booking_total(nightly_price: int, nights: int, cleaning_fee: int) -> tuple[int, int, int]:
-    lodging = nightly_price * nights
-    service_fee = _service_fee(lodging + cleaning_fee)
-    total = lodging + cleaning_fee + service_fee
-    return service_fee, total, lodging
+    quote = quote_stay(nightly_price, cleaning_fee, nights)
+    return quote.service_fee, quote.total, quote.lodging_total
 
 
 def _years_ago(moment: datetime, years: int) -> datetime:

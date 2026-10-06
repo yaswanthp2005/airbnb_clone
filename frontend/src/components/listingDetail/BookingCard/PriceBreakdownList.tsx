@@ -1,4 +1,5 @@
 import { t } from "@/common/i18n";
+import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/formatPrice";
 import type { PriceBreakdown } from "@/utils/pricing";
 
@@ -6,6 +7,8 @@ import { pluralize } from "../utils";
 
 type PriceBreakdownListProps = {
   breakdown: PriceBreakdown;
+  className?: string;
+  totalLabel?: string;
 };
 
 const Row = ({ label, amount }: { label: string; amount: number }) => (
@@ -15,8 +18,12 @@ const Row = ({ label, amount }: { label: string; amount: number }) => (
   </div>
 );
 
-const PriceBreakdownList = ({ breakdown }: PriceBreakdownListProps) => (
-  <dl className="mt-6 flex flex-col gap-3 text-base text-ink" aria-live="polite">
+const PriceBreakdownList = ({
+  breakdown,
+  className,
+  totalLabel = t("listingDetail.booking.totalBeforeTaxes"),
+}: PriceBreakdownListProps) => (
+  <dl className={cn("mt-6 flex flex-col gap-3 text-base text-ink", className)} aria-live="polite">
     <Row
       label={t("listingDetail.booking.nightlyLine", {
         price: formatPrice(breakdown.nightlyPrice),
@@ -29,7 +36,7 @@ const PriceBreakdownList = ({ breakdown }: PriceBreakdownListProps) => (
     ) : null}
     <Row label={t("listingDetail.booking.serviceFee")} amount={breakdown.serviceFee} />
     <div className="mt-3 flex items-center justify-between gap-4 border-t border-hairline pt-6 font-semibold">
-      <dt>{t("listingDetail.booking.totalBeforeTaxes")}</dt>
+      <dt>{totalLabel}</dt>
       <dd>{formatPrice(breakdown.total)}</dd>
     </div>
   </dl>

@@ -84,7 +84,4 @@ export const SECTION_IDS = {
   location: "location",
 } as const;
 
-/** Reserve leads here until checkout is built. */
-export const RESERVE_COMING_SOON_SLUG = "reserve";
-
 export const galleryPhotoId = (index: number) => `gallery-photo-${index}`;

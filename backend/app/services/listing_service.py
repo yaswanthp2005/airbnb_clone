@@ -25,14 +25,13 @@ from app.schemas.listing import (
     UnavailableDatesParams,
 )
 from app.schemas.pagination import PaginatedResponse
+from app.services.availability import overlaps_confirmed_booking
 
 PRICE_HISTOGRAM_BUCKETS = 40
 
 LISTING_NOT_FOUND_MESSAGE = "Listing not found"
 
 RATING_SCALE = (5, 4, 3, 2, 1)
-
-BOOKING_STATUS_CONFIRMED = "confirmed"
 
 LIKE_ESCAPE = "\\"
 
@@ -150,12 +149,7 @@ def _filter_by_availability(
         return stmt
     overlapping_booking = (
         select(Booking.id)
-        .where(
-            Booking.listing_id == Listing.id,
-            Booking.status == BOOKING_STATUS_CONFIRMED,
-            Booking.check_in < check_out,
-            Booking.check_out > check_in,
-        )
+        .where(Booking.listing_id == Listing.id, overlaps_confirmed_booking(check_in, check_out))
         .exists()
     )
     return stmt.where(~overlapping_booking)
@@ -330,10 +324,7 @@ def get_unavailable_dates(
 
     bookings = db.execute(
         select(Booking.check_in, Booking.check_out).where(
-            Booking.listing_id == listing_id,
-            Booking.status == BOOKING_STATUS_CONFIRMED,
-            Booking.check_in < end,
-            Booking.check_out > start,
+            Booking.listing_id == listing_id, overlaps_confirmed_booking(start, end)
         )
     )
     nights: set[date] = set()

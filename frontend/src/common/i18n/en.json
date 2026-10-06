@@ -217,7 +217,39 @@
   },
   "trips": {
     "title": "Trips",
-    "empty": "No trips booked yet — when you do, they will show up here."
+    "tabs": {
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "cancelled": "Cancelled"
+    },
+    "empty": {
+      "upcoming": {
+        "title": "No trips booked... yet!",
+        "description": "Time to dust off your bags and start planning your next adventure."
+      },
+      "past": {
+        "title": "No past trips",
+        "description": "Trips you've completed will show up here."
+      },
+      "cancelled": {
+        "title": "No cancelled trips",
+        "description": "Reservations you cancel will show up here."
+      }
+    },
+    "startSearching": "Start searching",
+    "hostedBy": "Hosted by {{name}}",
+    "total": "{{amount}} total",
+    "cancelledBadge": "Cancelled",
+    "cancelTrip": "Cancel reservation",
+    "showMore": "Show more trips",
+    "retry": "Try again",
+    "cancelDialog": {
+      "title": "Cancel your reservation?",
+      "description": "Your stay at {{title}} from {{checkIn}} to {{checkOut}} will be cancelled and the dates released. You'll be refunded {{amount}}.",
+      "keep": "Keep reservation",
+      "confirm": "Cancel reservation",
+      "cancelling": "Cancelling…"
+    }
   },
   "hosting": {
     "title": "Host your home",
@@ -335,6 +367,86 @@
       "title": "We can't find this place",
       "description": "It may have been removed, or the link might be wrong.",
       "backHome": "Back to home"
+    }
+  },
+  "checkout": {
+    "title": "Confirm and pay",
+    "back": "Back to listing",
+    "trip": {
+      "title": "Your trip",
+      "dates": "Dates",
+      "guests": "Guests",
+      "edit": "Edit",
+      "editDates": "Edit dates",
+      "editGuests": "Edit guests",
+      "addDates": "Add dates",
+      "addGuests": "Add guests",
+      "datesRequired": "Add your trip dates to continue."
+    },
+    "payment": {
+      "title": "Pay with",
+      "cardLabel": "Credit or debit card",
+      "demoNotice": "This is a demo checkout, so no money is taken. Use {{card}}, any future expiry date and any CVV.",
+      "cardNumber": "Card number",
+      "cardNumberPlaceholder": "0000 0000 0000 0000",
+      "expiry": "Expiration",
+      "expiryPlaceholder": "MM/YY",
+      "cvv": "CVV",
+      "cvvPlaceholder": "123",
+      "pinCode": "PIN code",
+      "postalCode": "Postal code",
+      "country": "Country/region",
+      "countries": {
+        "IN": "India",
+        "AE": "United Arab Emirates",
+        "GB": "United Kingdom",
+        "SG": "Singapore",
+        "US": "United States"
+      },
+      "errors": {
+        "cardNumberRequired": "Enter your card number.",
+        "cardNumberInvalid": "Check your card number.",
+        "expiryRequired": "Enter the expiration date.",
+        "expiryInvalid": "Enter a valid expiration date in the future (MM/YY).",
+        "cvvInvalid": "Enter the 3 or 4 digit CVV.",
+        "pinCodeInvalid": "Enter a valid 6-digit PIN code.",
+        "postalCodeInvalid": "Enter a valid postal code."
+      }
+    },
+    "cancellation": {
+      "title": "Cancellation policy",
+      "freeUntil": "Free cancellation until check-in on {{date}}. Cancel from My Trips for a full refund.",
+      "generic": "Free cancellation until check-in. Cancel from My Trips for a full refund."
+    },
+    "terms": "By selecting the button below, I agree to the host's house rules and the cancellation policy, and that the prices shown are confirmed by the server when I book.",
+    "confirmAndPay": "Confirm and pay",
+    "confirming": "Confirming…",
+    "priceDetails": "Price details",
+    "totalInr": "Total (INR)"
+  },
+  "bookingConfirmation": {
+    "title": "Your reservation is confirmed",
+    "subtitle": "You're going to {{city}}! The details are below and in My Trips.",
+    "cancelledTitle": "This reservation was cancelled",
+    "cancelledSubtitle": "The dates have been released and your payment refunded.",
+    "propertyIn": "{{type}} in {{city}}",
+    "hostedBy": "Hosted by {{name}}",
+    "checkIn": "Check-in",
+    "checkOut": "Checkout",
+    "guests": "Guests",
+    "guestCountOne": "{{count}} guest",
+    "guestCountOther": "{{count}} guests",
+    "confirmationCode": "Confirmation code",
+    "code": "#{{id}}",
+    "paymentDetails": "Payment details",
+    "refundDetails": "Refund details",
+    "totalPaid": "Total paid (INR)",
+    "totalRefunded": "Total refunded (INR)",
+    "goToTrips": "Go to My Trips",
+    "keepExploring": "Keep exploring",
+    "notFound": {
+      "title": "We couldn't find that reservation",
+      "description": "It may not exist, or it belongs to another account."
     }
   }
 }

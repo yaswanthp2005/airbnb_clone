@@ -47,6 +47,13 @@ export const LISTING_DETAIL_STALE_TIME_MS = 5 * 60 * 1000;
 export const LISTING_REVIEWS_STALE_TIME_MS = 5 * 60 * 1000;
 export const UNAVAILABLE_DATES_STALE_TIME_MS = 60 * 1000;
 export const REVIEWS_PAGE_SIZE = 6;
+export const BOOKINGS_PAGE_SIZE = 12;
+export const BOOKINGS_STALE_TIME_MS = 60 * 1000;
+
+export const HTTP_STATUS = {
+  unauthorized: 401,
+  conflict: 409,
+} as const;
 export const LISTING_IMAGE_SIZES =
   "(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw";
 /** Cards rendered with eager images (roughly the first visible row). */
@@ -61,6 +68,7 @@ export const CATEGORY_SCROLL_STEP_PX = 480;
 export {
   apiRoutes,
   bookingRoute,
+  bookRoute,
   comingSoonRoute,
   listingRoute,
   routes,

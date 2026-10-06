@@ -1,7 +1,17 @@
-import { addDays, differenceInYears, format, isBefore, parseISO } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  differenceInYears,
+  endOfMonth,
+  format,
+  isBefore,
+  parseISO,
+  startOfToday,
+} from "date-fns";
 import type { Matcher } from "react-day-picker";
 
 import { t } from "@/common/i18n";
+import { CALENDAR_MAX_MONTHS_AHEAD, type GuestCounts } from "@/components/search/constants";
 import { countNights } from "@/utils/pricing";
 import { fromDateParam, toDateParam } from "@/utils/dateParam";
 
@@ -13,6 +23,32 @@ export type StayDates = {
   /** `yyyy-MM-dd` */
   checkOut?: string;
 };
+
+/** Covers every month the calendar can show (checkout may land the day after the last one). */
+export const availabilityWindow = () => {
+  const today = startOfToday();
+  return {
+    startDate: toDateParam(today),
+    endDate: toDateParam(addDays(endOfMonth(addMonths(today, CALENDAR_MAX_MONTHS_AHEAD)), 1)),
+  };
+};
+
+/** `buildUrl` query that carries the chosen stay to another page (zero counts are dropped). */
+export const selectionQuery = ({
+  checkIn,
+  checkOut,
+  adults,
+  children,
+  infants,
+  pets,
+}: StayDates & GuestCounts) => ({
+  checkIn,
+  checkOut,
+  adults: adults || undefined,
+  children: children || undefined,
+  infants: infants || undefined,
+  pets: pets || undefined,
+});
 
 export const pluralize = (count: number, key: string) =>
   t(count === 1 ? `${key}One` : `${key}Other`, { count });
