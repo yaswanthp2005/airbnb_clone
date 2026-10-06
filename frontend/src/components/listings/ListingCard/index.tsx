@@ -17,11 +17,13 @@ import PhotoCarousel from "./PhotoCarousel";
 type ListingCardProps = {
   listing: ListingSummary;
   isEager?: boolean;
+  /** Defaults to the plain listing route. */
+  href?: string;
 };
 
 const RATING_DECIMALS = 2;
 
-const ListingCard = ({ listing, isEager = false }: ListingCardProps) => {
+const ListingCard = ({ listing, isEager = false, href }: ListingCardProps) => {
   const { isAuthenticated, openAuthModal } = useAuth();
   const location = t("listings.card.location", {
     city: listing.city,
@@ -44,7 +46,7 @@ const ListingCard = ({ listing, isEager = false }: ListingCardProps) => {
   return (
     <article className="group relative flex flex-col gap-3">
       <Link
-        href={listingRoute(listing.id)}
+        href={href ?? listingRoute(listing.id)}
         aria-label={listing.title}
         className="absolute inset-0 z-10 rounded-xl"
       />

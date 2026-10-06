@@ -86,6 +86,16 @@ export const filtersToQuery = (filters: ListingFilters) => ({
   bedrooms: filters.bedrooms,
 });
 
+/** Dates + guests to carry from search results into a listing page. */
+export const stayQuery = (filters: ListingFilters) => ({
+  checkIn: filters.checkIn,
+  checkOut: filters.checkOut,
+  adults: filters.adults,
+  children: filters.children,
+  infants: filters.infants,
+  pets: filters.pets,
+});
+
 export const countActiveFilters = (filters: ListingFilters): number =>
   Number(filters.minPrice !== undefined || filters.maxPrice !== undefined) +
   filters.propertyType.length +

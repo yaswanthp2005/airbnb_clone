@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import random
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal, ROUND_HALF_UP
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -26,7 +26,8 @@ from app.seed.constants import (
 )
 from app.seed.data import CITY_SEEDS, SEED_USERS
 
-SERVICE_FEE_RATE = Decimal("0.14")
+SERVICE_FEE_RATE = Decimal("0.12")
+REVIEW_POSTED_HOUR = 10
 RNG = random.Random(42)
 
 
@@ -38,9 +39,35 @@ def _service_fee(subtotal: int) -> int:
 
 def _booking_total(nightly_price: int, nights: int, cleaning_fee: int) -> tuple[int, int, int]:
     lodging = nightly_price * nights
-    service_fee = _service_fee(lodging)
+    service_fee = _service_fee(lodging + cleaning_fee)
     total = lodging + cleaning_fee + service_fee
     return service_fee, total, lodging
+
+
+def _years_ago(moment: datetime, years: int) -> datetime:
+    try:
+        return moment.replace(year=moment.year - years)
+    except ValueError:  # 29 Feb in a non-leap target year
+        return moment.replace(year=moment.year - years, day=28)
+
+
+def _listing_description(
+    property_type: str, city: str, state: str, host_first_name: str, bedrooms: int, max_guests: int
+) -> str:
+    article = "an" if property_type[0].lower() in "aeiou" else "a"
+    return "\n\n".join(
+        (
+            f"Stay in {article} {property_type.lower()} hosted by {host_first_name} in {city}, {state}. "
+            f"Enjoy Indian hospitality with modern comforts, great for families and small groups.",
+            f"The space\n{bedrooms} bedroom(s) with fresh linen, a bright living area and a "
+            f"well-stocked kitchen for home-cooked meals. Sleeps up to {max_guests} guests.",
+            "Guest access\nThe whole place is yours, including the outdoor seating area. "
+            "Self check-in with a smart lock, any time after 2 pm.",
+            f"Other things to note\nThe neighbourhood is quiet after 10 pm. Local markets, "
+            f"cafés and the best of {city} are a short drive away; {host_first_name} is happy "
+            f"to share recommendations.",
+        )
+    )
 
 
 def run_seed(db: Session) -> None:
@@ -58,6 +85,7 @@ def run_seed(db: Session) -> None:
             password_hash=password_hash,
             avatar_url=seed_user.avatar_url,
             bio=seed_user.bio,
+            created_at=_years_ago(datetime.now(timezone.utc), seed_user.joined_years_ago),
         )
         db.add(user)
         users_by_email[seed_user.email] = user
@@ -94,11 +122,13 @@ def run_seed(db: Session) -> None:
             max_guests = RNG.randint(2, 10)
 
             title = f"{property_type} in {city_seed.city} — {local_idx + 1}"
-            description = (
-                f"Stay in a {property_type.lower()} hosted by {host.name.split()[0]} "
-                f"in {city_seed.city}, {city_seed.state}. "
-                f"Enjoy Indian hospitality with modern comforts, great for families "
-                f"and small groups. Prices in INR (₹{price:,} per night)."
+            description = _listing_description(
+                property_type,
+                city_seed.city,
+                city_seed.state,
+                host.name.split()[0],
+                bedrooms,
+                max_guests,
             )
 
             listing = Listing(
@@ -184,6 +214,11 @@ def run_seed(db: Session) -> None:
                     guest_id=guest.id,
                     rating=rating,
                     comment=REVIEW_COMMENTS[(idx + review_idx) % len(REVIEW_COMMENTS)],
+                    created_at=datetime.combine(
+                        check_out + timedelta(days=1),
+                        time(REVIEW_POSTED_HOUR),
+                        tzinfo=timezone.utc,
+                    ),
                 )
             )
         if ratings:

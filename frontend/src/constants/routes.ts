@@ -14,8 +14,10 @@ export const routes = {
   comingSoon: `${BASE}/coming-soon/:slug`,
 } as const;
 
+export const LISTING_ROUTE_PREFIX = `${BASE}/listings/`;
+
 export const listingRoute = (listingId: string | number) =>
-  `${BASE}/listings/${listingId}`;
+  `${LISTING_ROUTE_PREFIX}${listingId}`;
 
 export const bookingRoute = (bookingId: string | number) =>
   `${BASE}/bookings/${bookingId}`;
@@ -34,4 +36,7 @@ export const apiRoutes = {
   listings: "/listings",
   listingFilterOptions: "/listings/filter-options",
   listingLocations: "/listings/locations",
+  listingDetail: "/listings/:id",
+  listingReviews: "/listings/:id/reviews",
+  listingUnavailableDates: "/listings/:id/unavailable-dates",
 } as const;

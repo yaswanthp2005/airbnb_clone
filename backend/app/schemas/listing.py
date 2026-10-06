@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 from typing import Any, Optional
 
@@ -12,6 +12,8 @@ MAX_GUESTS = 50
 MAX_LOCATION_LENGTH = 100
 DEFAULT_LOCATION_SUGGESTIONS = 6
 MAX_LOCATION_SUGGESTIONS = 20
+DEFAULT_AVAILABILITY_WINDOW_DAYS = 365
+MAX_AVAILABILITY_WINDOW_DAYS = 731
 
 
 class ListingSort(str, Enum):
@@ -131,6 +133,71 @@ class AmenityOut(BaseModel):
     icon: Optional[str] = None
 
     model_config = {"from_attributes": True}
+
+
+class ListingHostOut(BaseModel):
+    id: int
+    name: str
+    avatar_url: Optional[str] = None
+    bio: Optional[str] = None
+    joined_at: datetime
+    listing_count: int
+    review_count: int
+    rating_avg: float
+
+
+class RatingCount(BaseModel):
+    rating: int
+    count: int
+
+
+class ListingDetailOut(BaseModel):
+    id: int
+    title: str
+    description: str
+    property_type: str
+    city: str
+    state: str
+    country: str
+    latitude: float
+    longitude: float
+    price_per_night: int
+    cleaning_fee: int
+    max_guests: int
+    bedrooms: int
+    beds: int
+    bathrooms: int
+    rating_avg: float
+    review_count: int
+    rating_breakdown: list[RatingCount]
+    photos: list[str]
+    amenities: list[AmenityOut]
+    host: ListingHostOut
+    is_wishlisted: bool
+
+
+class ListingDetailResponse(BaseModel):
+    data: ListingDetailOut
+
+
+class UnavailableDatesParams(BaseModel):
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+
+    @model_validator(mode="after")
+    def check_window(self) -> "UnavailableDatesParams":
+        if self.start_date and self.end_date:
+            if self.end_date <= self.start_date:
+                raise ValueError("end_date must be after start_date")
+            if (self.end_date - self.start_date).days > MAX_AVAILABILITY_WINDOW_DAYS:
+                raise ValueError(
+                    f"date window cannot exceed {MAX_AVAILABILITY_WINDOW_DAYS} days"
+                )
+        return self
+
+
+class UnavailableDatesResponse(BaseModel):
+    data: list[date]
 
 
 class ListingFilterOptions(BaseModel):

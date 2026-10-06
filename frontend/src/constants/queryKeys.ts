@@ -19,6 +19,10 @@ export const queryKeys = {
       [...queryKeys.listings.all, "locations", query] as const,
     detail: (id: string | number) =>
       [...queryKeys.listings.all, "detail", id] as const,
+    reviews: (id: string | number) =>
+      [...queryKeys.listings.all, "reviews", id] as const,
+    unavailableDates: (id: string | number) =>
+      [...queryKeys.listings.all, "unavailableDates", id] as const,
   },
   bookings: {
     all: ["bookings"] as const,

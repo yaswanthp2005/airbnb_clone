@@ -10,6 +10,7 @@ class SeedUser:
     is_host: bool
     avatar_url: str
     bio: str
+    joined_years_ago: int
 
 
 @dataclass(frozen=True)
@@ -28,6 +29,7 @@ SEED_USERS: tuple[SeedUser, ...] = (
         is_host=True,
         avatar_url="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
         bio="Goa-born host sharing coastal homes and city apartments across western India.",
+        joined_years_ago=6,
     ),
     SeedUser(
         name="Priya Sharma",
@@ -35,6 +37,7 @@ SEED_USERS: tuple[SeedUser, ...] = (
         is_host=True,
         avatar_url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
         bio="Heritage stays in Rajasthan and curated boutique listings for slow travel.",
+        joined_years_ago=4,
     ),
     SeedUser(
         name="Vikram Singh",
@@ -42,6 +45,7 @@ SEED_USERS: tuple[SeedUser, ...] = (
         is_host=True,
         avatar_url="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
         bio="Mountain cabins, farm stays, and adventure bases in the Himalayas and hills.",
+        joined_years_ago=3,
     ),
     SeedUser(
         name="Ananya Iyer",
@@ -49,6 +53,7 @@ SEED_USERS: tuple[SeedUser, ...] = (
         is_host=False,
         avatar_url="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80",
         bio="Food blogger exploring homestays across South India.",
+        joined_years_ago=2,
     ),
     SeedUser(
         name="Rohit Khanna",
@@ -56,6 +61,7 @@ SEED_USERS: tuple[SeedUser, ...] = (
         is_host=False,
         avatar_url="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
         bio="Weekend traveller from Delhi; loves heritage havelis and houseboats.",
+        joined_years_ago=3,
     ),
     SeedUser(
         name="Demo Guest",
@@ -63,6 +69,7 @@ SEED_USERS: tuple[SeedUser, ...] = (
         is_host=False,
         avatar_url="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80",
         bio="Default demo account for trying bookings and reviews.",
+        joined_years_ago=1,
     ),
 )
 
