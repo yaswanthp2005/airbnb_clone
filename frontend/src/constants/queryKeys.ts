@@ -15,6 +15,8 @@ export const queryKeys = {
       [...queryKeys.listings.all, "count", filters] as const,
     filterOptions: (category?: string) =>
       [...queryKeys.listings.all, "filterOptions", category ?? null] as const,
+    locations: (query: string) =>
+      [...queryKeys.listings.all, "locations", query] as const,
     detail: (id: string | number) =>
       [...queryKeys.listings.all, "detail", id] as const,
   },

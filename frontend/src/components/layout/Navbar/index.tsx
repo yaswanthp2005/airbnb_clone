@@ -1,28 +1,39 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Globe } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import PageContainer from "@/components/layout/PageContainer";
+import type { SearchSection } from "@/components/search/constants";
+import SearchBar from "@/components/search/SearchBar";
+import SearchPill from "@/components/search/SearchPill";
 import { routes } from "@/constants/routes";
 import { useAuth } from "@/hooks/useAuth";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 import Logo from "./Logo";
-import SearchPill from "./SearchPill";
 import StaysTab from "./StaysTab";
 import UserMenu from "./UserMenu";
 
 type NavbarProps = {
   isExpanded: boolean;
+  activeSearchSection: SearchSection | null;
+  onActiveSearchSectionChange: (section: SearchSection | null) => void;
+  onOpenSearch: (section: SearchSection) => void;
 };
 
 const roundHoverClass =
   "rounded-full text-sm font-semibold text-ink transition-colors hover:bg-surface-muted";
 
-const Navbar = ({ isExpanded }: NavbarProps) => {
+const Navbar = ({
+  isExpanded,
+  activeSearchSection,
+  onActiveSearchSectionChange,
+  onOpenSearch,
+}: NavbarProps) => {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
   const requireAuth = useRequireAuth();
@@ -34,8 +45,14 @@ const Navbar = ({ isExpanded }: NavbarProps) => {
           <Logo />
         </div>
 
-        <div className="flex justify-center">
-          {isExpanded ? <StaysTab /> : <SearchPill />}
+        <div className="flex min-w-0 justify-center">
+          {isExpanded ? (
+            <StaysTab />
+          ) : (
+            <Suspense fallback={<div className="h-12 w-80" />}>
+              <SearchPill onSectionClick={onOpenSearch} />
+            </Suspense>
+          )}
         </div>
 
         <div className="flex items-center justify-end gap-1">
@@ -65,7 +82,12 @@ const Navbar = ({ isExpanded }: NavbarProps) => {
 
       {isExpanded ? (
         <div className="flex justify-center pb-5">
-          <SearchPill />
+          <Suspense fallback={<div className="h-16 w-[850px] max-w-full" />}>
+            <SearchBar
+              activeSection={activeSearchSection}
+              onActiveSectionChange={onActiveSearchSectionChange}
+            />
+          </Suspense>
         </div>
       ) : null}
     </PageContainer>

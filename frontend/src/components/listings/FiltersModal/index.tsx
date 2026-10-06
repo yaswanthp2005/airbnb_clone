@@ -16,8 +16,7 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useListingFilterOptions, useListingsCount } from "@/queries/listings";
 import type { ListingFilters } from "@/types/listing";
 
-import { EMPTY_LISTING_FILTERS } from "../constants";
-import { countActiveFilters, toggleValue } from "../utils";
+import { clearModalFilters, countActiveFilters, toggleValue } from "../utils";
 import AmenitiesFilter from "./AmenitiesFilter";
 import BedroomsFilter from "./BedroomsFilter";
 import FilterSection from "./FilterSection";
@@ -137,7 +136,7 @@ const FiltersPanel = ({ filters, onApply, onClose }: FiltersPanelProps) => {
         resultCount={resultCount}
         isCounting={isCounting}
         canClear={countActiveFilters(draft) > 0}
-        onClear={() => setDraft({ ...EMPTY_LISTING_FILTERS, category: filters.category })}
+        onClear={() => setDraft(clearModalFilters)}
         onApply={handleApply}
       />
     </>

@@ -33,4 +33,5 @@ export const apiRoutes = {
   authMe: "/auth/me",
   listings: "/listings",
   listingFilterOptions: "/listings/filter-options",
+  listingLocations: "/listings/locations",
 } as const;

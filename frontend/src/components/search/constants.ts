@@ -1,0 +1,59 @@
+import {
+  Landmark,
+  MountainSnow,
+  Sailboat,
+  Sunrise,
+  TreePalm,
+  Waves,
+  type LucideIcon,
+} from "lucide-react";
+
+export type SearchSection = "where" | "when" | "who";
+
+export type GuestKey = "adults" | "children" | "infants" | "pets";
+
+export type GuestCounts = Record<GuestKey, number>;
+
+export type GuestField = {
+  key: GuestKey;
+  labelKey: string;
+  descriptionKey: string;
+};
+
+export const GUEST_FIELDS: GuestField[] = [
+  { key: "adults", labelKey: "search.guests.adults", descriptionKey: "search.guests.adultsDescription" },
+  { key: "children", labelKey: "search.guests.children", descriptionKey: "search.guests.childrenDescription" },
+  { key: "infants", labelKey: "search.guests.infants", descriptionKey: "search.guests.infantsDescription" },
+  { key: "pets", labelKey: "search.guests.pets", descriptionKey: "search.guests.petsDescription" },
+];
+
+/** Adults + children; infants and pets have their own caps. */
+export const MAX_GUESTS = 16;
+export const MAX_INFANTS = 5;
+export const MAX_PETS = 5;
+
+export const EMPTY_GUEST_COUNTS: GuestCounts = {
+  adults: 0,
+  children: 0,
+  infants: 0,
+  pets: 0,
+};
+
+export const CALENDAR_MONTHS = 2;
+export const CALENDAR_MAX_MONTHS_AHEAD = 12;
+
+export type PopularDestination = {
+  city: string;
+  descriptionKey: string;
+  icon: LucideIcon;
+  tintClassName: string;
+};
+
+export const POPULAR_DESTINATIONS: PopularDestination[] = [
+  { city: "Goa", descriptionKey: "search.popular.goa", icon: TreePalm, tintClassName: "bg-emerald-50 text-emerald-700" },
+  { city: "Jaipur", descriptionKey: "search.popular.jaipur", icon: Landmark, tintClassName: "bg-rose-50 text-rose-700" },
+  { city: "Manali", descriptionKey: "search.popular.manali", icon: MountainSnow, tintClassName: "bg-sky-50 text-sky-700" },
+  { city: "Udaipur", descriptionKey: "search.popular.udaipur", icon: Sailboat, tintClassName: "bg-indigo-50 text-indigo-700" },
+  { city: "Kochi", descriptionKey: "search.popular.kochi", icon: Waves, tintClassName: "bg-teal-50 text-teal-700" },
+  { city: "Rishikesh", descriptionKey: "search.popular.rishikesh", icon: Sunrise, tintClassName: "bg-amber-50 text-amber-700" },
+];

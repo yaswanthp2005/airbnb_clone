@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import Optional
 
-from sqlalchemy import Select, false, func, select
+from sqlalchemy import ColumnElement, Select, case, false, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
-from app.models import Amenity, Listing, ListingAmenity, WishlistItem
+from app.models import Amenity, Booking, Listing, ListingAmenity, WishlistItem
 from app.models.user import User
 from app.schemas.listing import (
     AmenityOut,
@@ -13,10 +14,16 @@ from app.schemas.listing import (
     ListingFilterOptions,
     ListingFilterParams,
     ListingSort,
+    LocationSuggestion,
+    LocationSuggestionParams,
 )
 from app.schemas.pagination import PaginatedResponse
 
 PRICE_HISTOGRAM_BUCKETS = 40
+
+BOOKING_STATUS_CONFIRMED = "confirmed"
+
+LIKE_ESCAPE = "\\"
 
 DEFAULT_CATEGORY = "trending"
 
@@ -96,6 +103,59 @@ def _filter_by_amenities(stmt: Select, amenity_ids: list[int]) -> Select:
     return stmt.where(Listing.id.in_(matching_listing_ids))
 
 
+def _contains_ci(column: ColumnElement[str], term: str) -> ColumnElement[bool]:
+    escaped = (
+        term.lower()
+        .replace(LIKE_ESCAPE, LIKE_ESCAPE * 2)
+        .replace("%", f"{LIKE_ESCAPE}%")
+        .replace("_", f"{LIKE_ESCAPE}_")
+    )
+    return func.lower(column).like(f"%{escaped}%", escape=LIKE_ESCAPE)
+
+
+def _location_terms(location: Optional[str]) -> list[str]:
+    return [term.strip() for term in (location or "").split(",") if term.strip()]
+
+
+def _matches_location(term: str) -> ColumnElement[bool]:
+    return or_(
+        _contains_ci(Listing.city, term),
+        _contains_ci(Listing.state, term),
+        _contains_ci(Listing.country, term),
+    )
+
+
+def _filter_by_location(stmt: Select, location: Optional[str]) -> Select:
+    # "Udaipur, Rajasthan" → every comma-separated part must match some field.
+    for term in _location_terms(location):
+        stmt = stmt.where(_matches_location(term))
+    return stmt
+
+
+def _filter_by_availability(
+    stmt: Select, check_in: Optional[date], check_out: Optional[date]
+) -> Select:
+    if check_in is None or check_out is None:
+        return stmt
+    overlapping_booking = (
+        select(Booking.id)
+        .where(
+            Booking.listing_id == Listing.id,
+            Booking.status == BOOKING_STATUS_CONFIRMED,
+            Booking.check_in < check_out,
+            Booking.check_out > check_in,
+        )
+        .exists()
+    )
+    return stmt.where(~overlapping_booking)
+
+
+def _filter_by_guests(stmt: Select, guests: Optional[int]) -> Select:
+    if guests is None:
+        return stmt
+    return stmt.where(Listing.max_guests >= guests)
+
+
 def _filtered_listings(params: ListingFilterParams) -> Select:
     stmt = select(Listing)
     stmt = _filter_by_category(stmt, params.category)
@@ -103,6 +163,9 @@ def _filtered_listings(params: ListingFilterParams) -> Select:
     stmt = _filter_by_property_type(stmt, params.property_type)
     stmt = _filter_by_bedrooms(stmt, params.bedrooms)
     stmt = _filter_by_amenities(stmt, params.amenities)
+    stmt = _filter_by_location(stmt, params.location)
+    stmt = _filter_by_availability(stmt, params.check_in, params.check_out)
+    stmt = _filter_by_guests(stmt, params.guests)
     return stmt
 
 
@@ -201,3 +264,31 @@ def get_filter_options(db: Session, category: Optional[str]) -> ListingFilterOpt
         property_types=property_types,
         amenities=[AmenityOut.model_validate(amenity) for amenity in amenities],
     )
+
+
+def suggest_locations(
+    db: Session, params: LocationSuggestionParams
+) -> list[LocationSuggestion]:
+    listing_count = func.count(Listing.id)
+    stmt = select(
+        Listing.city, Listing.state, Listing.country, listing_count
+    ).group_by(Listing.city, Listing.state, Listing.country)
+
+    ordering: list[ColumnElement] = []
+    for term in _location_terms(params.q):
+        stmt = stmt.where(_matches_location(term))
+    if params.q:
+        city_prefix = params.q.split(",")[0].strip().lower()
+        ordering.append(
+            case((func.lower(Listing.city).startswith(city_prefix), 0), else_=1)
+        )
+
+    rows = db.execute(
+        stmt.order_by(*ordering, listing_count.desc(), Listing.city.asc()).limit(
+            params.limit
+        )
+    )
+    return [
+        LocationSuggestion(city=city, state=state, country=country, listing_count=count)
+        for city, state, country, count in rows
+    ]

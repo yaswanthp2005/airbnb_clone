@@ -26,7 +26,18 @@ export const LISTING_FILTER_PARAMS = {
   propertyType: "property_type",
   amenities: "amenities",
   bedrooms: "bedrooms",
+  location: "location",
+  checkIn: "check_in",
+  checkOut: "check_out",
+  adults: "adults",
+  children: "children",
+  infants: "infants",
+  pets: "pets",
 } as const;
+
+/** `yyyy-MM-dd`, the date format shared by URL params and the API. */
+export const DATE_PARAM_FORMAT = "yyyy-MM-dd";
+export const LOCATION_SUGGESTIONS_STALE_TIME_MS = 10 * 60 * 1000;
 
 export const LISTINGS_STALE_TIME_MS = 5 * 60 * 1000;
 export const LISTING_FILTER_OPTIONS_STALE_TIME_MS = 30 * 60 * 1000;

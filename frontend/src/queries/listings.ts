@@ -6,11 +6,16 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 
-import { getListingFilterOptions, getListings } from "@/api/listings";
+import {
+  getListingFilterOptions,
+  getListings,
+  getLocationSuggestions,
+} from "@/api/listings";
 import {
   DEFAULT_PAGE_SIZE,
   LISTING_FILTER_OPTIONS_STALE_TIME_MS,
   LISTINGS_STALE_TIME_MS,
+  LOCATION_SUGGESTIONS_STALE_TIME_MS,
 } from "@/constants";
 import { queryKeys } from "@/constants/queryKeys";
 import type { ListingFilters } from "@/types/listing";
@@ -41,6 +46,15 @@ export const useListingsCount = (filters: ListingFilters, enabled = true) =>
     enabled,
     placeholderData: keepPreviousData,
     staleTime: LISTINGS_STALE_TIME_MS,
+  });
+
+export const useLocationSuggestions = (query: string, enabled = true) =>
+  useQuery({
+    queryKey: queryKeys.listings.locations(query),
+    queryFn: () => getLocationSuggestions(query),
+    enabled: enabled && query.length > 0,
+    placeholderData: keepPreviousData,
+    staleTime: LOCATION_SUGGESTIONS_STALE_TIME_MS,
   });
 
 export const useListingFilterOptions = (category?: string, enabled = true) =>

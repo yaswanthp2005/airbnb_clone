@@ -17,7 +17,7 @@ import ListingCard from "./ListingCard";
 import ListingCardSkeleton from "./ListingCardSkeleton";
 import ListingGridSkeleton from "./ListingGridSkeleton";
 import ListingsEmptyState from "./ListingsEmptyState";
-import { countActiveFilters } from "./utils";
+import { countActiveFilters, hasSearchCriteria } from "./utils";
 
 const ListingsFeed = () => {
   const { filters, setFilters } = useListingFilters();
@@ -58,7 +58,10 @@ const ListingsFeed = () => {
   }
 
   if (listings.length === 0) {
-    const hasAnyFilter = countActiveFilters(filters) > 0 || Boolean(filters.category);
+    const hasAnyFilter =
+      countActiveFilters(filters) > 0 ||
+      Boolean(filters.category) ||
+      hasSearchCriteria(filters);
 
     return (
       <ListingsEmptyState
