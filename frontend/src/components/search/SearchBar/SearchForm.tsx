@@ -1,24 +1,14 @@
 "use client";
 
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type FormEvent,
-  type KeyboardEvent,
-} from "react";
-import { MapPin, Search } from "lucide-react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { Search } from "lucide-react";
 
 import { t } from "@/common/i18n";
-import { SEARCH_DEBOUNCE_MS } from "@/constants";
 import { useDismiss } from "@/hooks/useDismiss";
 import { cn } from "@/lib/utils";
-import { useLocationSuggestions } from "@/queries/listings";
-import { debounce } from "@/utils/debounce";
 
-import { POPULAR_DESTINATIONS, type GuestKey, type SearchSection } from "../constants";
+import type { GuestKey, SearchSection } from "../constants";
+import { useWhereOptions } from "../hooks/useWhereOptions";
 import {
   formatDateRange,
   formatGuestSummary,
@@ -27,7 +17,8 @@ import {
 } from "../utils";
 import { Segment, SegmentDivider, SegmentText } from "./Segment";
 import WhenPanel from "./WhenPanel";
-import WherePanel, { type WhereOption } from "./WherePanel";
+import type { WhereOption } from "./WhereOptionList";
+import WherePanel from "./WherePanel";
 import WhoPanel from "./WhoPanel";
 
 type SearchFormProps = {
@@ -37,8 +28,6 @@ type SearchFormProps = {
   onSubmit: (draft: SearchDraft) => void;
 };
 
-const SUGGESTION_TINT_CLASS_NAME = "bg-surface-strong text-ink";
-
 const SearchForm = ({
   initialDraft,
   activeSection,
@@ -46,47 +35,14 @@ const SearchForm = ({
   onSubmit,
 }: SearchFormProps) => {
   const [draft, setDraft] = useState(initialDraft);
-  const [locationQuery, setLocationQuery] = useState(initialDraft.location.trim());
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const idPrefix = useId();
   const listboxId = `${idPrefix}-where-listbox`;
   const optionId = (index: number) => `${idPrefix}-where-option-${index}`;
 
-  const debouncedSetLocationQuery = useMemo(
-    () => debounce((value: string) => setLocationQuery(value.trim()), SEARCH_DEBOUNCE_MS),
-    [],
-  );
-
   const isWhereActive = activeSection === "where";
-  const { data: suggestions = [], isFetching: isFetchingSuggestions } =
-    useLocationSuggestions(locationQuery, isWhereActive);
-
-  const typedLocation = draft.location.trim();
-  const showPopular = typedLocation === "";
-  const hasSettledNoMatches =
-    locationQuery === typedLocation && !isFetchingSuggestions && suggestions.length === 0;
-  const whereOptions: WhereOption[] = showPopular
-    ? POPULAR_DESTINATIONS.map(destination => ({
-        key: `popular-${destination.city}`,
-        city: destination.city,
-        title: destination.city,
-        subtitle: t(destination.descriptionKey),
-        icon: destination.icon,
-        tintClassName: destination.tintClassName,
-      }))
-    : suggestions.map(suggestion => ({
-        key: `${suggestion.city}-${suggestion.state}`,
-        city: suggestion.city,
-        title: t("search.suggestionTitle", { city: suggestion.city, state: suggestion.state }),
-        subtitle: t(
-          suggestion.listingCount === 1 ? "search.staysCountOne" : "search.staysCountOther",
-          { count: suggestion.listingCount },
-        ),
-        icon: MapPin,
-        tintClassName: SUGGESTION_TINT_CLASS_NAME,
-      }));
+  const where = useWhereOptions(draft.location, isWhereActive);
 
   useDismiss(formRef, activeSection !== null, () => onActiveSectionChange(null));
 
@@ -101,29 +57,13 @@ const SearchForm = ({
 
   const setLocation = (value: string) => {
     updateDraft({ location: value });
-    setHighlightedIndex(-1);
-    debouncedSetLocationQuery(value);
+    where.queueQuery(value);
   };
 
   const selectLocation = (option: WhereOption) => {
     updateDraft({ location: option.city });
-    setLocationQuery(option.city);
-    setHighlightedIndex(-1);
+    where.setQuery(option.city);
     onActiveSectionChange("when");
-  };
-
-  const handleLocationKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    const count = whereOptions.length;
-    if (event.key === "ArrowDown" && count > 0) {
-      event.preventDefault();
-      setHighlightedIndex(index => (index + 1) % count);
-    } else if (event.key === "ArrowUp" && count > 0) {
-      event.preventDefault();
-      setHighlightedIndex(index => (index <= 0 ? count - 1 : index - 1));
-    } else if (event.key === "Enter" && whereOptions[highlightedIndex]) {
-      event.preventDefault();
-      selectLocation(whereOptions[highlightedIndex]);
-    }
   };
 
   const handleDatesChange = (dates: { checkIn?: string; checkOut?: string }) => {
@@ -156,7 +96,7 @@ const SearchForm = ({
       onSubmit={handleSubmit}
       className={cn(
         "relative flex h-16 w-[850px] max-w-full items-center rounded-full border border-hairline shadow-pill transition-colors",
-        isAnyActive ? "bg-surface-strong" : "bg-white",
+        isAnyActive ? "bg-surface-strong" : "bg-surface",
       )}
     >
       <Segment
@@ -165,8 +105,8 @@ const SearchForm = ({
         className="flex-1 md:flex-[1.2]"
         canClear={draft.location.length > 0}
         onClear={() => {
-          setLocation("");
-          setLocationQuery("");
+          updateDraft({ location: "" });
+          where.setQuery("");
           inputRef.current?.focus();
         }}
       >
@@ -177,14 +117,14 @@ const SearchForm = ({
             value={draft.location}
             onChange={event => setLocation(event.target.value)}
             onFocus={() => onActiveSectionChange("where")}
-            onKeyDown={handleLocationKeyDown}
+            onKeyDown={event => where.handleKeyDown(event, selectLocation)}
             placeholder={t("search.searchDestinations")}
             role="combobox"
             aria-autocomplete="list"
             aria-expanded={isWhereActive}
             aria-controls={listboxId}
             aria-activedescendant={
-              highlightedIndex >= 0 ? optionId(highlightedIndex) : undefined
+              where.highlightedIndex >= 0 ? optionId(where.highlightedIndex) : undefined
             }
             autoComplete="off"
             className="w-full truncate bg-transparent text-sm font-medium text-ink outline-none placeholder:font-normal placeholder:text-ink-muted"
@@ -237,7 +177,7 @@ const SearchForm = ({
         <button
           type="submit"
           className={cn(
-            "mr-2 flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-brand text-white transition-all hover:bg-brand-dark",
+            "mr-2 flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-brand text-on-brand transition-all hover:bg-brand-dark",
             isAnyActive ? "w-12 md:w-auto md:px-5" : "w-12",
           )}
         >
@@ -248,18 +188,16 @@ const SearchForm = ({
         </button>
       </Segment>
 
-      {isWhereActive && (whereOptions.length > 0 || hasSettledNoMatches) ? (
+      {isWhereActive && (where.options.length > 0 || where.emptyMessage) ? (
         <WherePanel
           listboxId={listboxId}
           optionId={optionId}
-          heading={showPopular ? t("search.suggestedDestinations") : undefined}
-          options={whereOptions}
-          highlightedIndex={highlightedIndex}
-          emptyMessage={
-            hasSettledNoMatches ? t("search.noMatches", { query: typedLocation }) : undefined
-          }
+          heading={where.heading}
+          options={where.options}
+          highlightedIndex={where.highlightedIndex}
+          emptyMessage={where.emptyMessage}
           onSelect={selectLocation}
-          onHighlight={setHighlightedIndex}
+          onHighlight={where.setHighlightedIndex}
         />
       ) : null}
       {activeSection === "when" ? (

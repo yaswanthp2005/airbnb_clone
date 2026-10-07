@@ -78,7 +78,7 @@ const PriceRangeFilter = ({ bounds, histogram, value, onChange }: PriceRangeFilt
               key={label}
               index={index}
               getAriaLabel={() => label}
-              className="size-7 rounded-full border border-hairline bg-white shadow-pill outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-ink"
+              className="size-7 rounded-full border border-hairline bg-surface shadow-pill outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-ink"
             />
           ))}
         </Slider.Control>

@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import CategoryBar from "@/components/layout/CategoryBar";
+import MobileHeader from "@/components/layout/MobileHeader";
 import Navbar from "@/components/layout/Navbar";
 import HostNavbar from "@/components/layout/Navbar/HostNavbar";
 import type { SearchSection } from "@/components/search/constants";
@@ -27,6 +28,7 @@ const AppHeader = () => {
   const isCollapsed = useScrollCollapse();
   const isHome = pathname === routes.home;
   const isNarrowPage = NARROW_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix));
+  const isListingPage = pathname.startsWith(LISTING_ROUTE_PREFIX);
   const isHostingPage =
     pathname === HOSTING_ROUTE_PREFIX || pathname.startsWith(`${HOSTING_ROUTE_PREFIX}/`);
   const headerRef = useRef<HTMLElement>(null);
@@ -81,7 +83,7 @@ const AppHeader = () => {
 
   if (isHostingPage) {
     return (
-      <header ref={headerRef} className="sticky top-0 z-40 border-b border-hairline bg-white">
+      <header ref={headerRef} className="sticky top-0 z-40 border-b border-hairline bg-surface">
         <HostNavbar />
       </header>
     );
@@ -92,11 +94,14 @@ const AppHeader = () => {
       <header
         ref={headerRef}
         className={cn(
-          "sticky top-0 z-40 bg-white transition-shadow",
-          isHome && isCollapsed && "shadow-[0_1px_12px_rgba(0,0,0,0.08)]",
+          "sticky top-0 z-40 bg-surface transition-shadow",
+          isHome && isCollapsed && "shadow-header",
+          // On phones the listing page overlays its own back/share/save on the photos.
+          isListingPage && "max-md:hidden",
         )}
       >
-        <div className="border-b border-hairline">
+        <MobileHeader isHome={isHome} />
+        <div className="hidden border-b border-hairline md:block">
           <Navbar
             isExpanded={isExpanded}
             activeSearchSection={isExpanded ? activeSearchSection : null}
@@ -114,7 +119,7 @@ const AppHeader = () => {
       {isSearchForcedOpen ? (
         <div
           aria-hidden="true"
-          className="fixed inset-0 z-30 bg-black/25 animate-in fade-in-0"
+          className="fixed inset-0 z-30 bg-scrim/25 animate-in fade-in-0"
         />
       ) : null}
     </>

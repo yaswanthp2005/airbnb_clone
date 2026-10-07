@@ -136,7 +136,7 @@ const ReviewForm = ({ booking, onClose }: ReviewFormProps) => {
         <button
           type="submit"
           disabled={createReview.isPending}
-          className="rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-95 disabled:opacity-60"
+          className="rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-on-brand transition-opacity hover:opacity-95 disabled:opacity-60"
         >
           {t(createReview.isPending ? "trips.reviewDialog.submitting" : "trips.reviewDialog.submit")}
         </button>
@@ -154,7 +154,7 @@ const ReviewDialog = ({ booking, onClose }: ReviewDialogProps) => {
 
   return (
     <Dialog open={booking !== null} onOpenChange={open => !open && onClose()}>
-      <DialogContent className="rounded-xl bg-white p-6 sm:max-w-lg">
+      <DialogContent className="rounded-xl bg-surface-raised p-6 sm:max-w-lg">
         <DialogTitle className="text-[22px] font-semibold text-ink">
           {t("trips.reviewDialog.title")}
         </DialogTitle>

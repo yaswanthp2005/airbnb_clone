@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
   authUserName: "authUserName",
   authEmail: "authEmail",
   hostMode: "hostMode",
+  theme: "theme",
 } as const;
 
 export const API_BASE_URL =
@@ -70,6 +71,16 @@ export const LISTING_EAGER_IMAGE_COUNT = 5;
 /** Hysteresis so the header doesn't flicker when its own height change shifts scrollY. */
 export const HEADER_COLLAPSE_AT_PX = 80;
 export const HEADER_EXPAND_AT_PX = 8;
+/** Scroll distance before a direction change counts (ignores jitter and rubber-banding). */
+export const SCROLL_DIRECTION_THRESHOLD_PX = 12;
+/** The mobile tab bar stays put near the top of the page. */
+export const MOBILE_TAB_BAR_HIDE_AFTER_PX = 120;
+/** How far a bottom sheet must be dragged down before letting go closes it. */
+export const SWIPE_DISMISS_THRESHOLD_PX = 96;
+
+/** Bottom sheet on phones, centred dialog from `md` (append to `DialogContent`'s classes). */
+export const BOTTOM_SHEET_DIALOG_CLASS_NAME =
+  "max-md:inset-x-0 max-md:bottom-0 max-md:top-auto max-md:left-0 max-md:max-h-[92dvh] max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 max-md:rounded-b-none max-md:rounded-t-2xl max-md:data-open:zoom-in-100 max-md:data-open:slide-in-from-bottom max-md:data-closed:zoom-out-100 max-md:data-closed:slide-out-to-bottom";
 
 export const CATEGORY_SCROLL_STEP_PX = 480;
 

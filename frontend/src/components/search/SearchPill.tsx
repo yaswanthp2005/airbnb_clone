@@ -27,7 +27,7 @@ const SearchPill = ({ onSectionClick }: SearchPillProps) => {
   return (
     <div
       role="search"
-      className="flex h-12 max-w-full items-center rounded-full border border-hairline bg-white shadow-pill transition-shadow hover:shadow-pill-hover"
+      className="flex h-12 max-w-full items-center rounded-full border border-hairline bg-surface shadow-pill transition-shadow hover:shadow-pill-hover"
     >
       <button
         type="button"
@@ -53,7 +53,7 @@ const SearchPill = ({ onSectionClick }: SearchPillProps) => {
         <span className={cn("max-w-40 truncate", guests ? "font-semibold text-ink" : "text-ink-muted")}>
           {guests ?? t("search.addGuests")}
         </span>
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand">
           <Search className="size-3.5" strokeWidth={3} aria-hidden="true" />
           <span className="sr-only">{t("search.search")}</span>
         </span>

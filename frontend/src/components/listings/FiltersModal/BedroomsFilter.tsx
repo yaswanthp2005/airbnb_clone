@@ -41,7 +41,7 @@ const BedroomsFilter = ({ value, onChange }: BedroomsFilterProps) => {
             className={cn(
               "h-10 min-w-16 rounded-full border px-5 text-sm transition-colors",
               isSelected
-                ? "border-ink bg-ink text-white"
+                ? "border-ink bg-ink text-on-ink"
                 : "border-hairline text-ink hover:border-ink",
             )}
           >

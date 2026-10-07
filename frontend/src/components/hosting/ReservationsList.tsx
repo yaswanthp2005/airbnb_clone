@@ -148,7 +148,7 @@ const ReservationsList = () => {
             className={cn(
               "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
               tab === value
-                ? "border-ink bg-ink text-white"
+                ? "border-ink bg-ink text-on-ink"
                 : "border-hairline text-ink hover:border-ink",
             )}
           >

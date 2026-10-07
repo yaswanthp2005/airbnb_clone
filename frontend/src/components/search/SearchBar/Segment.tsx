@@ -24,7 +24,7 @@ export const Segment = ({
     className={cn(
       "relative flex h-full min-w-0 items-center rounded-full transition-colors",
       isActive
-        ? "bg-white shadow-card"
+        ? "bg-surface-raised shadow-card"
         : isAnyActive
           ? "hover:bg-hairline"
           : "hover:bg-surface-strong",

@@ -189,7 +189,7 @@ const ListingForm = ({ listing }: ListingFormProps) => {
                   className={cn(
                     "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
                     index === stepIndex
-                      ? "border-ink bg-ink text-white"
+                      ? "border-ink bg-ink text-on-ink"
                       : "border-hairline text-ink hover:border-ink",
                   )}
                 >
@@ -211,7 +211,7 @@ const ListingForm = ({ listing }: ListingFormProps) => {
         </div>
       </PageContainer>
 
-      <footer className="sticky bottom-0 z-30 bg-white">
+      <footer className="sticky bottom-0 z-30 bg-surface">
         <div
           role="progressbar"
           aria-valuemin={1}
@@ -251,8 +251,8 @@ const ListingForm = ({ listing }: ListingFormProps) => {
                 onClick={handleNext}
                 disabled={isSaving}
                 className={cn(
-                  "rounded-lg px-8 py-3.5 text-base font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60",
-                  isLastStep ? "bg-brand" : "bg-ink",
+                  "rounded-lg px-8 py-3.5 text-base font-semibold transition-opacity hover:opacity-90 disabled:opacity-60",
+                  isLastStep ? "bg-brand text-on-brand" : "bg-ink text-on-ink",
                 )}
               >
                 {isLastStep ? submitLabel : t("hosting.form.next")}

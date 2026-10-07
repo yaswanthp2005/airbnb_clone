@@ -50,10 +50,10 @@ export type PopularDestination = {
 };
 
 export const POPULAR_DESTINATIONS: PopularDestination[] = [
-  { city: "Goa", descriptionKey: "search.popular.goa", icon: TreePalm, tintClassName: "bg-emerald-50 text-emerald-700" },
-  { city: "Jaipur", descriptionKey: "search.popular.jaipur", icon: Landmark, tintClassName: "bg-rose-50 text-rose-700" },
-  { city: "Manali", descriptionKey: "search.popular.manali", icon: MountainSnow, tintClassName: "bg-sky-50 text-sky-700" },
-  { city: "Udaipur", descriptionKey: "search.popular.udaipur", icon: Sailboat, tintClassName: "bg-indigo-50 text-indigo-700" },
-  { city: "Kochi", descriptionKey: "search.popular.kochi", icon: Waves, tintClassName: "bg-teal-50 text-teal-700" },
-  { city: "Rishikesh", descriptionKey: "search.popular.rishikesh", icon: Sunrise, tintClassName: "bg-amber-50 text-amber-700" },
+  { city: "Goa", descriptionKey: "search.popular.goa", icon: TreePalm, tintClassName: "bg-tint-emerald/12 text-tint-emerald" },
+  { city: "Jaipur", descriptionKey: "search.popular.jaipur", icon: Landmark, tintClassName: "bg-tint-rose/12 text-tint-rose" },
+  { city: "Manali", descriptionKey: "search.popular.manali", icon: MountainSnow, tintClassName: "bg-tint-sky/12 text-tint-sky" },
+  { city: "Udaipur", descriptionKey: "search.popular.udaipur", icon: Sailboat, tintClassName: "bg-tint-indigo/12 text-tint-indigo" },
+  { city: "Kochi", descriptionKey: "search.popular.kochi", icon: Waves, tintClassName: "bg-tint-teal/12 text-tint-teal" },
+  { city: "Rishikesh", descriptionKey: "search.popular.rishikesh", icon: Sunrise, tintClassName: "bg-tint-amber/12 text-tint-amber" },
 ];

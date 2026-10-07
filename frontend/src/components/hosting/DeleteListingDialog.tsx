@@ -48,7 +48,7 @@ const DeleteListingDialog = ({ listing, onClose }: DeleteListingDialogProps) => 
 
   return (
     <Dialog open={listing !== null} onOpenChange={handleOpenChange}>
-      <DialogContent className="rounded-xl bg-white p-6 sm:max-w-md">
+      <DialogContent className="rounded-xl bg-surface-raised p-6 sm:max-w-md">
         <DialogTitle className="text-[22px] font-semibold text-ink">
           {t(isBlocked ? "hosting.deleteDialog.blockedTitle" : "hosting.deleteDialog.title")}
         </DialogTitle>
@@ -83,7 +83,7 @@ const DeleteListingDialog = ({ listing, onClose }: DeleteListingDialogProps) => 
                 type="button"
                 onClick={handleConfirm}
                 disabled={deleteListing.isPending}
-                className="rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-95 disabled:opacity-60"
+                className="rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-on-brand transition-opacity hover:opacity-95 disabled:opacity-60"
               >
                 {t(deleteListing.isPending ? "hosting.deleteDialog.deleting" : "hosting.deleteDialog.confirm")}
               </button>

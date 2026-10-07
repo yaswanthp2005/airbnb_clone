@@ -25,7 +25,7 @@ const showStaysLabel = (resultCount?: number): string => {
 };
 
 const Footer = ({ resultCount, isCounting, canClear, onClear, onApply }: FooterProps) => (
-  <div className="flex items-center justify-between border-t border-hairline px-6 py-4">
+  <div className="flex items-center justify-between border-t border-hairline px-6 py-4 max-md:pb-[calc(1rem+env(safe-area-inset-bottom))]">
     <button
       type="button"
       onClick={onClear}
@@ -37,7 +37,7 @@ const Footer = ({ resultCount, isCounting, canClear, onClear, onApply }: FooterP
     <button
       type="button"
       onClick={onApply}
-      className="flex min-w-36 items-center justify-center gap-2 rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-black"
+      className="flex min-w-36 items-center justify-center gap-2 rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-on-ink transition-colors hover:bg-ink-strong"
     >
       {isCounting ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
       {showStaysLabel(resultCount)}

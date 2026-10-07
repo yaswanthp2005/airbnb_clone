@@ -45,7 +45,7 @@ const TripCard = ({ booking, onCancel, onReview }: TripCardProps) => {
   const isCancelled = booking.status === "cancelled";
 
   return (
-    <article className="flex w-full flex-col overflow-hidden rounded-xl border border-hairline bg-white shadow-[0_6px_16px_rgba(0,0,0,0.06)]">
+    <article className="flex w-full flex-col overflow-hidden rounded-xl border border-hairline bg-surface-raised shadow-card-soft">
       <Link href={bookingRoute(booking.id)} className="group block">
         <div className="relative aspect-[3/2] w-full overflow-hidden bg-surface-muted">
           {listing.photoUrl ? (
@@ -58,7 +58,7 @@ const TripCard = ({ booking, onCancel, onReview }: TripCardProps) => {
             />
           ) : null}
           {isCancelled ? (
-            <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink shadow-sm">
+            <span className="absolute left-3 top-3 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-ink shadow-sm">
               {t("trips.cancelledBadge")}
             </span>
           ) : null}

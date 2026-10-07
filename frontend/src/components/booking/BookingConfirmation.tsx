@@ -45,7 +45,7 @@ const BookingNotFound = () => (
       <p className="mb-8 text-base text-ink-muted">{t("bookingConfirmation.notFound.description")}</p>
       <Link
         href={routes.trips}
-        className="rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-black"
+        className="rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-on-ink transition-colors hover:bg-ink-strong"
       >
         {t("bookingConfirmation.goToTrips")}
       </Link>
@@ -127,7 +127,7 @@ const ConfirmationContent = ({ booking }: { booking: Booking }) => {
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <Link
           href={routes.trips}
-          className="rounded-lg bg-ink px-6 py-3.5 text-center text-base font-semibold text-white transition-colors hover:bg-black"
+          className="rounded-lg bg-ink px-6 py-3.5 text-center text-base font-semibold text-on-ink transition-colors hover:bg-ink-strong"
         >
           {t("bookingConfirmation.goToTrips")}
         </Link>

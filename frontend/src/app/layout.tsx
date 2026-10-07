@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
 import en from "@/common/i18n/en.json";
 import Providers from "@/app/providers";
 import AppHeader from "@/components/layout/AppHeader";
 import Footer from "@/components/layout/Footer";
+import MobileTabBar from "@/components/layout/MobileTabBar";
+import { THEME_BROWSER_COLORS } from "@/constants/theme";
 
 import "./globals.css";
 
@@ -19,6 +21,14 @@ export const metadata: Metadata = {
   description: en.common.appName,
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: THEME_BROWSER_COLORS.light },
+    { media: "(prefers-color-scheme: dark)", color: THEME_BROWSER_COLORS.dark },
+  ],
+  viewportFit: "cover",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -31,6 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <AppHeader />
           <main className="flex flex-1 flex-col">{children}</main>
           <Footer />
+          <MobileTabBar />
         </Providers>
       </body>
     </html>

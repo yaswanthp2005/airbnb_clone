@@ -41,7 +41,7 @@ const CancelTripDialog = ({ booking, onClose }: CancelTripDialogProps) => {
 
   return (
     <Dialog open={booking !== null} onOpenChange={handleOpenChange}>
-      <DialogContent className="rounded-xl bg-white p-6 sm:max-w-md">
+      <DialogContent className="rounded-xl bg-surface-raised p-6 sm:max-w-md">
         <DialogTitle className="text-[22px] font-semibold text-ink">
           {t("trips.cancelDialog.title")}
         </DialogTitle>
@@ -68,7 +68,7 @@ const CancelTripDialog = ({ booking, onClose }: CancelTripDialogProps) => {
             type="button"
             onClick={handleConfirm}
             disabled={cancelBooking.isPending}
-            className="rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-95 disabled:opacity-60"
+            className="rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-on-brand transition-opacity hover:opacity-95 disabled:opacity-60"
           >
             {t(cancelBooking.isPending ? "trips.cancelDialog.cancelling" : "trips.cancelDialog.confirm")}
           </button>

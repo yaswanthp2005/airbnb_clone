@@ -99,7 +99,7 @@ const BookingCheckoutContent = ({ listing }: { listing: ListingDetail }) => {
 
       <div className={`mt-8 ${DETAIL_COLUMNS_CLASS_NAME}`}>
         <div className="flex min-w-0 flex-col">
-          <div className="mb-8 lg:hidden">
+          <div className="mb-8 md:hidden">
             <PriceDetailsCard listing={listing} breakdown={breakdown} />
           </div>
 
@@ -140,7 +140,7 @@ const BookingCheckoutContent = ({ listing }: { listing: ListingDetail }) => {
           />
         </div>
 
-        <aside className="hidden lg:block">
+        <aside className="hidden md:block">
           <div className="sticky top-32 pb-12">
             <PriceDetailsCard listing={listing} breakdown={breakdown} />
           </div>

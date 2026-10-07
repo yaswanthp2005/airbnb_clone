@@ -16,7 +16,7 @@ type PriceDetailsCardProps = {
 };
 
 const PriceDetailsCard = ({ listing, breakdown }: PriceDetailsCardProps) => (
-  <div className="rounded-xl border border-hairline bg-white p-6">
+  <div className="rounded-xl border border-hairline bg-surface p-6">
     <div className="flex gap-4 border-b border-hairline pb-6">
       <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-lg bg-surface-muted">
         {listing.photos[0] ? (

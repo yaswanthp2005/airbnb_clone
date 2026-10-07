@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Menu, UserRound } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import ThemeMenuItems from "@/components/common/theme/ThemeMenuItems";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -47,18 +48,18 @@ const UserMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={t("nav.mainMenu")}
-        className="flex items-center gap-3 rounded-full border border-hairline bg-white py-1.5 pl-3.5 pr-1.5 text-ink outline-none transition-shadow hover:shadow-pill-hover data-popup-open:shadow-pill-hover"
+        className="flex items-center gap-3 rounded-full border border-hairline bg-surface py-1.5 pl-3.5 pr-1.5 text-ink outline-none transition-shadow hover:shadow-pill-hover data-popup-open:shadow-pill-hover"
       >
         <Menu className="size-4" strokeWidth={2.5} aria-hidden="true" />
         {isAuthenticated && user ? (
           <Avatar className="size-8">
             {user.avatarUrl ? <AvatarImage src={user.avatarUrl} alt={user.name} /> : null}
-            <AvatarFallback className="bg-ink text-sm font-semibold text-white">
+            <AvatarFallback className="bg-ink text-sm font-semibold text-on-ink">
               {getInitial(user.name)}
             </AvatarFallback>
           </Avatar>
         ) : (
-          <span className="flex size-8 items-center justify-center rounded-full bg-ink-muted text-white">
+          <span className="flex size-8 items-center justify-center rounded-full bg-ink-muted text-on-ink">
             <UserRound className="size-5" fill="currentColor" aria-hidden="true" />
           </span>
         )}
@@ -85,6 +86,8 @@ const UserMenu = () => {
             ))}
           </Fragment>
         ))}
+        <DropdownMenuSeparator className="my-2 bg-hairline" />
+        <ThemeMenuItems />
       </DropdownMenuContent>
     </DropdownMenu>
   );

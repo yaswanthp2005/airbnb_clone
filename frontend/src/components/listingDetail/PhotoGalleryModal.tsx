@@ -74,7 +74,7 @@ const PhotoGalleryModal = ({
   <Dialog open={openIndex !== null} onOpenChange={open => !open && onClose()}>
     <DialogContent
       showCloseButton={false}
-      className="left-0 top-0 flex h-dvh w-screen max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-white p-0 ring-0 sm:max-w-none data-open:zoom-in-100 data-closed:zoom-out-100"
+      className="left-0 top-0 flex h-dvh w-screen max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-surface p-0 ring-0 sm:max-w-none data-open:zoom-in-100 data-closed:zoom-out-100"
     >
       <header className="flex h-16 shrink-0 items-center justify-between px-4 md:px-6">
         <DialogClose

@@ -62,7 +62,7 @@ const EditDatesModal = ({
               onSave(draft);
               onOpenChange(false);
             }}
-            className="rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:bg-ink-strong disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t("common.save")}
           </button>
