@@ -53,6 +53,7 @@ const LocationStep = ({ values, errors, onChange }: StepProps) => (
               {...fieldA11yProps(fieldId(key), errors[key])}
               name={key}
               inputMode="decimal"
+              required
               value={values[key]}
               onChange={event => onChange({ [key]: event.target.value.replace(/[^\d.-]/g, "") })}
               className={FORM_INPUT_CLASS_NAME}

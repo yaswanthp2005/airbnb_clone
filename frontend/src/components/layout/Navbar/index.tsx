@@ -65,7 +65,8 @@ const Navbar = ({
             className={cn(
               "[grid-area:1/1] max-w-full transition-[opacity,translate,scale]",
               HEADER_MORPH_TRANSITION_CLASS_NAME,
-              isExpanded && "pointer-events-none translate-y-18 scale-x-200 scale-y-133 opacity-0",
+              isExpanded &&
+                "pointer-events-none translate-y-18 scale-x-200 scale-y-133 opacity-0",
             )}
           >
             <Suspense fallback={<div className="h-12 w-80" />}>

@@ -97,23 +97,6 @@ def _host_listing_out(db: Session, listing_id: int) -> HostListingOut:
     return _to_host_listing(listing, _upcoming_counts(db, [listing_id]).get(listing_id, 0))
 
 
-def _resolve_coordinates(db: Session, payload: HostListingIn) -> tuple[float, float]:
-    """Without a pin, place the listing where the existing stays in that city are."""
-    if payload.latitude is not None and payload.longitude is not None:
-        return payload.latitude, payload.longitude
-    latitude, longitude = db.execute(
-        select(func.avg(Listing.latitude), func.avg(Listing.longitude)).where(
-            func.lower(Listing.city) == payload.city.lower()
-        )
-    ).one()
-    if latitude is None or longitude is None:
-        raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"We couldn't place {payload.city} on the map. Add its latitude and longitude.",
-        )
-    return round(float(latitude), 6), round(float(longitude), 6)
-
-
 def _canonical_place(db: Session, column, value: str) -> str:
     """Reuse the existing spelling ("goa" → "Goa") so search and suggestions group them."""
     existing = db.scalar(select(column).where(func.lower(column) == value.lower()).limit(1))
@@ -134,7 +117,8 @@ def _check_amenities(db: Session, amenity_ids: list[int]) -> None:
 
 def _apply(db: Session, listing: Listing, payload: HostListingIn) -> None:
     _check_amenities(db, payload.amenities)
-    listing.latitude, listing.longitude = _resolve_coordinates(db, payload)
+    listing.latitude = round(payload.latitude, 6)
+    listing.longitude = round(payload.longitude, 6)
     listing.city = _canonical_place(db, Listing.city, payload.city)
     listing.state = _canonical_place(db, Listing.state, payload.state)
     listing.country = _canonical_place(db, Listing.country, payload.country)

@@ -37,7 +37,7 @@ const AppHeader = () => {
   const [activeSearchSection, setActiveSearchSection] = useState<SearchSection | null>(null);
   const [isSearchForcedOpen, setIsSearchForcedOpen] = useState(false);
 
-  const isExpanded = (isHome && !isCollapsed) || isSearchForcedOpen;
+  const isExpanded = (isExplore && !isCollapsed) || isSearchForcedOpen;
 
   const handleActiveSearchSectionChange = useCallback((section: SearchSection | null) => {
     setActiveSearchSection(section);

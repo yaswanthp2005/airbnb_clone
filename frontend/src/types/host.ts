@@ -10,9 +10,8 @@ export type HostListingInput = {
   city: string;
   state: string;
   country: string;
-  /** Leave both empty to let the server place the listing in its city. */
-  latitude: number | null;
-  longitude: number | null;
+  latitude: number;
+  longitude: number;
   pricePerNight: number;
   cleaningFee: number;
   maxGuests: number;
