@@ -60,3 +60,6 @@ export const MEMBER_MENU_GROUPS: UserMenuItem[][] = [
     { key: "logout", labelKey: "nav.logOut", action: "logout" },
   ],
 ];
+
+export const HEADER_MORPH_TRANSITION_CLASS_NAME =
+  "duration-300 ease-header motion-reduce:transition-none";

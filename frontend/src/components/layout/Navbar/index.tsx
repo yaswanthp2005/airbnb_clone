@@ -13,7 +13,9 @@ import SearchPill from "@/components/search/SearchPill";
 import { routes } from "@/constants/routes";
 import { useAuth } from "@/hooks/useAuth";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { cn } from "@/lib/utils";
 
+import { HEADER_MORPH_TRANSITION_CLASS_NAME } from "./constants";
 import Logo from "./Logo";
 import StaysTab from "./StaysTab";
 import UserMenu from "./UserMenu";
@@ -47,14 +49,30 @@ const Navbar = ({
           <Logo />
         </div>
 
-        <div className="flex min-w-0 justify-center">
-          {isExpanded ? (
+        <div className="grid min-w-0 place-items-center">
+          <div
+            inert={!isExpanded}
+            className={cn(
+              "[grid-area:1/1] transition-[opacity,scale]",
+              HEADER_MORPH_TRANSITION_CLASS_NAME,
+              !isExpanded && "pointer-events-none scale-50 opacity-0",
+            )}
+          >
             <StaysTab />
-          ) : (
+          </div>
+          {/* translate-y = distance between the h-20 row's centre and the h-16 bar's centre below it. */}
+          <div
+            inert={isExpanded}
+            className={cn(
+              "[grid-area:1/1] max-w-full transition-[opacity,translate,scale]",
+              HEADER_MORPH_TRANSITION_CLASS_NAME,
+              isExpanded && "pointer-events-none translate-y-18 scale-x-200 scale-y-133 opacity-0",
+            )}
+          >
             <Suspense fallback={<div className="h-12 w-80" />}>
               <SearchPill onSectionClick={onOpenSearch} />
             </Suspense>
-          )}
+          </div>
         </div>
 
         <div className="flex items-center justify-end gap-1">
@@ -82,16 +100,36 @@ const Navbar = ({
         </div>
       </div>
 
-      {isExpanded ? (
-        <div className="flex justify-center pb-5">
-          <Suspense fallback={<div className="h-16 w-[850px] max-w-full" />}>
-            <SearchBar
-              activeSection={activeSearchSection}
-              onActiveSectionChange={onActiveSearchSectionChange}
-            />
-          </Suspense>
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows]",
+          HEADER_MORPH_TRANSITION_CLASS_NAME,
+          isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        {/* No overflow-hidden: it would clip the search panels that drop below the bar. */}
+        <div className="min-h-0">
+          <div className="pb-5">
+            <div
+              inert={!isExpanded}
+              className={cn(
+                "flex justify-center transition-[opacity,translate,scale]",
+                HEADER_MORPH_TRANSITION_CLASS_NAME,
+                !isExpanded && "pointer-events-none -translate-y-18 scale-x-45 scale-y-75 opacity-0",
+              )}
+            >
+              <Suspense fallback={<div className="h-16 w-[850px] max-w-full" />}>
+                {/* Remount per open so each expand starts from the URL's values, as before. */}
+                <SearchBar
+                  key={String(isExpanded)}
+                  activeSection={activeSearchSection}
+                  onActiveSectionChange={onActiveSearchSectionChange}
+                />
+              </Suspense>
+            </div>
+          </div>
         </div>
-      ) : null}
+      </div>
     </PageContainer>
   );
 };
