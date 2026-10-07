@@ -3,6 +3,7 @@ from __future__ import annotations
 """Seed constants (demo credentials documented in repo README)."""
 
 DEMO_PASSWORD = "Demo@12345"
+DEMO_GUEST_EMAIL = "guest@demo.in"
 
 SEED_PHOTO_URLS: tuple[str, ...] = (
     "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&q=80",

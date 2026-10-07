@@ -7,8 +7,11 @@ export const STORAGE_KEYS = {
   theme: "theme",
 } as const;
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api/v1";
+const DEFAULT_API_URL = "http://localhost:8000";
+const API_VERSION_PREFIX = "/api/v1";
+
+/** Backend origin from `NEXT_PUBLIC_API_URL` (inlined at build time), e.g. `https://airbnb-clone-api.onrender.com`. */
+export const API_BASE_URL = `${(process.env.NEXT_PUBLIC_API_URL || DEFAULT_API_URL).replace(/\/+$/, "")}${API_VERSION_PREFIX}`;
 
 export const DEFAULT_PAGE_SIZE = 20;
 
@@ -16,9 +19,8 @@ export const SEARCH_DEBOUNCE_MS = 400;
 
 /** Guest service fee, charged on nights + cleaning fee (see `utils/pricing`). */
 export const SERVICE_FEE_RATE = 0.12;
-export const CLEANING_FEE_DEFAULT = 500;
 
-export const CATEGORY_QUERY_PARAM = "category";
+const CATEGORY_QUERY_PARAM = "category";
 
 /** URL search param names for listing filters (snake_case to mirror the API). */
 export const LISTING_FILTER_PARAMS = {
@@ -83,13 +85,3 @@ export const BOTTOM_SHEET_DIALOG_CLASS_NAME =
   "max-md:inset-x-0 max-md:bottom-0 max-md:top-auto max-md:left-0 max-md:max-h-[92dvh] max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 max-md:rounded-b-none max-md:rounded-t-2xl max-md:data-open:zoom-in-100 max-md:data-open:slide-in-from-bottom max-md:data-closed:zoom-out-100 max-md:data-closed:slide-out-to-bottom";
 
 export const CATEGORY_SCROLL_STEP_PX = 480;
-
-export {
-  apiRoutes,
-  bookingRoute,
-  bookRoute,
-  comingSoonRoute,
-  listingRoute,
-  routes,
-} from "./routes";
-export { queryKeys } from "./queryKeys";

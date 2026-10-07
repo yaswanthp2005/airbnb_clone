@@ -39,11 +39,8 @@ export const hostingEditListingRoute = (listingId: string | number) =>
 export const comingSoonRoute = (slug: string) =>
   routes.comingSoon.replace(":slug", encodeURIComponent(slug));
 
-/** Paths relative to `NEXT_PUBLIC_API_BASE_URL` (include leading segment only). */
+/** Paths relative to `API_BASE_URL` (`NEXT_PUBLIC_API_URL` + `/api/v1`). */
 export const apiRoutes = {
-  health: "/health",
-  healthEcho: "/health/echo",
-  healthNotFound: "/health/__not_found__",
   authRegister: "/auth/register",
   authLogin: "/auth/login",
   authMe: "/auth/me",

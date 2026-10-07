@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { t } from "@/common/i18n";
 import { API_BASE_URL, HTTP_STATUS } from "@/constants";
+import { apiRoutes } from "@/constants/routes";
 import { camelToSnake } from "@/utils/camelToSnake";
 import { notifyUnauthorized } from "@/utils/authEvents";
 import { clearAuthSession } from "@/utils/authSession";
@@ -26,6 +27,9 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+/** A 401 from these means wrong credentials, not an expired session. */
+const AUTH_ATTEMPT_PATHS = [apiRoutes.authLogin, apiRoutes.authRegister];
 
 const isMutationMethod = (method: string | undefined): boolean => {
   const normalized = (method ?? "get").toLowerCase();
@@ -86,9 +90,7 @@ const getErrorMessage = (error: AxiosError<{ message?: string }>): string => {
 const handleErrorResponse = (error: AxiosError): Promise<never> => {
   if (error.response?.status === HTTP_STATUS.unauthorized) {
     const requestUrl = error.config?.url ?? "";
-    const isAuthAttempt =
-      requestUrl.includes("/auth/login") ||
-      requestUrl.includes("/auth/register");
+    const isAuthAttempt = AUTH_ATTEMPT_PATHS.some(path => requestUrl.includes(path));
 
     clearAuthSession();
 

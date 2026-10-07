@@ -32,4 +32,3 @@ export const t = (key: string, vars?: TranslateVars): string => {
   );
 };
 
-export default t;

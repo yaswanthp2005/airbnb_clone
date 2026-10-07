@@ -1,6 +1,6 @@
 const CAMEL_TO_SNAKE = /[A-Z]/g;
 
-export const camelToSnakeKey = (key: string): string =>
+const camelToSnakeKey = (key: string): string =>
   key.replace(CAMEL_TO_SNAKE, letter => `_${letter.toLowerCase()}`);
 
 const isPlainRecord = (value: unknown): value is Record<string, unknown> =>

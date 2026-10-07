@@ -29,7 +29,7 @@ export const setStorageItem = (key: string, value: unknown): void => {
   window.localStorage.setItem(key, JSON.stringify(value));
 };
 
-export const removeStorageItem = (key: string): void => {
+const removeStorageItem = (key: string): void => {
   if (typeof window === "undefined") {
     return;
   }
@@ -38,10 +38,6 @@ export const removeStorageItem = (key: string): void => {
 
 export const getAuthToken = (): string | null =>
   getStorageItem<string>(STORAGE_KEYS.authToken);
-
-export const setAuthToken = (token: string | null): void => {
-  setStorageItem(STORAGE_KEYS.authToken, token);
-};
 
 export const clearAuthStorage = (): void => {
   removeStorageItem(STORAGE_KEYS.authToken);

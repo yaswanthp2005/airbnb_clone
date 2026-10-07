@@ -5,6 +5,7 @@ import { CircleCheck, CircleX } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import RemoteImage from "@/components/common/RemoteImage";
+import StatusPage, { STATUS_PRIMARY_ACTION_CLASS_NAME } from "@/components/common/StatusPage";
 import PageContainer from "@/components/layout/PageContainer";
 import PriceBreakdownList from "@/components/listingDetail/BookingCard/PriceBreakdownList";
 import { pluralize } from "@/components/listingDetail/utils";
@@ -37,20 +38,15 @@ const ConfirmationSkeleton = () => (
 );
 
 const BookingNotFound = () => (
-  <PageContainer className="flex flex-1 items-center justify-center py-24">
-    <div className="flex max-w-md flex-col items-center text-center">
-      <h1 className="mb-3 text-[32px] font-semibold leading-tight text-ink">
-        {t("bookingConfirmation.notFound.title")}
-      </h1>
-      <p className="mb-8 text-base text-ink-muted">{t("bookingConfirmation.notFound.description")}</p>
-      <Link
-        href={routes.trips}
-        className="rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-on-ink transition-colors hover:bg-ink-strong"
-      >
+  <StatusPage
+    title={t("bookingConfirmation.notFound.title")}
+    description={t("bookingConfirmation.notFound.description")}
+    actions={
+      <Link href={routes.trips} className={STATUS_PRIMARY_ACTION_CLASS_NAME}>
         {t("bookingConfirmation.goToTrips")}
       </Link>
-    </div>
-  </PageContainer>
+    }
+  />
 );
 
 const ConfirmationContent = ({ booking }: { booking: Booking }) => {

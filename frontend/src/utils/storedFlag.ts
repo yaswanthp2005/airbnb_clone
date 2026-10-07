@@ -11,7 +11,7 @@ export type StoredFlag = {
 };
 
 /** A boolean UI preference in localStorage that components can subscribe to. */
-export const createStoredFlag = (key: string): StoredFlag => {
+const createStoredFlag = (key: string): StoredFlag => {
   const listeners = new Set<Listener>();
 
   return {

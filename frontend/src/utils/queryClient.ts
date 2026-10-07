@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 
-export const QUERY_STALE_TIME_MS = 60 * 1000;
+const QUERY_STALE_TIME_MS = 60 * 1000;
 
 const makeQueryClient = () =>
   new QueryClient({

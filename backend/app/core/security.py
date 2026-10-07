@@ -26,12 +26,16 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     )
 
 
-def create_access_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(
+    subject: str, email: str, expires_delta: Optional[timedelta] = None
+) -> str:
+    """`email` is checked on every request: a re-seeded database can hand the same user id to
+    someone else, and the email claim stops an old token from authenticating as them."""
     expire = datetime.now(timezone.utc) + (
         expires_delta
         or timedelta(minutes=settings.access_token_expire_minutes)
     )
-    payload: dict[str, Any] = {"sub": subject, "exp": expire}
+    payload: dict[str, Any] = {"sub": subject, "email": email, "exp": expire}
     return jwt.encode(payload, settings.secret_key, algorithm=ALGORITHM)
 
 
