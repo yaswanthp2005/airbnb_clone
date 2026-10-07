@@ -52,9 +52,11 @@ class Listing(Base):
         Index("ix_listings_city", "city"),
         Index("ix_listings_price_per_night", "price_per_night"),
         Index("ix_listings_property_type", "property_type"),
+        Index("ix_listings_slug", "slug", unique=True),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    slug: Mapped[str] = mapped_column(String(220), nullable=False)
     host_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
     )

@@ -26,6 +26,7 @@ export type HostListingInput = {
 
 export type HostListing = Omit<HostListingInput, "latitude" | "longitude"> & {
   id: number;
+  slug: string;
   latitude: number;
   longitude: number;
   ratingAvg: number;
@@ -40,6 +41,7 @@ export type HostBooking = {
   id: number;
   listing: {
     id: number;
+    slug: string;
     title: string;
     city: string;
     photoUrl: string | null;

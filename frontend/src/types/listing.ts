@@ -8,6 +8,7 @@ export type PaginatedResponse<T> = {
 
 export type ListingSummary = {
   id: number;
+  slug: string;
   title: string;
   propertyType: string;
   city: string;
@@ -96,6 +97,7 @@ export type RatingCount = {
 
 export type ListingDetail = {
   id: number;
+  slug: string;
   title: string;
   description: string;
   propertyType: string;

@@ -45,7 +45,7 @@ const ReservationRow = ({ booking }: { booking: HostBooking }) => {
           </span>
         </div>
       </div>
-      <Link href={listingRoute(booking.listing.id)} className="flex min-w-0 items-center gap-3 hover:underline">
+      <Link href={listingRoute(booking.listing.slug)} className="flex min-w-0 items-center gap-3 hover:underline">
         <div className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-surface-muted">
           {booking.listing.photoUrl ? (
             <RemoteImage

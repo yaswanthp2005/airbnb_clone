@@ -81,28 +81,28 @@ export const usePropertyTypes = () =>
     queryFn: getPropertyTypes,
   });
 
-export const useListing = (listingId: number) =>
+export const useListing = (listingSlug: string) =>
   useQuery({
-    queryKey: queryKeys.listings.detail(listingId),
-    queryFn: () => getListing(listingId),
+    queryKey: queryKeys.listings.detail(listingSlug),
+    queryFn: () => getListing(listingSlug),
   });
 
-export const useListingReviewsInfinite = (listingId: number) =>
+export const useListingReviewsInfinite = (listingSlug: string) =>
   useInfiniteQuery({
-    queryKey: queryKeys.listings.reviews(listingId),
+    queryKey: queryKeys.listings.reviews(listingSlug),
     queryFn: ({ pageParam }) =>
-      getListingReviews(listingId, { page: pageParam, pageSize: REVIEWS_PAGE_SIZE }),
+      getListingReviews(listingSlug, { page: pageParam, pageSize: REVIEWS_PAGE_SIZE }),
     initialPageParam: FIRST_PAGE,
     getNextPageParam: lastPage =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
   });
 
 export const useListingUnavailableDates = (
-  listingId: number,
+  listingSlug: string,
   window: GetUnavailableDatesParams,
 ) =>
   useQuery({
-    queryKey: queryKeys.listings.unavailableDates(listingId),
-    queryFn: () => getListingUnavailableDates(listingId, window),
+    queryKey: queryKeys.listings.unavailableDates(listingSlug),
+    queryFn: () => getListingUnavailableDates(listingSlug, window),
     staleTime: UNAVAILABLE_DATES_STALE_TIME_MS,
   });

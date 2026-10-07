@@ -34,7 +34,7 @@ const ReviewSkeleton = () => (
 
 const ReviewsSection = ({ listing }: ReviewsSectionProps) => {
   const { data, isPending, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useListingReviewsInfinite(listing.id);
+    useListingReviewsInfinite(listing.slug);
   const reviews = useMemo(() => data?.pages.flatMap(page => page.items) ?? [], [data]);
 
   if (listing.reviewCount === 0) {

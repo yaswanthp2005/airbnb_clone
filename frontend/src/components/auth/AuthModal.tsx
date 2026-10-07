@@ -1,19 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { XIcon } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import type { AuthMode } from "@/types/auth";
+import { cn } from "cn";
 
 type FormErrors = {
   name?: string;
@@ -23,6 +25,56 @@ type FormErrors = {
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+type AuthFieldProps = {
+  id: string;
+  label: string;
+  type?: React.HTMLInputTypeAttribute;
+  autoComplete?: string;
+  value: string;
+  onChange: (value: string) => void;
+  invalid?: boolean;
+  className?: string;
+};
+
+const AuthField = ({
+  id,
+  label,
+  type = "text",
+  autoComplete,
+  value,
+  onChange,
+  invalid,
+  className,
+}: AuthFieldProps) => (
+  <label
+    htmlFor={id}
+    className={cn(
+      "relative block px-4 py-3 has-[:focus-visible]:shadow-[inset_0_0_0_2px_var(--color-ink)]",
+      className,
+    )}
+  >
+    <span className="block text-xs font-medium text-ink-muted">{label}</span>
+    <input
+      id={id}
+      type={type}
+      autoComplete={autoComplete}
+      value={value}
+      onChange={event => onChange(event.target.value)}
+      aria-invalid={invalid}
+      className="mt-0.5 w-full border-0 bg-transparent p-0 text-base text-ink outline-none placeholder:text-ink-muted/70"
+    />
+  </label>
+);
+
+const SocialButton = ({ label }: { label: string }) => (
+  <button
+    type="button"
+    className="flex h-12 w-full items-center justify-center rounded-lg border border-ink/20 bg-white text-sm font-semibold text-ink transition-colors hover:bg-surface-muted"
+  >
+    {label}
+  </button>
+);
 
 const AuthModal = () => {
   const {
@@ -56,7 +108,7 @@ const AuthModal = () => {
     }
   };
 
-  const title = useMemo(
+  const headerTitle = useMemo(
     () =>
       authMode === "login"
         ? t("auth.modal.loginTitle")
@@ -122,73 +174,92 @@ const AuthModal = () => {
 
   return (
     <Dialog open={authModalOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-[568px]">
-        <DialogHeader className="border-b px-6 py-4 text-center">
-          <DialogTitle className="text-base font-semibold">{title}</DialogTitle>
-          <DialogDescription className="sr-only">{title}</DialogDescription>
+      <DialogContent showCloseButton={false} className="gap-0 overflow-hidden p-0 sm:max-w-[568px]">
+        <DialogHeader className="relative border-b border-hairline px-6 py-4">
+          <DialogClose
+            render={
+              <button
+                type="button"
+                className="absolute left-4 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-muted"
+              />
+            }
+          >
+            <XIcon className="size-4" />
+            <span className="sr-only">{t("common.close")}</span>
+          </DialogClose>
+          <DialogTitle className="text-center text-base font-semibold">{headerTitle}</DialogTitle>
+          <DialogDescription className="sr-only">{headerTitle}</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6 py-6">
-          {authMode === "register" ? (
-            <div className="space-y-1">
-              <Input
-                autoComplete="name"
-                placeholder={t("auth.namePlaceholder")}
-                value={name}
-                onChange={event => setName(event.target.value)}
-                aria-invalid={Boolean(errors.name)}
-              />
-              {errors.name ? (
-                <p className="text-xs text-destructive">{errors.name}</p>
-              ) : null}
-            </div>
-          ) : null}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 px-6 py-6">
+          <div>
+            <h2 className="text-[22px] font-semibold leading-7 text-ink">
+              {t("auth.modal.welcomeTitle")}
+            </h2>
+          </div>
 
-          <div className="space-y-1">
-            <Input
+          <div className="flex flex-col gap-3">
+            <SocialButton label={t("auth.modal.continueWithGoogle")} />
+            <SocialButton label={t("auth.modal.continueWithApple")} />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="h-px flex-1 bg-hairline" aria-hidden="true" />
+            <span className="text-xs text-ink-muted">{t("auth.modal.or")}</span>
+            <span className="h-px flex-1 bg-hairline" aria-hidden="true" />
+          </div>
+
+          <div className="overflow-hidden rounded-lg border border-ink/20">
+            {authMode === "register" ? (
+              <AuthField
+                id="auth-name"
+                label={t("auth.namePlaceholder")}
+                autoComplete="name"
+                value={name}
+                onChange={setName}
+                invalid={Boolean(errors.name)}
+                className="border-b border-ink/20"
+              />
+            ) : null}
+            <AuthField
+              id="auth-email"
+              label={t("auth.email")}
               type="email"
               autoComplete="email"
-              placeholder={t("auth.emailPlaceholder")}
               value={email}
-              onChange={event => setEmail(event.target.value)}
-              aria-invalid={Boolean(errors.email)}
+              onChange={setEmail}
+              invalid={Boolean(errors.email)}
+              className="border-b border-ink/20"
             />
-            {errors.email ? (
-              <p className="text-xs text-destructive">{errors.email}</p>
-            ) : null}
-          </div>
-
-          <div className="space-y-1">
-            <Input
+            <AuthField
+              id="auth-password"
+              label={t("auth.password")}
               type="password"
-              autoComplete={
-                authMode === "login" ? "current-password" : "new-password"
-              }
-              placeholder={t("auth.passwordPlaceholder")}
+              autoComplete={authMode === "login" ? "current-password" : "new-password"}
               value={password}
-              onChange={event => setPassword(event.target.value)}
-              aria-invalid={Boolean(errors.password)}
+              onChange={setPassword}
+              invalid={Boolean(errors.password)}
+              className={authMode === "register" ? "border-b border-ink/20" : undefined}
             />
-            {errors.password ? (
-              <p className="text-xs text-destructive">{errors.password}</p>
-            ) : null}
-          </div>
-
-          {authMode === "register" ? (
-            <div className="space-y-1">
-              <Input
+            {authMode === "register" ? (
+              <AuthField
+                id="auth-password-confirmation"
+                label={t("auth.passwordConfirmationPlaceholder")}
                 type="password"
                 autoComplete="new-password"
-                placeholder={t("auth.passwordConfirmationPlaceholder")}
                 value={passwordConfirmation}
-                onChange={event => setPasswordConfirmation(event.target.value)}
-                aria-invalid={Boolean(errors.passwordConfirmation)}
+                onChange={setPasswordConfirmation}
+                invalid={Boolean(errors.passwordConfirmation)}
               />
-              {errors.passwordConfirmation ? (
-                <p className="text-xs text-destructive">
-                  {errors.passwordConfirmation}
-                </p>
-              ) : null}
+            ) : null}
+          </div>
+
+          {(errors.name ?? errors.email ?? errors.password ?? errors.passwordConfirmation) ? (
+            <div className="space-y-1 text-xs text-destructive">
+              {errors.name ? <p>{errors.name}</p> : null}
+              {errors.email ? <p>{errors.email}</p> : null}
+              {errors.password ? <p>{errors.password}</p> : null}
+              {errors.passwordConfirmation ? <p>{errors.passwordConfirmation}</p> : null}
             </div>
           ) : null}
 
@@ -200,11 +271,11 @@ const AuthModal = () => {
             {authMode === "login" ? t("auth.signIn") : t("auth.continue")}
           </Button>
 
-          <div className="border-t pt-4 text-center text-sm">
+          <div className="text-center text-sm text-ink">
             {authMode === "login" ? (
               <button
                 type="button"
-                className="font-semibold underline"
+                className="font-semibold underline underline-offset-2"
                 onClick={() => switchMode("register")}
               >
                 {t("auth.modal.switchToRegister")}
@@ -212,7 +283,7 @@ const AuthModal = () => {
             ) : (
               <button
                 type="button"
-                className="font-semibold underline"
+                className="font-semibold underline underline-offset-2"
                 onClick={() => switchMode("login")}
               >
                 {t("auth.modal.switchToLogin")}

@@ -10,6 +10,7 @@ export type BookingReview = {
 
 export type BookingListing = {
   id: number;
+  slug: string;
   title: string;
   propertyType: string;
   city: string;

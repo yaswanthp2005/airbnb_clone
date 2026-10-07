@@ -13,6 +13,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: en.common.appName,
   description: en.common.appName,
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export const viewport: Viewport = {

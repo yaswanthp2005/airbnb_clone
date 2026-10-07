@@ -32,7 +32,7 @@ import TripDetails from "./TripDetails";
 import { EMPTY_CARD, formatTripDate, validateCard, type CardDetails } from "./utils";
 
 type BookingCheckoutProps = {
-  listingId: number;
+  listingSlug: string;
 };
 
 const NO_BOOKED_DATES: string[] = [];
@@ -43,7 +43,7 @@ const BookingCheckoutContent = ({ listing }: { listing: ListingDetail }) => {
   const [card, setCard] = useState<CardDetails>(EMPTY_CARD);
   const [showCardErrors, setShowCardErrors] = useState(false);
   const { selection, setDates, setGuests, guestLimits } = useBookingSelection(listing.maxGuests);
-  const { data: bookedDates = NO_BOOKED_DATES } = useListingUnavailableDates(listing.id, datesWindow);
+  const { data: bookedDates = NO_BOOKED_DATES } = useListingUnavailableDates(listing.slug, datesWindow);
   const bookedNights = useMemo(() => new Set(bookedDates), [bookedDates]);
   const createBooking = useCreateBooking();
 
@@ -86,7 +86,7 @@ const BookingCheckoutContent = ({ listing }: { listing: ListingDetail }) => {
     <PageContainer width="narrow" className="pb-16 pt-6 md:pt-10">
       <div className="flex items-center gap-2 md:-ml-12">
         <Link
-          href={buildUrl({ path: listingRoute(listing.id), query: selectionQuery(selection) })}
+          href={buildUrl({ path: listingRoute(listing.slug), query: selectionQuery(selection) })}
           aria-label={t("checkout.back")}
           className="flex size-10 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-muted"
         >
@@ -150,8 +150,8 @@ const BookingCheckoutContent = ({ listing }: { listing: ListingDetail }) => {
   );
 };
 
-const BookingCheckout = ({ listingId }: BookingCheckoutProps) => {
-  const { data: listing, isPending, isError } = useListing(listingId);
+const BookingCheckout = ({ listingSlug }: BookingCheckoutProps) => {
+  const { data: listing, isPending, isError } = useListing(listingSlug);
 
   if (isPending) {
     return <BookingCheckoutSkeleton />;

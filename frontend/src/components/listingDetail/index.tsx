@@ -33,7 +33,7 @@ import ReviewsSection from "./Reviews";
 import { availabilityWindow, isStayBookable, selectionQuery } from "./utils";
 
 type ListingDetailProps = {
-  listingId: number;
+  listingSlug: string;
 };
 
 const NO_BOOKED_DATES: string[] = [];
@@ -46,7 +46,7 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
   const { selection, setDates, changeGuests, guestLimits } = useBookingSelection(
     listing.maxGuests,
   );
-  const { data: bookedDates = NO_BOOKED_DATES } = useListingUnavailableDates(listing.id, datesWindow);
+  const { data: bookedDates = NO_BOOKED_DATES } = useListingUnavailableDates(listing.slug, datesWindow);
   const bookedNights = useMemo(() => new Set(bookedDates), [bookedDates]);
 
   const { checkIn, checkOut } = selection;
@@ -62,7 +62,7 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
   const handleReserve = () => {
     if (isBookable) {
       requireAuth(() =>
-        router.push(buildUrl({ path: bookRoute(listing.id), query: selectionQuery(selection) })),
+        router.push(buildUrl({ path: bookRoute(listing.slug), query: selectionQuery(selection) })),
       );
     }
   };
@@ -146,8 +146,8 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
   );
 };
 
-const ListingDetail = ({ listingId }: ListingDetailProps) => {
-  const { data: listing, isPending, isError } = useListing(listingId);
+const ListingDetail = ({ listingSlug }: ListingDetailProps) => {
+  const { data: listing, isPending, isError } = useListing(listingSlug);
 
   if (isPending) {
     return <ListingDetailSkeleton />;

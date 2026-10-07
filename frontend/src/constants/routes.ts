@@ -18,14 +18,15 @@ export const routes = {
 
 export const LISTING_ROUTE_PREFIX = `${BASE}/listings/`;
 
-export const listingRoute = (listingId: string | number) =>
-  `${LISTING_ROUTE_PREFIX}${listingId}`;
+export const listingRoute = (slug: string) =>
+  `${LISTING_ROUTE_PREFIX}${encodeURIComponent(slug)}`;
 
 export const BOOK_ROUTE_PREFIX = `${BASE}/book/`;
 export const BOOKING_ROUTE_PREFIX = `${BASE}/bookings/`;
 
 /** "Confirm and pay" checkout for a listing. */
-export const bookRoute = (listingId: string | number) => `${BOOK_ROUTE_PREFIX}${listingId}`;
+export const bookRoute = (slug: string) =>
+  `${BOOK_ROUTE_PREFIX}${encodeURIComponent(slug)}`;
 
 /** Confirmation / details page of a placed booking. */
 export const bookingRoute = (bookingId: string | number) =>
@@ -49,9 +50,9 @@ export const apiRoutes = {
   listingAmenities: "/listings/amenities",
   listingPropertyTypes: "/listings/property-types",
   listingLocations: "/listings/locations",
-  listingDetail: "/listings/:id",
-  listingReviews: "/listings/:id/reviews",
-  listingUnavailableDates: "/listings/:id/unavailable-dates",
+  listingDetail: "/listings/:slug",
+  listingReviews: "/listings/:slug/reviews",
+  listingUnavailableDates: "/listings/:slug/unavailable-dates",
   destinations: "/destinations",
   bookings: "/bookings",
   myBookings: "/bookings/me",

@@ -80,7 +80,7 @@ const HostListingCard = ({ listing, onDelete, isEager = false }: HostListingCard
           {t("hosting.listings.edit")}
         </Link>
         <Link
-          href={listingRoute(listing.id)}
+          href={listingRoute(listing.slug)}
           aria-label={t("hosting.listings.viewLabel", { title: listing.title })}
           className={actionClassName}
         >

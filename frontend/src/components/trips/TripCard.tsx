@@ -100,7 +100,7 @@ const TripCard = ({ booking, onCancel, onReview }: TripCardProps) => {
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-hairline px-4 py-3">
           <YourRating rating={booking.review.rating} />
           <Link
-            href={`${listingRoute(listing.id)}#${SECTION_IDS.reviews}`}
+            href={`${listingRoute(listing.slug)}#${SECTION_IDS.reviews}`}
             className={footerButtonClassName}
           >
             {t("trips.seeReview")}

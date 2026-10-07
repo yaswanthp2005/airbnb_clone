@@ -58,7 +58,7 @@ const ListingsFeed = () => {
   const listingQuery = useMemo(() => stayQuery(filters), [filters]);
   const filtersKey = useMemo(() => JSON.stringify(filters), [filters]);
   const listingHref = useCallback(
-    (listing: ListingSummary) => buildUrl({ path: listingRoute(listing.id), query: listingQuery }),
+    (listing: ListingSummary) => buildUrl({ path: listingRoute(listing.slug), query: listingQuery }),
     [listingQuery],
   );
   const total = data?.pages[0]?.total ?? 0;

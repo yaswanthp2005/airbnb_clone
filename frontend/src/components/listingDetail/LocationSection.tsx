@@ -19,7 +19,6 @@ const LocationSection = ({ listing }: LocationSectionProps) => (
   <section id={SECTION_IDS.location} className="border-t border-hairline py-12">
     <h2 className="text-[22px] font-semibold text-ink">{t("listingDetail.location.title")}</h2>
     <div
-      role="img"
       aria-label={t("listingDetail.location.mapTitle", { city: listing.city })}
       className="relative isolate mt-6 h-[320px] overflow-hidden rounded-xl bg-surface-muted md:h-[480px]"
     >

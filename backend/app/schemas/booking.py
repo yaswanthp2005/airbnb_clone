@@ -50,6 +50,7 @@ class MyBookingsParams(BaseModel):
 
 class BookingListingOut(BaseModel):
     id: int
+    slug: str
     title: str
     property_type: str
     city: str

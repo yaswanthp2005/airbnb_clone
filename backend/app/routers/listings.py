@@ -21,6 +21,7 @@ from app.schemas.pagination import PaginatedResponse
 from app.schemas.review import ReviewListParams, ReviewOut
 from app.services.listing_service import (
     get_filter_options,
+    get_listing_by_slug_or_404,
     get_listing_detail,
     get_unavailable_dates,
     list_listings,
@@ -32,7 +33,7 @@ from app.services.review_service import list_listing_reviews
 
 router = APIRouter(prefix="/listings", tags=["listings"])
 
-ListingId = Annotated[int, Path(ge=1)]
+ListingSlug = Annotated[str, Path(min_length=1, max_length=220)]
 
 
 @router.get("", response_model=PaginatedResponse[ListingCardOut])
@@ -70,28 +71,29 @@ def locations(
     return LocationSuggestionsResponse(data=suggest_locations(db, params))
 
 
-@router.get("/{listing_id}", response_model=ListingDetailResponse)
+@router.get("/{listing_slug}", response_model=ListingDetailResponse)
 def show(
-    listing_id: ListingId,
+    listing_slug: ListingSlug,
     db: Session = Depends(get_db_session),
     user: Optional[User] = Depends(get_optional_user),
 ) -> ListingDetailResponse:
-    return ListingDetailResponse(data=get_listing_detail(db, listing_id, user))
+    return ListingDetailResponse(data=get_listing_detail(db, listing_slug, user))
 
 
-@router.get("/{listing_id}/reviews", response_model=PaginatedResponse[ReviewOut])
+@router.get("/{listing_slug}/reviews", response_model=PaginatedResponse[ReviewOut])
 def reviews(
-    listing_id: ListingId,
+    listing_slug: ListingSlug,
     params: Annotated[ReviewListParams, Query()],
     db: Session = Depends(get_db_session),
 ) -> PaginatedResponse[ReviewOut]:
-    return list_listing_reviews(db, listing_id, params)
+    listing = get_listing_by_slug_or_404(db, listing_slug)
+    return list_listing_reviews(db, listing.id, params)
 
 
-@router.get("/{listing_id}/unavailable-dates", response_model=UnavailableDatesResponse)
+@router.get("/{listing_slug}/unavailable-dates", response_model=UnavailableDatesResponse)
 def unavailable_dates(
-    listing_id: ListingId,
+    listing_slug: ListingSlug,
     params: Annotated[UnavailableDatesParams, Query()],
     db: Session = Depends(get_db_session),
 ) -> UnavailableDatesResponse:
-    return UnavailableDatesResponse(data=get_unavailable_dates(db, listing_id, params))
+    return UnavailableDatesResponse(data=get_unavailable_dates(db, listing_slug, params))

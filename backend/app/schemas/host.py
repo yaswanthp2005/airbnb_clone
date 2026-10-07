@@ -99,6 +99,7 @@ class HostListingIn(BaseModel):
 
 class HostListingOut(BaseModel):
     id: int
+    slug: str
     title: str
     description: str
     property_type: str
@@ -152,6 +153,7 @@ class HostBookingsParams(HostPageParams):
 
 class HostBookingListingOut(BaseModel):
     id: int
+    slug: str
     title: str
     city: str
     photo_url: Optional[str] = None

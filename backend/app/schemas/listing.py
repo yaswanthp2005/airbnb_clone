@@ -117,6 +117,7 @@ class PropertyTypeSummariesResponse(BaseModel):
 
 class ListingCardOut(BaseModel):
     id: int
+    slug: str
     title: str
     property_type: str
     city: str
@@ -161,6 +162,7 @@ class RatingCount(BaseModel):
 
 class ListingDetailOut(BaseModel):
     id: int
+    slug: str
     title: str
     description: str
     property_type: str

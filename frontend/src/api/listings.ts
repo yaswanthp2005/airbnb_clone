@@ -110,22 +110,22 @@ export const getLocationSuggestions = async (
 };
 
 /** The page renders its own not-found / error state, so no toast. */
-export const getListing = async (listingId: number): Promise<ListingDetail> => {
+export const getListing = async (listingSlug: string): Promise<ListingDetail> => {
   const { data } = await apiClient.get<ListingDetailResponseBody>(
-    buildUrl({ path: apiRoutes.listingDetail, pathParams: { id: listingId } }),
+    buildUrl({ path: apiRoutes.listingDetail, pathParams: { slug: listingSlug } }),
     { skipToast: true },
   );
   return data.data;
 };
 
 export const getListingReviews = async (
-  listingId: number,
+  listingSlug: string,
   params: GetListingReviewsParams,
 ): Promise<PaginatedResponse<Review>> => {
   const { data } = await apiClient.get<PaginatedResponse<Review>>(
     buildUrl({
       path: apiRoutes.listingReviews,
-      pathParams: { id: listingId },
+      pathParams: { slug: listingSlug },
       query: params,
     }),
   );
@@ -133,13 +133,13 @@ export const getListingReviews = async (
 };
 
 export const getListingUnavailableDates = async (
-  listingId: number,
+  listingSlug: string,
   params: GetUnavailableDatesParams = {},
 ): Promise<string[]> => {
   const { data } = await apiClient.get<UnavailableDatesResponseBody>(
     buildUrl({
       path: apiRoutes.listingUnavailableDates,
-      pathParams: { id: listingId },
+      pathParams: { slug: listingSlug },
       query: params,
     }),
   );
