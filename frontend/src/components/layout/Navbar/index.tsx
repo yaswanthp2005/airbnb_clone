@@ -59,14 +59,14 @@ const Navbar = ({
 
         <div className="flex items-center justify-end gap-1">
           {isAuthenticated ? (
-            <Link href={routes.hosting} className={`${roundHoverClass} hidden px-4 py-3 md:inline-flex`}>
+            <Link href={routes.hosting} className={`${roundHoverClass} hidden whitespace-nowrap px-4 py-3 lg:inline-flex`}>
               {t("nav.switchToHosting")}
             </Link>
           ) : (
             <button
               type="button"
               onClick={() => requireAuth(() => router.push(routes.hosting))}
-              className={`${roundHoverClass} hidden px-4 py-3 md:inline-flex`}
+              className={`${roundHoverClass} hidden whitespace-nowrap px-4 py-3 lg:inline-flex`}
             >
               {t("nav.hostYourHome")}
             </button>

@@ -58,7 +58,7 @@ const HostingDashboard = () => {
         </div>
         <Link
           href={routes.hostingNewListing}
-          className="inline-flex items-center gap-2 self-start rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:self-auto"
+          className="inline-flex items-center gap-2 self-start rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-on-ink transition-opacity hover:opacity-90 sm:self-auto"
         >
           <Plus className="size-4" aria-hidden="true" />
           {t("hosting.createListing")}

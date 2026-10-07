@@ -26,10 +26,10 @@ const ScrollArrow = ({ direction, isVisible, onClick }: ScrollArrowProps) => {
   return (
     <div
       className={cn(
-        "pointer-events-none absolute inset-y-0 z-10 flex items-center transition-opacity",
+        "pointer-events-none absolute inset-y-0 z-10 hidden items-center transition-opacity md:flex",
         direction === "left"
-          ? "left-0 bg-linear-to-r from-white from-60% to-transparent pr-10"
-          : "right-0 bg-linear-to-l from-white from-60% to-transparent pl-10",
+          ? "left-0 bg-linear-to-r from-surface from-60% to-transparent pr-10"
+          : "right-0 bg-linear-to-l from-surface from-60% to-transparent pl-10",
         isVisible ? "opacity-100" : "opacity-0",
       )}
     >
@@ -39,7 +39,7 @@ const ScrollArrow = ({ direction, isVisible, onClick }: ScrollArrowProps) => {
         aria-label={t(direction === "left" ? "categories.scrollLeft" : "categories.scrollRight")}
         onClick={onClick}
         className={cn(
-          "flex size-7 items-center justify-center rounded-full border border-hairline/80 bg-white text-ink transition-shadow hover:shadow-pill-hover",
+          "flex size-7 items-center justify-center rounded-full border border-hairline/80 bg-surface text-ink transition-shadow hover:shadow-pill-hover",
           isVisible && "pointer-events-auto",
         )}
       >
@@ -77,7 +77,7 @@ const CategoryBar = () => {
             ref={ref}
             role="tablist"
             aria-label={t("categories.label")}
-            className="scrollbar-none flex gap-8 overflow-x-auto"
+            className="scrollbar-none flex gap-6 overflow-x-auto md:gap-8"
           >
             {CATEGORIES.map(category => (
               <CategoryTab
@@ -101,7 +101,7 @@ const CategoryBar = () => {
           aria-label={
             activeFilterCount > 0
               ? t("categories.filtersApplied", { count: activeFilterCount })
-              : undefined
+              : t("categories.filters")
           }
           className={cn(
             "relative mb-2 flex h-12 shrink-0 items-center gap-2 rounded-xl border px-4 text-xs font-semibold text-ink transition-colors hover:border-ink hover:bg-surface-muted",
@@ -109,11 +109,11 @@ const CategoryBar = () => {
           )}
         >
           <SlidersHorizontal className="size-4" aria-hidden="true" />
-          {t("categories.filters")}
+          <span className="hidden md:inline">{t("categories.filters")}</span>
           {activeFilterCount > 0 ? (
             <span
               aria-hidden="true"
-              className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-ink text-[10px] font-bold text-white"
+              className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-ink text-[10px] font-bold text-on-ink"
             >
               {activeFilterCount}
             </span>

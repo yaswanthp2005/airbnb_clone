@@ -25,7 +25,7 @@ const WishlistEmptyState = () => (
     <p className="max-w-md text-base text-ink-muted">{t("wishlists.empty.description")}</p>
     <Link
       href={routes.home}
-      className="mt-3 rounded-lg bg-ink px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-black"
+      className="mt-3 rounded-lg bg-ink px-6 py-3 text-base font-semibold text-on-ink transition-colors hover:bg-ink-strong"
     >
       {t("wishlists.empty.action")}
     </Link>

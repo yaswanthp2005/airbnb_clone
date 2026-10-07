@@ -27,7 +27,7 @@ const HostListingCard = ({ listing, onDelete, isEager = false }: HostListingCard
   return (
     <article
       data-listing-id={listing.id}
-      className="flex w-full flex-col overflow-hidden rounded-xl border border-hairline bg-white shadow-[0_6px_16px_rgba(0,0,0,0.06)]"
+      className="flex w-full flex-col overflow-hidden rounded-xl border border-hairline bg-surface-raised shadow-card-soft"
     >
       <Link href={editHref} className="group block" aria-label={t("hosting.listings.editLabel", { title: listing.title })}>
         <div className="relative aspect-[3/2] w-full overflow-hidden bg-surface-muted">
@@ -41,7 +41,7 @@ const HostListingCard = ({ listing, onDelete, isEager = false }: HostListingCard
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
           ) : null}
-          <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink shadow-sm">
+          <span className="absolute left-3 top-3 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-ink shadow-sm">
             {listing.propertyType}
           </span>
         </div>

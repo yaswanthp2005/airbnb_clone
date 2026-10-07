@@ -60,7 +60,7 @@ const PhotoGrid = ({ photos, onOpen }: PhotoGridProps) => {
       <button
         type="button"
         onClick={() => onOpen(0)}
-        className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg border border-ink bg-white px-4 py-1.5 text-sm font-semibold text-ink shadow-sm transition-colors hover:bg-surface-muted md:bottom-6 md:right-6"
+        className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg border border-ink bg-surface px-4 py-1.5 text-sm font-semibold text-ink shadow-sm transition-colors hover:bg-surface-muted md:bottom-6 md:right-6"
       >
         <LayoutGrid className="size-4" aria-hidden="true" />
         {t("listingDetail.photos.showAll")}

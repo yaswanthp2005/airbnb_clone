@@ -195,7 +195,7 @@ const AuthModal = () => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="h-12 rounded-lg bg-[#ff385c] text-base font-semibold hover:bg-[#e31c5f]"
+            className="h-12 rounded-lg bg-brand text-base font-semibold text-on-brand hover:bg-brand-dark"
           >
             {authMode === "login" ? t("auth.signIn") : t("auth.continue")}
           </Button>

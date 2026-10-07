@@ -65,14 +65,19 @@ export const REVIEW_DATE_FORMAT = "MMMM yyyy";
 export const PHOTO_GRID_SIZES = "(min-width: 768px) 50vw, 100vw";
 export const PHOTO_GRID_SMALL_SIZES = "(min-width: 768px) 25vw, 1px";
 export const GALLERY_PHOTO_SIZES = "(min-width: 768px) 768px, 100vw";
+export const MOBILE_PHOTO_SIZES = "100vw";
+
+/** Round icon buttons floating over photos (mobile carousel). */
+export const PHOTO_OVERLAY_BUTTON_CLASS_NAME =
+  "flex size-9 items-center justify-center rounded-full bg-surface-raised text-ink shadow-pill transition-transform active:scale-95";
 
 export const LOCATION_MAP_ZOOM = 13;
 /** Approximate area shown instead of the exact address (revealed after booking). */
 export const LOCATION_RADIUS_METERS = 1200;
 
-/** Content + booking card columns; below `lg` the card becomes the bottom bar. */
+/** Content + booking card columns from `md` (tablet: fixed-width card); phones get the bottom bar. */
 export const DETAIL_COLUMNS_CLASS_NAME =
-  "lg:grid lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-x-16 xl:gap-x-24";
+  "md:grid md:grid-cols-[minmax(0,1fr)_18rem] md:gap-x-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] lg:gap-x-16 xl:gap-x-24";
 
 export const SECTION_IDS = {
   photos: "photos",

@@ -22,7 +22,7 @@ const MeetHost = ({ host }: MeetHostProps) => (
   <section className="border-t border-hairline py-12">
     <h2 className="text-[22px] font-semibold text-ink">{t("listingDetail.host.meetYourHost")}</h2>
     <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,380px)_minmax(0,1fr)] md:items-center md:gap-16">
-      <div className="grid grid-cols-[1fr_auto] items-center gap-6 rounded-3xl bg-white px-6 py-8 shadow-card">
+      <div className="grid grid-cols-[1fr_auto] items-center gap-6 rounded-3xl bg-surface-raised px-6 py-8 shadow-card">
         <div className="flex flex-col items-center text-center">
           <UserAvatar name={host.name} avatarUrl={host.avatarUrl} className="size-24" />
           <p className="mt-3 text-[28px] font-bold leading-8 text-ink">{firstName(host.name)}</p>

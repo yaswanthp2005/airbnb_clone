@@ -67,6 +67,16 @@
       "infantsOther": "{{count}} infants",
       "petsOne": "1 pet",
       "petsOther": "{{count}} pets"
+    },
+    "mobile": {
+      "startSearch": "Start your search",
+      "summary": "{{dates}} · {{guests}}",
+      "close": "Close search",
+      "whereTo": "Where to?",
+      "whenTrip": "When’s your trip?",
+      "whoComing": "Who’s coming?",
+      "flexible": "I’m flexible",
+      "clearAll": "Clear all"
     }
   },
   "categories": {
@@ -482,7 +492,9 @@
       "showAll": "Show all photos",
       "alt": "{{title}} — photo {{index}} of {{total}}",
       "openPhoto": "Open photo {{index}} of {{total}}",
-      "galleryTitle": "Photo tour"
+      "galleryTitle": "Photo tour",
+      "carousel": "Photo carousel",
+      "counter": "{{current}} / {{total}}"
     },
     "overview": {
       "heading": "Entire {{propertyType}} in {{city}}, {{country}}",
@@ -665,5 +677,24 @@
       "description": "As you search, tap the heart icon to save your favourite places to stay.",
       "action": "Start exploring"
     }
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "mobileNav": {
+    "label": "Main",
+    "explore": "Explore",
+    "wishlists": "Wishlists",
+    "trips": "Trips",
+    "profile": "Profile"
+  },
+  "profile": {
+    "title": "Profile",
+    "guestPrompt": "Log in to start planning your next trip.",
+    "noAccount": "Don’t have an account?",
+    "settings": "Settings"
   }
 }

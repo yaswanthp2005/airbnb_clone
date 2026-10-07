@@ -5,6 +5,8 @@ import { ThemeProvider } from "next-themes";
 
 import AuthProvider from "@/components/auth/AuthProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { STORAGE_KEYS } from "@/constants";
+import { DEFAULT_THEME } from "@/constants/theme";
 import { getQueryClient } from "@/utils/queryClient";
 
 type ProvidersProps = {
@@ -15,7 +17,13 @@ const Providers = ({ children }: ProvidersProps) => {
   const queryClient = getQueryClient();
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme={DEFAULT_THEME}
+      enableSystem
+      disableTransitionOnChange
+      storageKey={STORAGE_KEYS.theme}
+    >
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           {children}

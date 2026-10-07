@@ -37,6 +37,8 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
   const hasReviews = listing.reviewCount > 0;
   const rating = listing.ratingAvg.toFixed(RATING_DECIMALS);
 
+  const cardHref = href ?? listingRoute(listing.id);
+
   const handleWishlistClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -46,13 +48,13 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
   return (
     <article data-listing-id={listing.id} className="group relative flex flex-col gap-3">
       <Link
-        href={href ?? listingRoute(listing.id)}
+        href={cardHref}
         aria-label={listing.title}
         className="absolute inset-0 z-10 rounded-xl"
       />
 
       <div className="relative">
-        <PhotoCarousel photos={listing.photos} alt={listing.title} isEager={isEager} />
+        <PhotoCarousel photos={listing.photos} alt={listing.title} href={cardHref} isEager={isEager} />
         <button
           type="button"
           onClick={handleWishlistClick}
@@ -66,8 +68,8 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
         >
           <Heart
             className={cn(
-              "size-6 stroke-white stroke-2 drop-shadow-sm",
-              listing.isWishlisted ? "fill-brand" : "fill-black/50",
+              "size-6 stroke-on-photo stroke-2 drop-shadow-sm",
+              listing.isWishlisted ? "fill-brand" : "fill-photo-scrim/50",
             )}
             aria-hidden="true"
           />

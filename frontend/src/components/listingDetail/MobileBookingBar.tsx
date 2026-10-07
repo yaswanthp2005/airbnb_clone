@@ -14,8 +14,8 @@ type MobileBookingBarProps = {
 };
 
 const MobileBookingBar = ({ pricePerNight, dates, isBookable, onReserve }: MobileBookingBarProps) => (
-  <div className="fixed inset-x-0 bottom-0 z-30 border-t border-hairline bg-white lg:hidden">
-    <div className="flex items-center justify-between gap-4 px-6 py-4">
+  <div className="fixed inset-x-0 bottom-0 z-30 border-t border-hairline bg-surface shadow-bar md:hidden">
+    <div className="flex items-center justify-between gap-4 px-6 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
       <div className="min-w-0">
         <p className="text-ink">
           <span className="font-semibold">{formatPrice(pricePerNight)}</span>{" "}

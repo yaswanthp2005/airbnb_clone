@@ -27,7 +27,7 @@ const DetailModal = ({
     <DialogContent
       showCloseButton={false}
       className={cn(
-        "flex max-h-[calc(100dvh-4rem)] w-full flex-col gap-0 overflow-hidden rounded-xl bg-white p-0 shadow-card sm:max-w-[780px]",
+        "flex max-h-[calc(100dvh-4rem)] w-full flex-col gap-0 overflow-hidden rounded-xl bg-surface-raised p-0 shadow-card sm:max-w-[780px]",
         className,
       )}
     >

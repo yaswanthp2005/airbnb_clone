@@ -1,4 +1,5 @@
-import { addDays, format, isSameMonth } from "date-fns";
+import { addDays, format, isSameDay, isSameMonth } from "date-fns";
+import type { DateRange } from "react-day-picker";
 
 import { t } from "@/common/i18n";
 import type { ListingFilters } from "@/types/listing";
@@ -126,4 +127,19 @@ export const updateGuestCount = (
     next.adults = 1;
   }
   return next;
+};
+
+export type StayDateParams = { checkIn?: string; checkOut?: string };
+
+export const datesToRange = ({ checkIn, checkOut }: StayDateParams): DateRange | undefined =>
+  checkIn ? { from: fromDateParam(checkIn), to: fromDateParam(checkOut) } : undefined;
+
+/** A same-day "range" is just a check-in; the checkout is still to be picked. */
+export const rangeToDates = (range: DateRange | undefined): StayDateParams => {
+  const from = range?.from;
+  const to = range?.to && from && !isSameDay(range.to, from) ? range.to : undefined;
+  return {
+    checkIn: from ? toDateParam(from) : undefined,
+    checkOut: to ? toDateParam(to) : undefined,
+  };
 };

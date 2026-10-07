@@ -17,7 +17,7 @@ const ListingUnavailable = () => (
       <p className="mb-8 text-base text-ink-muted">{t("listingDetail.unavailable.description")}</p>
       <Link
         href={routes.home}
-        className="rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-black"
+        className="rounded-lg bg-ink px-6 py-3.5 text-base font-semibold text-on-ink transition-colors hover:bg-ink-strong"
       >
         {t("listingDetail.unavailable.backHome")}
       </Link>

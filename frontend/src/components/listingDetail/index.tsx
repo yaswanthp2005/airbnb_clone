@@ -26,6 +26,7 @@ import ListingUnavailable from "./ListingUnavailable";
 import LocationSection from "./LocationSection";
 import MeetHost from "./MeetHost";
 import MobileBookingBar from "./MobileBookingBar";
+import MobilePhotoCarousel from "./MobilePhotoCarousel";
 import PhotoGalleryModal from "./PhotoGalleryModal";
 import PhotoGrid from "./PhotoGrid";
 import ReviewsSection from "./Reviews";
@@ -68,18 +69,26 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
 
   return (
     <>
-      <PageContainer width="narrow" className="pb-28 pt-6 lg:pb-16">
-        <div className="flex items-start justify-between gap-4">
-          <h1 className="text-[22px] font-semibold leading-7 text-ink md:text-[26px] md:leading-8">
-            {listing.title}
-          </h1>
+      <PageContainer width="narrow" className="pb-28 md:pb-16 md:pt-6">
+        <MobilePhotoCarousel
+          listingId={listing.id}
+          title={listing.title}
+          photos={listing.photos}
+          isWishlisted={listing.isWishlisted}
+          onOpen={setGalleryIndex}
+        />
+        <div className="mt-6 flex items-start justify-between gap-4 md:mt-0">
+          <h1 className="text-[26px] font-semibold leading-8 text-ink">{listing.title}</h1>
           <ListingActions
             listingId={listing.id}
             title={listing.title}
             isWishlisted={listing.isWishlisted}
+            className="hidden md:flex"
           />
         </div>
-        <PhotoGrid photos={listing.photos} onOpen={setGalleryIndex} />
+        <div className="hidden md:block">
+          <PhotoGrid photos={listing.photos} onOpen={setGalleryIndex} />
+        </div>
 
         <div className={`mt-8 ${DETAIL_COLUMNS_CLASS_NAME}`}>
           <div className="min-w-0">
@@ -95,7 +104,7 @@ const ListingDetailContent = ({ listing }: { listing: ListingDetailData }) => {
               onChange={setDates}
             />
           </div>
-          <aside className="hidden lg:block">
+          <aside className="hidden md:block">
             <div className="sticky top-32 pb-12">
               <BookingCard
                 listing={listing}

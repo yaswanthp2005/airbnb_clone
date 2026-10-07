@@ -19,7 +19,7 @@ const DatesPopover = ({ city, onClose, ...calendarProps }: DatesPopoverProps) =>
     <div
       role="dialog"
       aria-label={t("listingDetail.booking.selectDates")}
-      className="absolute -right-4 -top-4 z-30 w-[680px] max-w-[calc(100vw-3rem)] rounded-3xl bg-white px-8 pb-6 pt-8 shadow-menu"
+      className="absolute -right-4 -top-4 z-30 w-[680px] max-w-[calc(100vw-3rem)] rounded-3xl bg-surface-raised px-8 pb-6 pt-8 shadow-menu"
     >
       <div className="flex items-start justify-between gap-6">
         <div>
@@ -52,7 +52,7 @@ const DatesPopover = ({ city, onClose, ...calendarProps }: DatesPopoverProps) =>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-black"
+          className="rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-on-ink transition-colors hover:bg-ink-strong"
         >
           {t("listingDetail.close")}
         </button>

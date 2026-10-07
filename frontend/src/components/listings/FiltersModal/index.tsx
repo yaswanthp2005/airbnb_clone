@@ -11,8 +11,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FILTERS_PREVIEW_DEBOUNCE_MS } from "@/constants";
+import { BOTTOM_SHEET_DIALOG_CLASS_NAME, FILTERS_PREVIEW_DEBOUNCE_MS } from "@/constants";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { useSwipeToDismiss } from "@/hooks/useSwipeToDismiss";
+import { cn } from "@/lib/utils";
 import { useListingFilterOptions, useListingsCount } from "@/queries/listings";
 import type { ListingFilters } from "@/types/listing";
 
@@ -33,9 +35,10 @@ type FiltersModalProps = {
 
 type FiltersPanelProps = Omit<FiltersModalProps, "open" | "onOpenChange"> & {
   onClose: () => void;
+  dragHandleProps: ReturnType<typeof useSwipeToDismiss>["handleProps"];
 };
 
-const FiltersPanel = ({ filters, onApply, onClose }: FiltersPanelProps) => {
+const FiltersPanel = ({ filters, onApply, onClose, dragHandleProps }: FiltersPanelProps) => {
   const [draft, setDraft] = useState<ListingFilters>(filters);
   const { data: options, isPending: isOptionsPending } = useListingFilterOptions(
     filters.category,
@@ -64,7 +67,14 @@ const FiltersPanel = ({ filters, onApply, onClose }: FiltersPanelProps) => {
 
   return (
     <>
-      <header className="relative flex h-16 shrink-0 items-center justify-center border-b border-hairline px-6">
+      <header
+        {...dragHandleProps}
+        className="relative flex h-16 shrink-0 touch-none items-center justify-center border-b border-hairline px-6 md:touch-auto"
+      >
+        <span
+          aria-hidden="true"
+          className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-hairline md:hidden"
+        />
         <DialogClose
           aria-label={t("listings.filters.close")}
           className="absolute left-4 flex size-8 items-center justify-center rounded-full text-ink transition-colors hover:bg-surface-muted"
@@ -143,19 +153,29 @@ const FiltersPanel = ({ filters, onApply, onClose }: FiltersPanelProps) => {
   );
 };
 
-const FiltersModal = ({ open, onOpenChange, filters, onApply }: FiltersModalProps) => (
-  <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent
-      showCloseButton={false}
-      className="flex max-h-[calc(100dvh-4rem)] w-full max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden rounded-xl p-0 shadow-card sm:max-w-[780px]"
-    >
-      <FiltersPanel
-        filters={filters}
-        onApply={onApply}
-        onClose={() => onOpenChange(false)}
-      />
-    </DialogContent>
-  </Dialog>
-);
+const FiltersModal = ({ open, onOpenChange, filters, onApply }: FiltersModalProps) => {
+  const close = () => onOpenChange(false);
+  const { handleProps, sheetStyle } = useSwipeToDismiss(close);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton={false}
+        style={sheetStyle}
+        className={cn(
+          "flex max-h-[calc(100dvh-4rem)] w-full max-w-none flex-col gap-0 overflow-hidden rounded-xl p-0 shadow-card sm:max-w-none md:max-w-[min(780px,calc(100%-2rem))]",
+          BOTTOM_SHEET_DIALOG_CLASS_NAME,
+        )}
+      >
+        <FiltersPanel
+          filters={filters}
+          onApply={onApply}
+          onClose={close}
+          dragHandleProps={handleProps}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 export default FiltersModal;

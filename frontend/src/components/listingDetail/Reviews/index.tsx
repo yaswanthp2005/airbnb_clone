@@ -58,7 +58,7 @@ const ReviewsSection = ({ listing }: ReviewsSectionProps) => {
       </h2>
       <RatingSummary breakdown={listing.ratingBreakdown} total={listing.reviewCount} />
 
-      <div className="mt-10 grid gap-x-24 gap-y-10 md:grid-cols-2">
+      <div className="mt-10 grid gap-x-12 gap-y-10 md:grid-cols-2 lg:gap-x-24">
         {isPending
           ? Array.from({ length: REVIEWS_PAGE_SIZE }, (_, index) => <ReviewSkeleton key={index} />)
           : reviews.map(review => <ReviewCard key={review.id} review={review} />)}

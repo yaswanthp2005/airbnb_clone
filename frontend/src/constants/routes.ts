@@ -10,6 +10,7 @@ export const routes = {
   hosting: `${BASE}/hosting`,
   hostingNewListing: `${BASE}/hosting/listings/new`,
   account: `${BASE}/account`,
+  profile: `${BASE}/profile`,
   messages: `${BASE}/messages`,
   identityVerification: `${BASE}/identity-verification`,
   comingSoon: `${BASE}/coming-soon/:slug`,

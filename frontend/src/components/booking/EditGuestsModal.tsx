@@ -50,7 +50,7 @@ const EditGuestsModal = ({ open, onOpenChange, guests, guestLimits, onSave }: Ed
               onSave(draft);
               onOpenChange(false);
             }}
-            className="rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-black"
+            className="rounded-lg bg-ink px-6 py-3 text-sm font-semibold text-on-ink transition-colors hover:bg-ink-strong"
           >
             {t("common.save")}
           </button>

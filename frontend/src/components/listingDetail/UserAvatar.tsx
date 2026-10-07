@@ -13,7 +13,7 @@ const UserAvatar = ({ name, avatarUrl, className }: UserAvatarProps) => (
     {avatarUrl ? (
       <AvatarImage src={avatarUrl} alt={t("listingDetail.host.avatarAlt", { name })} />
     ) : null}
-    <AvatarFallback className="bg-ink font-semibold text-white">
+    <AvatarFallback className="bg-ink font-semibold text-on-ink">
       {name.charAt(0).toUpperCase()}
     </AvatarFallback>
   </Avatar>

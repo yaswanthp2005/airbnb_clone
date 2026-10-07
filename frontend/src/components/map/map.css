@@ -1,7 +1,38 @@
-/* Leaflet's CSS is unlayered, so it beats Tailwind's layered utilities; keep overrides here. */
+/* Leaflet's CSS is unlayered, so it beats Tailwind's layered utilities; keep overrides here.
+   Colours come from the theme variables in app/globals.css. */
 
 .leaflet-container {
   font-family: inherit;
+  background: var(--surface-muted);
+}
+
+/* OSM only ships light tiles; invert them (and turn hues back) so dark mode stays dark. */
+.dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+}
+
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background: var(--surface-raised);
+  color: var(--ink);
+  border-bottom-color: var(--hairline);
+}
+
+.leaflet-bar a:hover {
+  background: var(--surface-muted);
+}
+
+.leaflet-touch .leaflet-bar {
+  border-color: var(--hairline);
+}
+
+.leaflet-container .leaflet-control-attribution {
+  background: color-mix(in srgb, var(--surface-raised) 80%, transparent);
+  color: var(--ink-muted);
+}
+
+.leaflet-container .leaflet-control-attribution a {
+  color: var(--ink);
 }
 
 .price-pin {
@@ -12,12 +43,12 @@
   white-space: nowrap;
   padding: 6px 10px;
   border-radius: 9999px;
-  background: #fff;
-  color: var(--color-ink);
+  background: var(--surface-raised);
+  color: var(--ink);
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 1px var(--hairline), var(--shadow-pill-hover-value);
   cursor: pointer;
   transition:
     transform 150ms ease,
@@ -27,8 +58,8 @@
 
 .price-pin:hover,
 .price-pin--active {
-  background: var(--color-ink);
-  color: #fff;
+  background: var(--ink);
+  color: var(--on-ink);
   transform: translate(-50%, -50%) scale(1.08);
 }
 
@@ -43,16 +74,20 @@
   width: 48px;
   height: 48px;
   border-radius: 9999px;
-  background: var(--color-ink);
-  color: #fff;
-  box-shadow: 0 0 0 6px rgba(255, 56, 92, 0.25), 0 6px 16px rgba(0, 0, 0, 0.2);
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--brand) 25%, transparent),
+    var(--shadow-card-value);
 }
 
 .listing-map-popup .leaflet-popup-content-wrapper {
   padding: 0;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: var(--shadow-card-value);
 }
 
 .listing-map-popup .leaflet-popup-content {
@@ -73,8 +108,8 @@
 
 /* Approximate-area circle; CSS because SVG attributes can't read theme variables. */
 .location-radius {
-  stroke: var(--color-brand);
+  stroke: var(--brand);
   stroke-width: 2;
-  fill: var(--color-brand);
+  fill: var(--brand);
   fill-opacity: 0.12;
 }

@@ -32,7 +32,7 @@ const AmenitiesFilter = ({ amenities, selected, onToggle }: AmenitiesFilterProps
             <Checkbox
               checked={selected.includes(amenity.id)}
               onCheckedChange={() => onToggle(amenity.id)}
-              className="size-6 rounded-md border-ink-muted data-checked:border-ink data-checked:bg-ink data-checked:text-white"
+              className="size-6 rounded-md border-ink-muted data-checked:border-ink data-checked:bg-ink data-checked:text-on-ink"
             />
             {amenity.name}
           </label>

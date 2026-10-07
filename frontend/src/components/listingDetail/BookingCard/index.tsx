@@ -67,7 +67,7 @@ const BookingCard = ({
   const hasReviews = listing.reviewCount > 0;
 
   return (
-    <div ref={cardRef} className="relative rounded-xl border border-hairline bg-white p-6 shadow-card">
+    <div ref={cardRef} className="relative rounded-xl border border-hairline bg-surface-raised p-6 shadow-card">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="text-ink">
           <span className="text-[22px] font-semibold">{formatPrice(listing.pricePerNight)}</span>{" "}
@@ -117,7 +117,7 @@ const BookingCard = ({
         </button>
 
         {openPanel === "guests" ? (
-          <div className="absolute inset-x-0 top-full z-20 mt-1 rounded-lg bg-white px-4 pb-4 shadow-menu">
+          <div className="absolute inset-x-0 top-full z-20 mt-1 rounded-lg bg-surface-raised px-4 pb-4 shadow-menu">
             <GuestSteppers
               counts={guests}
               onChange={onGuestsChange}

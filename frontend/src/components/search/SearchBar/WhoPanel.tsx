@@ -7,7 +7,7 @@ type WhoPanelProps = {
 };
 
 const WhoPanel = ({ counts, onChange }: WhoPanelProps) => (
-  <div className="absolute right-0 top-full z-50 mt-3 w-[400px] max-w-[calc(100vw-3rem)] rounded-[32px] bg-white px-8 py-4 shadow-menu">
+  <div className="absolute right-0 top-full z-50 mt-3 w-[400px] max-w-[calc(100vw-3rem)] rounded-[32px] bg-surface-raised px-8 py-4 shadow-menu">
     <GuestSteppers counts={counts} onChange={onChange} />
   </div>
 );

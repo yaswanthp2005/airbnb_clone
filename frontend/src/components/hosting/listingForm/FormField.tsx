@@ -3,7 +3,7 @@ import { CircleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const FORM_INPUT_CLASS_NAME =
-  "w-full rounded-lg border border-surface-strong bg-white px-4 py-3 text-base text-ink outline-none transition-shadow placeholder:text-ink-muted/70 focus:border-ink focus:ring-1 focus:ring-ink aria-invalid:border-destructive aria-invalid:ring-destructive";
+  "w-full rounded-lg border border-surface-strong bg-surface px-4 py-3 text-base text-ink outline-none transition-shadow placeholder:text-ink-muted/70 focus:border-ink focus:ring-1 focus:ring-ink aria-invalid:border-destructive aria-invalid:ring-destructive";
 
 export const fieldErrorId = (id: string) => `${id}-error`;
 

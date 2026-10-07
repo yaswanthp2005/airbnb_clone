@@ -20,7 +20,7 @@ type PhotosStepProps = StepProps & {
 const INPUT_ID = "listing-photo-url";
 
 const photoActionClassName =
-  "flex size-8 items-center justify-center rounded-full bg-white/95 text-ink shadow-sm transition-transform hover:scale-105 disabled:opacity-40 disabled:hover:scale-100";
+  "flex size-8 items-center justify-center rounded-full bg-surface-raised/95 text-ink shadow-sm transition-transform hover:scale-105 disabled:opacity-40 disabled:hover:scale-100";
 
 const PhotosStep = ({ values, errors, onChange, brokenPhotos, onPhotoStatusChange }: PhotosStepProps) => {
   const [draftUrl, setDraftUrl] = useState("");
@@ -79,7 +79,7 @@ const PhotosStep = ({ values, errors, onChange, brokenPhotos, onPhotoStatusChang
           <button
             type="submit"
             disabled={draftUrl.trim() === ""}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-ink px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-ink px-5 text-sm font-semibold text-on-ink transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             <Plus className="size-4" aria-hidden="true" />
             {t("hosting.form.fields.addPhoto")}
@@ -128,7 +128,7 @@ const PhotosStep = ({ values, errors, onChange, brokenPhotos, onPhotoStatusChang
                   />
                 )}
                 {isCover ? (
-                  <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink shadow-sm">
+                  <span className="absolute left-3 top-3 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-ink shadow-sm">
                     {t("hosting.form.fields.coverPhoto")}
                   </span>
                 ) : null}

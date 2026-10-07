@@ -51,7 +51,7 @@ const HostListingsList = ({ onDelete }: HostListingsListProps) => {
         <p className="max-w-md text-base text-ink-muted">{t("hosting.listings.emptyDescription")}</p>
         <Link
           href={routes.hostingNewListing}
-          className="mt-3 rounded-lg bg-ink px-6 py-3 text-base font-semibold text-white transition-opacity hover:opacity-90"
+          className="mt-3 rounded-lg bg-ink px-6 py-3 text-base font-semibold text-on-ink transition-opacity hover:opacity-90"
         >
           {t("hosting.createListing")}
         </Link>
