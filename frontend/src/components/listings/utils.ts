@@ -2,6 +2,8 @@ import { isAfter } from "date-fns";
 
 import { LISTING_FILTER_PARAMS } from "@/constants";
 import type { ListingFilters } from "@/types/listing";
+
+import { parseListingSort } from "./constants";
 import { fromDateParam } from "@/utils/dateParam";
 
 type ReadableSearchParams = Pick<URLSearchParams, "get">;
@@ -65,6 +67,7 @@ export const filtersFromSearchParams = (
     children: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.children)),
     infants: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.infants)),
     pets: parsePositiveInt(searchParams.get(LISTING_FILTER_PARAMS.pets)),
+    sort: parseListingSort(searchParams.get(LISTING_FILTER_PARAMS.sort)),
   };
 };
 
@@ -82,6 +85,7 @@ export const filtersToQuery = (filters: ListingFilters) => ({
   propertyType: uniqueSorted(filters.propertyType),
   amenities: uniqueSorted(filters.amenities),
   bedrooms: filters.bedrooms,
+  sort: filters.sort && filters.sort !== "recommended" ? filters.sort : undefined,
 });
 
 /** Dates + guests to carry from search results into a listing page. */

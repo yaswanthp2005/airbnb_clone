@@ -177,6 +177,14 @@
       "description": "Check your connection and try again.",
       "retry": "Try again"
     },
+    "sort": {
+      "label": "Sort results",
+      "recommended": "Recommended",
+      "priceAsc": "Price: low to high",
+      "priceDesc": "Price: high to low",
+      "ratingDesc": "Top rated",
+      "newest": "Newest"
+    },
     "filters": {
       "title": "Filters",
       "close": "Close filters",

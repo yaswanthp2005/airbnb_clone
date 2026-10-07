@@ -1,6 +1,6 @@
 import apiClient from "@/api/client";
 import { apiRoutes } from "@/constants/routes";
-import type { CreatedReview, CreateReviewInput } from "@/types/review";
+import type { CreatedReview, CreateReviewInput } from "@/types/listing";
 
 type ReviewResponseBody = {
   data: CreatedReview;

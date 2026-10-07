@@ -8,6 +8,7 @@ from sqlalchemy import ColumnElement, Select, case, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.orm.interfaces import ORMOption
 
+from app.constants.limits import LISTING_NOT_FOUND_MESSAGE
 from app.models import (
     Amenity,
     Booking,
@@ -37,8 +38,6 @@ from app.schemas.pagination import PaginatedResponse
 from app.services.availability import overlaps_confirmed_booking
 
 PRICE_HISTOGRAM_BUCKETS = 40
-
-LISTING_NOT_FOUND_MESSAGE = "Listing not found"
 
 RATING_SCALE = (5, 4, 3, 2, 1)
 

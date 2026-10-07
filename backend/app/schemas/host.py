@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from pydantic import BaseModel, Field, field_validator
 
+from app.constants.limits import MAX_LISTING_GUESTS
 from app.models.listing import PROPERTY_TYPES
 from app.schemas.booking import BookingStatus, BookingTab
 from app.schemas.listing import AmenityOut
@@ -21,7 +22,6 @@ ADDRESS_MAX_LENGTH = 255
 MIN_PRICE_PER_NIGHT = 500
 MAX_PRICE_PER_NIGHT = 1_000_000
 MAX_CLEANING_FEE = 100_000
-MAX_LISTING_GUESTS = 16
 MAX_ROOMS = 50
 MIN_PHOTOS = 1
 MAX_PHOTOS = 20

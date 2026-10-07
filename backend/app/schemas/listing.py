@@ -6,9 +6,10 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from app.constants.limits import MAX_LISTING_GUESTS as MAX_GUESTS
+
 DEFAULT_PAGE_SIZE = 20
 MAX_PAGE_SIZE = 50
-MAX_GUESTS = 50
 MAX_LOCATION_LENGTH = 100
 DEFAULT_LOCATION_SUGGESTIONS = 6
 MAX_LOCATION_SUGGESTIONS = 20
