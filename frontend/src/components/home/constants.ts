@@ -1,5 +1,5 @@
 /** "Popular homes in {city}" rows, for the first featured destinations. */
-export const POPULAR_CITY_ROW_COUNT = 3;
+export const POPULAR_CITY_ROW_COUNT = 6;
 
 export const ROW_SKELETON_COUNT = 8;
 

@@ -37,6 +37,12 @@ PROPERTY_TYPES: tuple[str, ...] = (
     "Farmhouse",
     "Heritage haveli",
     "Camping",
+    "Cottage",
+    "Bungalow",
+    "Loft",
+    "Tiny home",
+    "Dome",
+    "Palace",
 )
 
 

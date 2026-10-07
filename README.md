@@ -324,9 +324,10 @@ Deleting a user or listing cascades to dependent rows (photos, bookings, reviews
 The same seed runs on every empty database, so every fresh boot gives the same demo. It uses a fixed random seed, and all dates are relative to today.
 
 - 6 users (3 hosts, 3 guests). See [demo credentials](#demo-credentials).
-- 36 listings across Goa, Jaipur, Udaipur, Mumbai, Bengaluru, Manali, Kochi, Delhi, Rishikesh, Pondicherry and Darjeeling.
-- 5 photos per listing from a photo set for its property type, 8–12 amenities, priced from ₹1,500 to ₹25,000 a night.
-- 11 featured destinations with a tagline and photo. They are seeded separately whenever the table is empty, so existing databases get them too.
+- 152 listings, 8 in each of 19 cities: Goa, Jaipur, Udaipur, Mumbai, Bengaluru, Manali, Kochi, Delhi, Rishikesh, Pondicherry, Darjeeling, Shimla, Ooty, Munnar, Coorg, Varanasi, Agra, Hyderabad and Leh.
+- 15 property types (Villa, Apartment, Cabin, Houseboat, Treehouse, Beachfront, Farmhouse, Heritage haveli, Camping, Cottage, Bungalow, Loft, Tiny home, Dome, Palace), picked per city to suit it (houseboats in Kochi, domes and camping in Leh).
+- 6–8 photos per listing from a 10-photo set for its property type, rotated so listings of the same type lead with different photos. 8–12 amenities each, priced from ₹1,500 to ₹25,000 a night.
+- 19 featured destinations with a tagline and photo. They are seeded separately whenever the table is empty, so existing databases get them too.
 - Listings rated 4.5+ with at least 5 reviews are shown as "Guest favourite".
 - 4–12 reviewed past stays per listing, plus future bookings that block dates and some cancelled stays.
 - Wishlists for every guest.
@@ -419,5 +420,5 @@ Run this against a freshly started backend (or right after a Render restart):
 - [ ] **See the trip:** user menu → Trips → the booking is under Upcoming.
 - [ ] **Cancel:** Cancel reservation → confirm → "Your reservation was cancelled"; the trip moves to Cancelled and the dates free up.
 - [ ] **Wishlist:** heart a card → "Saved to your wishlist" → Wishlists shows it → un-heart → "Removed from your wishlist".
-- [ ] **Host CRUD:** Airbnb your home → Create listing → 7 steps → "Your listing is live" → Edit price → "Your listing was updated" → Delete → "Your listing was deleted".
+- [ ] **Host CRUD:** Become a host → Create listing → 7 steps → "Your listing is live" → Edit price → "Your listing was updated" → Delete → "Your listing was deleted".
 - [ ] **Errors:** an unknown URL shows the 404 page; stopping the backend shows a network error toast instead of a blank screen.

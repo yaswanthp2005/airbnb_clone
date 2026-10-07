@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+from collections import Counter
 from datetime import date, datetime, time, timedelta, timezone
 from decimal import Decimal
 from sqlalchemy import func, select
@@ -19,11 +20,11 @@ from app.models import (
     WishlistItem,
 )
 from app.models.booking import BOOKING_STATUS_CANCELLED, BOOKING_STATUS_CONFIRMED
-from app.models.listing import PROPERTY_TYPES
 from app.seed.constants import (
     AMENITY_DEFINITIONS,
     DEMO_GUEST_EMAIL,
     DEMO_PASSWORD,
+    LISTING_PHOTO_COUNT_RANGE,
     REVIEW_COMMENTS,
     property_type_photo_urls,
     unsplash_url,
@@ -109,13 +110,11 @@ def run_seed(db: Session) -> bool:
 
     listings: list[Listing] = []
     listing_index = 0
+    listings_per_type: Counter[str] = Counter()
     for city_seed in CITY_SEEDS:
-        for local_idx in range(city_seed.listing_count):
-            property_type = PROPERTY_TYPES[listing_index % len(PROPERTY_TYPES)]
+        for property_type in city_seed.property_types:
             host = hosts[listing_index % len(hosts)]
-            price = rng.randint(15, 500) * 100  # ₹1,500 – ₹50,000 in steps; cap at 25000
-            price = min(price, 25000)
-            price = max(price, 1500)
+            price = rng.randint(15, 250) * 100  # ₹1,500 – ₹25,000 in ₹100 steps
             cleaning = rng.choice([0, 500, 750, 1000, 1500])
             lat_jitter = rng.uniform(-0.08, 0.08)
             lng_jitter = rng.uniform(-0.08, 0.08)
@@ -124,7 +123,7 @@ def run_seed(db: Session) -> bool:
             bathrooms = rng.randint(1, 3)
             max_guests = rng.randint(2, 10)
 
-            title = f"{property_type} in {city_seed.city} — {local_idx + 1}"
+            title = f"{property_type} in {city_seed.city}"
             description = _listing_description(
                 property_type,
                 city_seed.city,
@@ -157,9 +156,12 @@ def run_seed(db: Session) -> bool:
             db.add(listing)
             db.flush()
 
-            # Types are assigned round-robin, so this counts earlier listings of the same type.
-            photo_rotation = listing_index // len(PROPERTY_TYPES)
-            for position, url in enumerate(property_type_photo_urls(property_type, photo_rotation)):
+            photo_count = rng.randint(*LISTING_PHOTO_COUNT_RANGE)
+            photo_urls = property_type_photo_urls(
+                property_type, listings_per_type[property_type], photo_count
+            )
+            listings_per_type[property_type] += 1
+            for position, url in enumerate(photo_urls):
                 db.add(
                     ListingPhoto(listing_id=listing.id, url=url, position=position)
                 )
