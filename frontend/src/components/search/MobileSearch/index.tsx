@@ -43,7 +43,7 @@ const MobileSearch = ({ variant }: MobileSearchProps) => {
               <span className="truncate text-sm font-semibold">{location || t("search.anywhere")}</span>
               <span className="truncate text-xs text-ink-muted">
                 {t("search.mobile.summary", {
-                  dates: dates ?? t("search.anyWeek"),
+                  dates: dates ?? t("search.anytime"),
                   guests: guests ?? t("search.addGuests"),
                 })}
               </span>

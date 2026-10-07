@@ -359,6 +359,26 @@ def get_filter_options(db: Session) -> ListingFilterOptions:
     )
 
 
+def list_search_amenities(db: Session, params: ListingFilterParams) -> list[AmenityOut]:
+    """Amenities offered by at least one listing in the search, most common first.
+
+    The amenity filter itself is ignored, so picking one amenity doesn't hide the others.
+    """
+    matching_ids = (
+        _filtered_listings(params.model_copy(update={"amenities": []}))
+        .with_only_columns(Listing.id)
+    )
+    listing_count = func.count(ListingAmenity.listing_id)
+    amenities = db.scalars(
+        select(Amenity)
+        .join(ListingAmenity, ListingAmenity.amenity_id == Amenity.id)
+        .where(ListingAmenity.listing_id.in_(matching_ids))
+        .group_by(Amenity.id)
+        .order_by(listing_count.desc(), Amenity.name.asc())
+    )
+    return [AmenityOut.model_validate(amenity) for amenity in amenities]
+
+
 def list_property_types(db: Session) -> list[PropertyTypeSummary]:
     """Each property type with its listing count; the cover is its top-recommended listing's first photo."""
     counts: dict[str, int] = {}

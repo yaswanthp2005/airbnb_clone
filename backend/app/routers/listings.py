@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.dependencies import get_db_session, get_optional_user
 from app.models.user import User
 from app.schemas.listing import (
+    AmenitiesResponse,
     ListingCardOut,
     ListingDetailResponse,
     ListingFilterOptionsResponse,
@@ -24,6 +25,7 @@ from app.services.listing_service import (
     get_unavailable_dates,
     list_listings,
     list_property_types,
+    list_search_amenities,
     suggest_locations,
 )
 from app.services.review_service import list_listing_reviews
@@ -45,6 +47,14 @@ def index(
 @router.get("/filter-options", response_model=ListingFilterOptionsResponse)
 def filter_options(db: Session = Depends(get_db_session)) -> ListingFilterOptionsResponse:
     return ListingFilterOptionsResponse(data=get_filter_options(db))
+
+
+@router.get("/amenities", response_model=AmenitiesResponse)
+def search_amenities(
+    params: Annotated[ListingFilterParams, Query()],
+    db: Session = Depends(get_db_session),
+) -> AmenitiesResponse:
+    return AmenitiesResponse(data=list_search_amenities(db, params))
 
 
 @router.get("/property-types", response_model=PropertyTypeSummariesResponse)

@@ -3,10 +3,12 @@
 import { Search } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import { useListingFilters } from "@/components/listings/hooks/useListingFilters";
+import { HOMES_ICON_URL } from "@/constants/images";
 import { cn } from "@/lib/utils";
 
-import type { SearchSection } from "./constants";
+import { SEARCH_PILL_ICON_SIZE_PX, type SearchSection } from "./constants";
 import { draftFromFilters, formatDateRange, formatGuestSummary } from "./utils";
 
 type SearchPillProps = {
@@ -32,9 +34,16 @@ const SearchPill = ({ onSectionClick }: SearchPillProps) => {
       <button
         type="button"
         onClick={() => onSectionClick("where")}
-        className={cn(SEGMENT_TEXT_CLASS_NAME, "pl-6 pr-4")}
+        className="flex min-w-0 items-center gap-2 pl-3 pr-4"
       >
-        {location ?? t("search.anywhere")}
+        <RemoteImage
+          src={HOMES_ICON_URL}
+          alt=""
+          width={SEARCH_PILL_ICON_SIZE_PX}
+          height={SEARCH_PILL_ICON_SIZE_PX}
+          className="size-8 shrink-0 object-contain"
+        />
+        <span className={SEGMENT_TEXT_CLASS_NAME}>{location ?? t("search.anywhere")}</span>
       </button>
       <Divider />
       <button
@@ -42,7 +51,7 @@ const SearchPill = ({ onSectionClick }: SearchPillProps) => {
         onClick={() => onSectionClick("when")}
         className={cn(SEGMENT_TEXT_CLASS_NAME, "px-4")}
       >
-        {dates ?? t("search.anyWeek")}
+        {dates ?? t("search.anytime")}
       </button>
       <Divider />
       <button

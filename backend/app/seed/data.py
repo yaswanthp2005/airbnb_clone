@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Literal
+
+Landscape = Literal["coast", "hills", "plains"]
 
 
 @dataclass(frozen=True)
@@ -21,6 +24,8 @@ class CitySeed:
     longitude: float
     # One listing per entry, in this order.
     property_types: tuple[str, ...]
+    # Decides the location-only amenities (sea view, fireplace, …).
+    landscape: Landscape = "plains"
 
 
 @dataclass(frozen=True)
@@ -86,6 +91,7 @@ CITY_SEEDS: tuple[CitySeed, ...] = (
     CitySeed(
         "Goa", "Goa", 15.2993, 74.1240,
         ("Beachfront", "Villa", "Apartment", "Bungalow", "Cottage", "Loft", "Treehouse", "Dome"),
+        landscape="coast",
     ),
     CitySeed(
         "Jaipur", "Rajasthan", 26.9124, 75.7873,
@@ -98,6 +104,7 @@ CITY_SEEDS: tuple[CitySeed, ...] = (
     CitySeed(
         "Mumbai", "Maharashtra", 19.0760, 72.8777,
         ("Apartment", "Loft", "Beachfront", "Villa", "Bungalow", "Tiny home", "Houseboat", "Cottage"),
+        landscape="coast",
     ),
     CitySeed(
         "Bengaluru", "Karnataka", 12.9716, 77.5946,
@@ -106,10 +113,12 @@ CITY_SEEDS: tuple[CitySeed, ...] = (
     CitySeed(
         "Manali", "Himachal Pradesh", 32.2396, 77.1887,
         ("Cabin", "Cottage", "Treehouse", "Camping", "Dome", "Tiny home", "Farmhouse", "Villa"),
+        landscape="hills",
     ),
     CitySeed(
         "Kochi", "Kerala", 9.9312, 76.2673,
         ("Houseboat", "Beachfront", "Villa", "Bungalow", "Heritage haveli", "Apartment", "Cottage", "Treehouse"),
+        landscape="coast",
     ),
     CitySeed(
         "Delhi", "Delhi", 28.6139, 77.2090,
@@ -118,30 +127,37 @@ CITY_SEEDS: tuple[CitySeed, ...] = (
     CitySeed(
         "Rishikesh", "Uttarakhand", 30.0869, 78.2676,
         ("Camping", "Cottage", "Treehouse", "Dome", "Cabin", "Farmhouse", "Tiny home", "Villa"),
+        landscape="hills",
     ),
     CitySeed(
         "Pondicherry", "Puducherry", 11.9416, 79.8083,
         ("Beachfront", "Villa", "Heritage haveli", "Bungalow", "Apartment", "Cottage", "Loft", "Dome"),
+        landscape="coast",
     ),
     CitySeed(
         "Darjeeling", "West Bengal", 27.0410, 88.2663,
         ("Cottage", "Cabin", "Bungalow", "Heritage haveli", "Farmhouse", "Tiny home", "Camping", "Treehouse"),
+        landscape="hills",
     ),
     CitySeed(
         "Shimla", "Himachal Pradesh", 31.1048, 77.1734,
         ("Cottage", "Cabin", "Bungalow", "Heritage haveli", "Apartment", "Villa", "Dome", "Camping"),
+        landscape="hills",
     ),
     CitySeed(
         "Ooty", "Tamil Nadu", 11.4102, 76.6950,
         ("Cottage", "Bungalow", "Farmhouse", "Cabin", "Treehouse", "Villa", "Tiny home", "Dome"),
+        landscape="hills",
     ),
     CitySeed(
         "Munnar", "Kerala", 10.0889, 77.0595,
         ("Treehouse", "Cottage", "Farmhouse", "Camping", "Dome", "Cabin", "Villa", "Bungalow"),
+        landscape="hills",
     ),
     CitySeed(
         "Coorg", "Karnataka", 12.4244, 75.7382,
         ("Farmhouse", "Cottage", "Treehouse", "Bungalow", "Villa", "Camping", "Tiny home", "Dome"),
+        landscape="hills",
     ),
     CitySeed(
         "Varanasi", "Uttar Pradesh", 25.3176, 82.9739,
@@ -158,6 +174,7 @@ CITY_SEEDS: tuple[CitySeed, ...] = (
     CitySeed(
         "Leh", "Ladakh", 34.1526, 77.5771,
         ("Camping", "Dome", "Cottage", "Cabin", "Tiny home", "Heritage haveli", "Farmhouse", "Bungalow"),
+        landscape="hills",
     ),
 )
 

@@ -10,6 +10,8 @@ import { LISTING_IMAGE_SIZES } from "@/constants";
 import { useSnapCarousel } from "@/hooks/useSnapCarousel";
 import { cn } from "@/lib/utils";
 
+import { LISTING_LINK_TARGET_PROPS } from "../constants";
+
 type PhotoCarouselProps = {
   photos: string[];
   alt: string;
@@ -67,6 +69,7 @@ const PhotoCarousel = ({ photos, alt, href, isEager = false }: PhotoCarouselProp
       <Link
         ref={ref}
         href={href}
+        {...LISTING_LINK_TARGET_PROPS}
         onScroll={onScroll}
         tabIndex={-1}
         aria-hidden="true"

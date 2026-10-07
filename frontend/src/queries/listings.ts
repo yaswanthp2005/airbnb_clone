@@ -14,6 +14,7 @@ import {
   getListingUnavailableDates,
   getLocationSuggestions,
   getPropertyTypes,
+  getSearchAmenities,
   type GetUnavailableDatesParams,
 } from "@/api/listings";
 import {
@@ -63,6 +64,16 @@ export const useListingFilterOptions = () =>
     queryKey: queryKeys.listings.filterOptions(),
     queryFn: getListingFilterOptions,
   });
+
+/** The amenity bar's tabs: what the current search's listings offer. */
+export const useSearchAmenities = (filters: ListingFilters) => {
+  const searchFilters = { ...filters, amenities: [] };
+  return useQuery({
+    queryKey: queryKeys.listings.searchAmenities(searchFilters),
+    queryFn: () => getSearchAmenities(searchFilters),
+    placeholderData: keepPreviousData,
+  });
+};
 
 export const usePropertyTypes = () =>
   useQuery({

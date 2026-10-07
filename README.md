@@ -22,7 +22,7 @@ A full-stack Airbnb clone: browse and search stays across India, filter them, vi
 ## Features
 
 - **Home:** All / Homes / Experiences / Services tabs, "Destinations for you", "Popular homes in {city}" and "Browse by type of stay" rows (with "Guest favourite" badges). Every card opens the results for that city or type.
-- **Results (`/search`):** split list/map view with ₹ price pins, infinite scroll, amenity tabs in the header that toggle the amenity filter, and a Filters modal (price histogram, property type, bedrooms, amenities).
+- **Results (`/search`):** split list/map view with ₹ price pins, infinite scroll, amenity tabs in the header (only the amenities that stays in the current search offer) that toggle the amenity filter, and a Filters modal (price histogram, property type, bedrooms, amenities).
 - **Search:** Where (debounced destination suggestions) → When (range calendar) → Who (guest steppers), all stored in the URL.
 - **Listing detail:** photo mosaic + gallery, amenities, reviews with rating breakdown, location map, availability calendar and a live price breakdown.
 - **Booking:** mocked checkout with card validation, double-booking protection, confirmation page, and trips (upcoming / past / cancelled) with cancellation and reviews for past stays.
@@ -326,7 +326,7 @@ The same seed runs on every empty database, so every fresh boot gives the same d
 - 6 users (3 hosts, 3 guests). See [demo credentials](#demo-credentials).
 - 152 listings, 8 in each of 19 cities: Goa, Jaipur, Udaipur, Mumbai, Bengaluru, Manali, Kochi, Delhi, Rishikesh, Pondicherry, Darjeeling, Shimla, Ooty, Munnar, Coorg, Varanasi, Agra, Hyderabad and Leh.
 - 15 property types (Villa, Apartment, Cabin, Houseboat, Treehouse, Beachfront, Farmhouse, Heritage haveli, Camping, Cottage, Bungalow, Loft, Tiny home, Dome, Palace), picked per city to suit it (houseboats in Kochi, domes and camping in Leh).
-- 6–8 photos per listing from a 10-photo set for its property type, rotated so listings of the same type lead with different photos. 8–12 amenities each, priced from ₹1,500 to ₹25,000 a night.
+- 6–8 photos per listing from a 10-photo set for its property type, rotated so listings of the same type lead with different photos. 8–12 amenities each (sea view and beach access only on the coast, mountain view and fireplace only in the hills, elevator and gym only in apartments, lofts and palaces), priced from ₹1,500 to ₹25,000 a night.
 - 19 featured destinations with a tagline and photo. They are seeded separately whenever the table is empty, so existing databases get them too.
 - Listings rated 4.5+ with at least 5 reviews are shown as "Guest favourite".
 - 4–12 reviewed past stays per listing, plus future bookings that block dates and some cancelled stays.
@@ -353,6 +353,7 @@ Auth: `Authorization: Bearer <jwt>` from register/login. "Optional" endpoints wo
 | GET | `/listings` | Optional | Search/browse. Query: `location`, `check_in`, `check_out`, `guests`, `min_price`, `max_price`, `property_type` (repeatable), `amenities` (repeatable ids), `bedrooms`, `sort` (`recommended`, `price_asc`, `price_desc`, `rating_desc`, `newest`), `page`, `page_size` |
 | GET | `/listings/filter-options` | – | Price bounds + histogram, property types, amenities |
 | GET | `/listings/locations` | – | Destination suggestions (query `q`, `limit`) |
+| GET | `/listings/amenities` | – | Amenities offered by at least one listing matching the search filters (amenity filter ignored), most common first → `{ data }` |
 | GET | `/listings/property-types` | – | Property types with listing count and a cover photo → `{ data }` |
 | GET | `/destinations` | – | Featured destinations that have listings → `{ data }` |
 | GET | `/listings/{id}` | Optional | Listing detail: photos, amenities, host, rating breakdown |
@@ -405,7 +406,7 @@ All seeded accounts use the password **`Demo@12345`**. You can also register a n
   - Guests = adults + children; infants and pets are UI-only.
   - Dates exclude listings with an overlapping confirmed booking.
   - Location matches city, state or country.
-- **Not built:** messages, identity verification and the footer/help pages show "coming soon" screens; the language/currency (globe) controls are visual only.
+- **Not built:** messages, identity verification and the footer/help pages show "coming soon" screens; the footer's language and currency labels are visual only.
 
 ## Smoke test checklist
 

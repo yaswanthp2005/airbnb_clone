@@ -218,3 +218,7 @@ class ListingFilterOptions(BaseModel):
 
 class ListingFilterOptionsResponse(BaseModel):
     data: ListingFilterOptions
+
+
+class AmenitiesResponse(BaseModel):
+    data: list[AmenityOut]

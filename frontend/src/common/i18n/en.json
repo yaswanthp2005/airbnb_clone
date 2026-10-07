@@ -13,7 +13,6 @@
     "becomeHost": "Become a host",
     "switchToHosting": "Switch to hosting",
     "switchToTraveling": "Switch to traveling",
-    "languageAndRegion": "Choose a language and region",
     "mainMenu": "Main navigation menu",
     "trips": "Trips",
     "wishlists": "Wishlists",
@@ -34,7 +33,7 @@
   },
   "search": {
     "anywhere": "Anywhere",
-    "anyWeek": "Any week",
+    "anytime": "Anytime",
     "addGuests": "Add guests",
     "search": "Search",
     "where": "Where",

@@ -3,7 +3,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Globe } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import PageContainer from "@/components/layout/PageContainer";
@@ -75,7 +74,7 @@ const Navbar = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-1">
+        <div className="flex items-center justify-end gap-2">
           {isAuthenticated ? (
             <Link href={routes.hosting} className={`${roundHoverClass} hidden whitespace-nowrap px-4 py-3 lg:inline-flex`}>
               {t("nav.switchToHosting")}
@@ -89,13 +88,6 @@ const Navbar = ({
               {t("nav.becomeHost")}
             </button>
           )}
-          <button
-            type="button"
-            aria-label={t("nav.languageAndRegion")}
-            className={`${roundHoverClass} mr-2 flex size-10 items-center justify-center`}
-          >
-            <Globe className="size-4" aria-hidden="true" />
-          </button>
           <UserMenu />
         </div>
       </div>

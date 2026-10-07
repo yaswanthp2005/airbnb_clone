@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import RemoteImage from "@/components/common/RemoteImage";
+import { LISTING_LINK_TARGET_PROPS } from "@/components/listings/constants";
 import GuestFavouriteBadge from "@/components/listings/ListingCard/GuestFavouriteBadge";
 import WishlistButton from "@/components/listings/ListingCard/WishlistButton";
 import { listingRoute } from "@/constants/routes";
@@ -29,7 +30,12 @@ const HomeListingCard = ({ listing }: HomeListingCardProps) => {
       data-listing-id={listing.id}
       className={cn("relative flex shrink-0 snap-start flex-col gap-2", HOME_CARD_WIDTH_CLASS_NAME)}
     >
-      <Link href={listingRoute(listing.id)} aria-label={title} className="group flex flex-col gap-2">
+      <Link
+        href={listingRoute(listing.id)}
+        {...LISTING_LINK_TARGET_PROPS}
+        aria-label={title}
+        className="group flex flex-col gap-2"
+      >
         <div className="relative aspect-[20/19] overflow-hidden rounded-2xl bg-surface-muted">
           {photo ? (
             <RemoteImage

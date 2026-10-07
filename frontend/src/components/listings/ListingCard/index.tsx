@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import type { ListingSummary } from "@/types/listing";
 import { formatPrice } from "@/utils/formatPrice";
 
+import { LISTING_LINK_TARGET_PROPS } from "../constants";
 import GuestFavouriteBadge from "./GuestFavouriteBadge";
 import PhotoCarousel from "./PhotoCarousel";
 import WishlistButton from "./WishlistButton";
@@ -42,6 +43,7 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
     <article data-listing-id={listing.id} className="group relative flex flex-col gap-3">
       <Link
         href={cardHref}
+        {...LISTING_LINK_TARGET_PROPS}
         aria-label={listing.title}
         className="absolute inset-0 z-10 rounded-xl"
       />

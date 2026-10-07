@@ -4,6 +4,7 @@ import { t } from "@/common/i18n";
 import { cn } from "@/lib/utils";
 
 type SegmentProps = {
+  ref?: React.Ref<HTMLDivElement>;
   isActive: boolean;
   isAnyActive: boolean;
   className?: string;
@@ -12,7 +13,9 @@ type SegmentProps = {
   children: React.ReactNode;
 };
 
+/** The active segment's white pill is the form's sliding highlight, drawn underneath. */
 export const Segment = ({
+  ref,
   isActive,
   isAnyActive,
   className,
@@ -21,13 +24,10 @@ export const Segment = ({
   children,
 }: SegmentProps) => (
   <div
+    ref={ref}
     className={cn(
       "relative flex h-full min-w-0 items-center rounded-full transition-colors",
-      isActive
-        ? "bg-surface-raised shadow-card"
-        : isAnyActive
-          ? "hover:bg-hairline"
-          : "hover:bg-surface-strong",
+      !isActive && (isAnyActive ? "hover:bg-hairline" : "hover:bg-surface-strong"),
       className,
     )}
   >
