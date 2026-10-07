@@ -5,6 +5,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  type Query,
 } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 
@@ -14,7 +15,7 @@ import {
   getMyBookings,
   postBooking,
 } from "@/api/bookings";
-import { BOOKINGS_PAGE_SIZE, BOOKINGS_STALE_TIME_MS, HTTP_STATUS } from "@/constants";
+import { BOOKINGS_PAGE_SIZE, HTTP_STATUS } from "@/constants";
 import { queryKeys } from "@/constants/queryKeys";
 import type { Booking, BookingTab, CreateBookingInput } from "@/types/booking";
 
@@ -28,24 +29,34 @@ export const useMyBookingsInfinite = (tab: BookingTab) =>
     initialPageParam: FIRST_PAGE,
     getNextPageParam: lastPage =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
-    staleTime: BOOKINGS_STALE_TIME_MS,
   });
 
 export const useBooking = (bookingId: number) =>
   useQuery({
     queryKey: queryKeys.bookings.detail(bookingId),
     queryFn: () => getBooking(bookingId),
-    staleTime: BOOKINGS_STALE_TIME_MS,
     retry: false,
   });
 
-/** Booked dates, trips and listing data (availability, prices) all change after a mutation. */
+/** Feed and count keys end with the filters; only searches with dates depend on availability. */
+const isDatedListingSearch = ({ queryKey }: Query) => {
+  const filters = queryKey[2];
+  return typeof filters === "object" && filters !== null && "checkIn" in filters && Boolean(filters.checkIn);
+};
+
+/** A booking changes the trips, the listing's booked dates and which listings dated searches return. */
 const useInvalidateAfterBookingChange = () => {
   const queryClient = useQueryClient();
   return (booking: Booking) => {
     queryClient.setQueryData(queryKeys.bookings.detail(booking.id), booking);
     void queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
-    void queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
+    void queryClient.invalidateQueries({
+      queryKey: queryKeys.listings.unavailableDates(booking.listing.id),
+    });
+    void queryClient.invalidateQueries({
+      queryKey: queryKeys.listings.all,
+      predicate: isDatedListingSearch,
+    });
   };
 };
 

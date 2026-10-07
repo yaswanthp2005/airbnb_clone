@@ -1,6 +1,11 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type QueryClient,
+} from "@tanstack/react-query";
 
 import {
   getMe,
@@ -12,6 +17,22 @@ import {
 import { queryKeys } from "@/constants/queryKeys";
 import { getAuthToken } from "@/utils/storage";
 import { clearAuthSession, persistAuthSession } from "@/utils/authSession";
+
+/**
+ * Account data never goes stale on its own, so it must not outlive the account: a 401 clears the
+ * token but not the cache, and the next login may be someone else.
+ */
+const removeAccountQueries = (queryClient: QueryClient) => {
+  queryClient.removeQueries({ queryKey: queryKeys.bookings.all });
+  queryClient.removeQueries({ queryKey: queryKeys.wishlist.all });
+  queryClient.removeQueries({ queryKey: queryKeys.host.all });
+};
+
+/** Listing cards and details carry the viewer's `isWishlisted`. */
+const invalidateViewerListingData = (queryClient: QueryClient) => {
+  void queryClient.invalidateQueries({ queryKey: queryKeys.listings.lists() });
+  void queryClient.invalidateQueries({ queryKey: queryKeys.listings.details() });
+};
 
 export const useMe = (enabled = true) =>
   useQuery({
@@ -28,8 +49,9 @@ export const useLogin = () => {
     mutationFn: (payload: LoginPayload) => postLogin(payload),
     onSuccess: session => {
       persistAuthSession(session.accessToken, session.user);
+      removeAccountQueries(queryClient);
       queryClient.setQueryData(queryKeys.auth.session(), session.user);
-      queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
+      invalidateViewerListingData(queryClient);
     },
   });
 };
@@ -41,8 +63,9 @@ export const useRegister = () => {
     mutationFn: (payload: RegisterPayload) => postRegister(payload),
     onSuccess: session => {
       persistAuthSession(session.accessToken, session.user);
+      removeAccountQueries(queryClient);
       queryClient.setQueryData(queryKeys.auth.session(), session.user);
-      queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
+      invalidateViewerListingData(queryClient);
     },
   });
 };
@@ -56,10 +79,8 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: queryKeys.auth.all });
-      queryClient.removeQueries({ queryKey: queryKeys.bookings.all });
-      queryClient.removeQueries({ queryKey: queryKeys.wishlist.all });
-      queryClient.removeQueries({ queryKey: queryKeys.host.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
+      removeAccountQueries(queryClient);
+      invalidateViewerListingData(queryClient);
     },
   });
 };

@@ -18,11 +18,6 @@ import {
 } from "@/api/listings";
 import {
   DEFAULT_PAGE_SIZE,
-  LISTING_DETAIL_STALE_TIME_MS,
-  LISTING_FILTER_OPTIONS_STALE_TIME_MS,
-  LISTING_REVIEWS_STALE_TIME_MS,
-  LISTINGS_STALE_TIME_MS,
-  LOCATION_SUGGESTIONS_STALE_TIME_MS,
   REVIEWS_PAGE_SIZE,
   UNAVAILABLE_DATES_STALE_TIME_MS,
 } from "@/constants";
@@ -39,7 +34,6 @@ export const useListingsInfinite = (filters: ListingFilters) =>
     initialPageParam: FIRST_PAGE,
     getNextPageParam: lastPage =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
-    staleTime: LISTINGS_STALE_TIME_MS,
   });
 
 export const useListingsCount = (filters: ListingFilters, enabled = true) =>
@@ -54,7 +48,6 @@ export const useListingsCount = (filters: ListingFilters, enabled = true) =>
     },
     enabled,
     placeholderData: keepPreviousData,
-    staleTime: LISTINGS_STALE_TIME_MS,
   });
 
 export const useLocationSuggestions = (query: string, enabled = true) =>
@@ -63,28 +56,24 @@ export const useLocationSuggestions = (query: string, enabled = true) =>
     queryFn: () => getLocationSuggestions(query),
     enabled: enabled && query.length > 0,
     placeholderData: keepPreviousData,
-    staleTime: LOCATION_SUGGESTIONS_STALE_TIME_MS,
   });
 
 export const useListingFilterOptions = () =>
   useQuery({
     queryKey: queryKeys.listings.filterOptions(),
     queryFn: getListingFilterOptions,
-    staleTime: LISTING_FILTER_OPTIONS_STALE_TIME_MS,
   });
 
 export const usePropertyTypes = () =>
   useQuery({
     queryKey: queryKeys.listings.propertyTypes(),
     queryFn: getPropertyTypes,
-    staleTime: LISTINGS_STALE_TIME_MS,
   });
 
 export const useListing = (listingId: number) =>
   useQuery({
     queryKey: queryKeys.listings.detail(listingId),
     queryFn: () => getListing(listingId),
-    staleTime: LISTING_DETAIL_STALE_TIME_MS,
   });
 
 export const useListingReviewsInfinite = (listingId: number) =>
@@ -95,7 +84,6 @@ export const useListingReviewsInfinite = (listingId: number) =>
     initialPageParam: FIRST_PAGE,
     getNextPageParam: lastPage =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
-    staleTime: LISTING_REVIEWS_STALE_TIME_MS,
   });
 
 export const useListingUnavailableDates = (

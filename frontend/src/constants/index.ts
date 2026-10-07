@@ -38,26 +38,19 @@ export const LISTING_FILTER_PARAMS = {
 
 /** `yyyy-MM-dd`, the date format shared by URL params and the API. */
 export const DATE_PARAM_FORMAT = "yyyy-MM-dd";
-export const LOCATION_SUGGESTIONS_STALE_TIME_MS = 10 * 60 * 1000;
 
-export const LISTINGS_STALE_TIME_MS = 5 * 60 * 1000;
-export const LISTING_FILTER_OPTIONS_STALE_TIME_MS = 30 * 60 * 1000;
-export const DESTINATIONS_STALE_TIME_MS = 30 * 60 * 1000;
 export const FILTERS_PREVIEW_DEBOUNCE_MS = 400;
 export const INFINITE_SCROLL_ROOT_MARGIN = "600px";
-export const LISTING_DETAIL_STALE_TIME_MS = 5 * 60 * 1000;
-export const LISTING_REVIEWS_STALE_TIME_MS = 5 * 60 * 1000;
+/** Other guests' bookings change these, so they can't wait for an invalidation. */
 export const UNAVAILABLE_DATES_STALE_TIME_MS = 60 * 1000;
 export const REVIEWS_PAGE_SIZE = 6;
 export const BOOKINGS_PAGE_SIZE = 12;
 export const WISHLIST_PAGE_SIZE = 20;
-export const BOOKINGS_STALE_TIME_MS = 60 * 1000;
 
 export const HOST_LISTINGS_PAGE_SIZE = 12;
 export const HOST_BOOKINGS_PAGE_SIZE = 12;
-export const HOST_STALE_TIME_MS = 60 * 1000;
-/** Listing options (property types, amenities) rarely change. */
-export const HOST_OPTIONS_STALE_TIME_MS = 30 * 60 * 1000;
+/** Guests' bookings and reviews change the host's reservations, counts and stats. */
+export const HOST_ACTIVITY_STALE_TIME_MS = 60 * 1000;
 
 export const HTTP_STATUS = {
   unauthorized: 401,
