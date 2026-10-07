@@ -14,6 +14,7 @@ from app.routers.bookings import router as bookings_router
 from app.routers.health import router as health_router
 from app.routers.host import router as host_router
 from app.routers.listings import router as listings_router
+from app.routers.reviews import router as reviews_router
 from app.routers.wishlist import router as wishlist_router
 
 
@@ -44,6 +45,7 @@ app.include_router(listings_router, prefix="/api/v1")
 app.include_router(bookings_router, prefix="/api/v1")
 app.include_router(wishlist_router, prefix="/api/v1")
 app.include_router(host_router, prefix="/api/v1")
+app.include_router(reviews_router, prefix="/api/v1")
 
 VALIDATION_FAILED_MESSAGE = "Validation failed"
 

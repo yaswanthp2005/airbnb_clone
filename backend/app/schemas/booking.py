@@ -59,6 +59,11 @@ class BookingListingOut(BaseModel):
     host_name: str
 
 
+class BookingReviewOut(BaseModel):
+    id: int
+    rating: int
+
+
 class BookingOut(BaseModel):
     id: int
     listing: BookingListingOut
@@ -72,6 +77,8 @@ class BookingOut(BaseModel):
     total_price: int
     status: BookingStatus
     can_cancel: bool
+    can_review: bool
+    review: Optional[BookingReviewOut] = None
     created_at: datetime
 
 

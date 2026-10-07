@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date
 
 from fastapi import HTTPException, status
-from sqlalchemy import Select, func, select, text
+from sqlalchemy import Select, func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import Booking, Listing
@@ -13,6 +13,7 @@ from app.schemas.booking import (
     BookingCreate,
     BookingListingOut,
     BookingOut,
+    BookingReviewOut,
     BookingTab,
     MyBookingsParams,
 )
@@ -20,6 +21,7 @@ from app.schemas.pagination import PaginatedResponse
 from app.services.availability import overlaps_confirmed_booking
 from app.services.listing_service import LISTING_NOT_FOUND_MESSAGE
 from app.services.pricing import quote_stay
+from app.services.transactions import begin_write
 
 BOOKING_NOT_FOUND_MESSAGE = "Booking not found"
 BOOKING_FORBIDDEN_MESSAGE = "You can only manage your own bookings"
@@ -33,6 +35,7 @@ NOT_CANCELLABLE_MESSAGE = "Trips that have already started can't be cancelled"
 BOOKING_LOAD_OPTIONS = (
     selectinload(Booking.listing).selectinload(Listing.photos),
     selectinload(Booking.listing).selectinload(Listing.host),
+    selectinload(Booking.review),
 )
 
 TAB_ORDER = {
@@ -44,6 +47,11 @@ TAB_ORDER = {
 
 def _can_cancel(booking: Booking, today: date) -> bool:
     return booking.status == BOOKING_STATUS_CONFIRMED and booking.check_in >= today
+
+
+def is_stay_over(booking: Booking, today: date) -> bool:
+    """Checkout day counts as over, matching the "past" trips tab."""
+    return booking.status == BOOKING_STATUS_CONFIRMED and booking.check_out <= today
 
 
 def _to_booking_out(booking: Booking, today: date) -> BookingOut:
@@ -70,6 +78,12 @@ def _to_booking_out(booking: Booking, today: date) -> BookingOut:
         total_price=booking.total_price,
         status=booking.status,
         can_cancel=_can_cancel(booking, today),
+        can_review=booking.review is None and is_stay_over(booking, today),
+        review=(
+            BookingReviewOut(id=booking.review.id, rating=booking.review.rating)
+            if booking.review
+            else None
+        ),
         created_at=booking.created_at,
     )
 
@@ -80,12 +94,8 @@ def _load_booking_out(db: Session, booking_id: int) -> BookingOut:
 
 
 def _lock_listing_for_booking(db: Session, listing_id: int) -> Listing:
-    """
-    Serialises bookings so the overlap check and the insert can't interleave with another
-    request: SQLite takes the database write lock up front, other databases lock the listing row.
-    """
-    if db.get_bind().dialect.name == "sqlite":
-        db.execute(text("BEGIN IMMEDIATE"))
+    """Serialises bookings so the overlap check and the insert can't interleave with another request."""
+    begin_write(db)
     listing = db.scalar(select(Listing).where(Listing.id == listing_id).with_for_update())
     if listing is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=LISTING_NOT_FOUND_MESSAGE)
