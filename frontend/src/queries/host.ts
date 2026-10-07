@@ -24,6 +24,7 @@ import {
 } from "@/constants";
 import { queryKeys } from "@/constants/queryKeys";
 import type { HostBookingTab, HostListing, HostListingInput } from "@/types/host";
+import { invalidateViewerData } from "@/utils/invalidateViewerData";
 
 const FIRST_PAGE = 1;
 
@@ -80,12 +81,7 @@ export const useHostListingOptions = () =>
  */
 const useInvalidateAfterListingChange = () => {
   const queryClient = useQueryClient();
-  return () => {
-    void queryClient.invalidateQueries({ queryKey: queryKeys.host.all });
-    void queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
-    void queryClient.invalidateQueries({ queryKey: queryKeys.wishlist.all });
-    void queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
-  };
+  return () => invalidateViewerData(queryClient);
 };
 
 export const useCreateHostListing = () => {

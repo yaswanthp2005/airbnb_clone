@@ -6,7 +6,8 @@ import { isAxiosError } from "axios";
 import { postReview } from "@/api/reviews";
 import { HTTP_STATUS } from "@/constants";
 import { queryKeys } from "@/constants/queryKeys";
-import type { CreateReviewInput } from "@/types/review";
+import type { CreateReviewInput } from "@/types/listing";
+import { invalidateViewerData } from "@/utils/invalidateViewerData";
 
 /**
  * A review changes the listing's reviews, rating and breakdown (`listings.all` covers the
@@ -18,10 +19,7 @@ export const useCreateReview = () => {
   return useMutation({
     mutationFn: (input: CreateReviewInput) => postReview(input),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: queryKeys.listings.all });
-      void queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
-      void queryClient.invalidateQueries({ queryKey: queryKeys.wishlist.all });
-      void queryClient.invalidateQueries({ queryKey: queryKeys.host.all });
+      invalidateViewerData(queryClient);
     },
     onError: error => {
       // Already reviewed (e.g. in another tab): refresh the trip so the button goes away.

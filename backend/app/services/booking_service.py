@@ -19,7 +19,7 @@ from app.schemas.booking import (
 )
 from app.schemas.pagination import PaginatedResponse
 from app.services.availability import overlaps_confirmed_booking
-from app.services.listing_service import LISTING_NOT_FOUND_MESSAGE
+from app.constants.limits import LISTING_NOT_FOUND_MESSAGE
 from app.services.pricing import quote_stay
 from app.services.transactions import begin_write
 

@@ -9,7 +9,7 @@ import { useListingsInfinite } from "@/queries/listings";
 import { buildUrl } from "@/utils/buildUrl";
 
 import { HOME_CARD_WIDTH_CLASS_NAME } from "./constants";
-import HomeListingCard from "./HomeListingCard";
+import ListingCard from "@/components/listings/ListingCard";
 import HomeRow from "./HomeRow";
 import HomeRowSkeleton from "./HomeRowSkeleton";
 
@@ -36,7 +36,7 @@ const PopularHomesRow = ({ city }: PopularHomesRowProps) => {
       href={buildUrl({ path: routes.search, query: { location: city } })}
     >
       {listings.map(listing => (
-        <HomeListingCard key={listing.id} listing={listing} />
+        <ListingCard key={listing.id} listing={listing} variant="homeRow" />
       ))}
     </HomeRow>
   );

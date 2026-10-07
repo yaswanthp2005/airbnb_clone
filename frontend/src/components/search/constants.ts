@@ -28,6 +28,7 @@ export const GUEST_FIELDS: GuestField[] = [
 ];
 
 /** Adults + children; infants and pets have their own caps. */
+/** Matches backend `MAX_LISTING_GUESTS` (listing capacity and search guest filter). */
 export const MAX_GUESTS = 16;
 export const MAX_INFANTS = 5;
 export const MAX_PETS = 5;

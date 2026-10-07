@@ -34,6 +34,7 @@ export const LISTING_FILTER_PARAMS = {
   children: "children",
   infants: "infants",
   pets: "pets",
+  sort: "sort",
 } as const;
 
 /** `yyyy-MM-dd`, the date format shared by URL params and the API. */

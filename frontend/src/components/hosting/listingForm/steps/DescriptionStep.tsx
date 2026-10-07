@@ -2,7 +2,7 @@ import { t } from "@/common/i18n";
 import { cn } from "@/lib/utils";
 
 import { LISTING_LIMITS } from "../constants";
-import FormField, { FORM_INPUT_CLASS_NAME, fieldA11yProps } from "../FormField";
+import FormField, { FORM_INPUT_CLASS_NAME, ListingFormInput, fieldA11yProps } from "../FormField";
 import type { StepProps } from "../types";
 
 const TITLE_ID = "listing-title";
@@ -20,14 +20,14 @@ const DescriptionStep = ({ values, errors, onChange }: StepProps) => (
       error={errors.title}
       trailing={<CharacterCount count={values.title.length} max={LISTING_LIMITS.titleMax} />}
     >
-      <input
+      <ListingFormInput
         {...fieldA11yProps(TITLE_ID, errors.title)}
         name="title"
         value={values.title}
         maxLength={LISTING_LIMITS.titleMax}
         placeholder={t("hosting.form.fields.titlePlaceholder")}
         onChange={event => onChange({ title: event.target.value })}
-        className={cn(FORM_INPUT_CLASS_NAME, "text-lg")}
+        className="text-lg"
       />
     </FormField>
     <FormField

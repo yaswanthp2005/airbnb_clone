@@ -1,23 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { Skeleton } from "@/components/ui/skeleton";
 import { t } from "@/common/i18n";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthGate } from "@/hooks/useRequireAuth";
 
 type RequireAuthProps = {
   children: React.ReactNode;
 };
 
 const RequireAuth = ({ children }: RequireAuthProps) => {
-  const { isAuthenticated, isBootstrapping, openAuthModal } = useAuth();
-
-  useEffect(() => {
-    if (!isBootstrapping && !isAuthenticated) {
-      openAuthModal("login");
-    }
-  }, [isAuthenticated, isBootstrapping, openAuthModal]);
+  const { isAuthenticated, isBootstrapping } = useAuthGate();
 
   if (isBootstrapping) {
     return (

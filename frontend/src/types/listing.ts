@@ -135,3 +135,14 @@ export type Review = {
   createdAt: string;
   guest: Reviewer;
 };
+
+export type CreateReviewInput = {
+  bookingId: number;
+  rating: number;
+  comment: string;
+};
+
+export type CreatedReview = Review & {
+  listingId: number;
+  bookingId: number;
+};

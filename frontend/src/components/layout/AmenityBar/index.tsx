@@ -13,6 +13,9 @@ import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 import { cn } from "@/lib/utils";
 import { useListingFilterOptions, useSearchAmenities } from "@/queries/listings";
 
+import ListingsSortSelect from "@/components/listings/ListingsSortSelect";
+import type { ListingSort } from "@/types/listing";
+
 import AmenityTab from "./AmenityTab";
 import { AMENITY_TAB_SKELETON_COUNT } from "./constants";
 
@@ -72,6 +75,10 @@ const AmenityBar = () => {
     setFilters({ ...filters, amenities: toggleValue(filters.amenities, amenityId) });
   };
 
+  const handleSortChange = (sort: ListingSort) => {
+    setFilters({ ...filters, sort: sort === "recommended" ? undefined : sort }, { scrollToTop: true });
+  };
+
   return (
     <PageContainer>
       <div className="flex h-[78px] items-center gap-6 pt-3">
@@ -110,6 +117,8 @@ const AmenityBar = () => {
             onClick={() => scrollByStep("right")}
           />
         </div>
+
+        <ListingsSortSelect value={filters.sort} onChange={handleSortChange} />
 
         <button
           type="button"

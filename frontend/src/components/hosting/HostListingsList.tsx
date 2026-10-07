@@ -12,7 +12,7 @@ import type { HostListing } from "@/types/host";
 
 import { HOST_LISTING_GRID_CLASS_NAME, HOST_SKELETON_COUNT } from "./constants";
 import HostListingCard from "./HostListingCard";
-import LoadError from "./LoadError";
+import QueryRetryPanel from "@/components/common/QueryRetryPanel";
 import ShowMoreButton from "./ShowMoreButton";
 
 type HostListingsListProps = {
@@ -38,7 +38,7 @@ const HostListingsList = ({ onDelete }: HostListingsListProps) => {
   }
 
   if (isError) {
-    return <LoadError onRetry={() => void refetch()} />;
+    return <QueryRetryPanel onRetry={() => void refetch()} />;
   }
 
   const listings = data.pages.flatMap(page => page.items);

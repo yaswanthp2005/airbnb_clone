@@ -22,7 +22,7 @@ import {
   RESERVATION_TABS,
   RESERVATION_THUMBNAIL_SIZES,
 } from "./constants";
-import LoadError from "./LoadError";
+import QueryRetryPanel from "@/components/common/QueryRetryPanel";
 import ShowMoreButton from "./ShowMoreButton";
 
 const ReservationRow = ({ booking }: { booking: HostBooking }) => {
@@ -95,7 +95,7 @@ const ReservationsTabList = ({ tab }: { tab: HostBookingTab }) => {
   }
 
   if (isError) {
-    return <LoadError onRetry={() => void refetch()} />;
+    return <QueryRetryPanel onRetry={() => void refetch()} />;
   }
 
   const bookings = data.pages.flatMap(page => page.items);
