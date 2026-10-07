@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { LayoutGrid } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import { cn } from "@/lib/utils";
 
 import {
@@ -45,7 +45,7 @@ const PhotoGrid = ({ photos, onOpen }: PhotoGridProps) => {
                 !isHero && isMosaic && "md:block",
               )}
             >
-              <Image
+              <RemoteImage
                 src={url}
                 alt=""
                 fill

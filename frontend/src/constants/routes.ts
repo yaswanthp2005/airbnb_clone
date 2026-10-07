@@ -8,6 +8,7 @@ export const routes = {
   trips: `${BASE}/trips`,
   wishlists: `${BASE}/wishlists`,
   hosting: `${BASE}/hosting`,
+  hostingNewListing: `${BASE}/hosting/listings/new`,
   account: `${BASE}/account`,
   messages: `${BASE}/messages`,
   identityVerification: `${BASE}/identity-verification`,
@@ -28,6 +29,11 @@ export const bookRoute = (listingId: string | number) => `${BOOK_ROUTE_PREFIX}${
 /** Confirmation / details page of a placed booking. */
 export const bookingRoute = (bookingId: string | number) =>
   `${BOOKING_ROUTE_PREFIX}${bookingId}`;
+
+export const HOSTING_ROUTE_PREFIX = routes.hosting;
+
+export const hostingEditListingRoute = (listingId: string | number) =>
+  `${HOSTING_ROUTE_PREFIX}/listings/${listingId}/edit`;
 
 export const comingSoonRoute = (slug: string) =>
   routes.comingSoon.replace(":slug", encodeURIComponent(slug));
@@ -52,4 +58,9 @@ export const apiRoutes = {
   bookingCancel: "/bookings/:id/cancel",
   wishlist: "/wishlist",
   wishlistItem: "/wishlist/:id",
+  hostListings: "/host/listings",
+  hostListing: "/host/listings/:id",
+  hostBookings: "/host/bookings",
+  hostStats: "/host/stats",
+  hostListingOptions: "/host/listing-options",
 } as const;

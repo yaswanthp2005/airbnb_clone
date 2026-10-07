@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Star } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import PriceBreakdownList from "@/components/listingDetail/BookingCard/PriceBreakdownList";
 import { RATING_DECIMALS } from "@/components/listingDetail/constants";
 import { pluralize } from "@/components/listingDetail/utils";
@@ -20,7 +20,7 @@ const PriceDetailsCard = ({ listing, breakdown }: PriceDetailsCardProps) => (
     <div className="flex gap-4 border-b border-hairline pb-6">
       <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-lg bg-surface-muted">
         {listing.photos[0] ? (
-          <Image src={listing.photos[0]} alt={listing.title} fill sizes={CHECKOUT_PHOTO_SIZES} loading="eager" className="object-cover" />
+          <RemoteImage src={listing.photos[0]} alt={listing.title} fill sizes={CHECKOUT_PHOTO_SIZES} loading="eager" className="object-cover" />
         ) : null}
       </div>
       <div className="flex min-w-0 flex-col justify-between">

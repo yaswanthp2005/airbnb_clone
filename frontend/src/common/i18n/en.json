@@ -11,6 +11,7 @@
     "stays": "Stays",
     "hostYourHome": "Airbnb your home",
     "switchToHosting": "Switch to hosting",
+    "switchToTraveling": "Switch to traveling",
     "languageAndRegion": "Choose a language and region",
     "mainMenu": "Main navigation menu",
     "trips": "Trips",
@@ -252,8 +253,182 @@
     }
   },
   "hosting": {
-    "title": "Host your home",
-    "comingSoon": "Listing creation will be available in a later step."
+    "welcome": "Welcome back, {{name}}",
+    "subtitle": "Manage your listings and see who's coming to stay.",
+    "createListing": "Create listing",
+    "retry": "Try again",
+    "stats": {
+      "label": "Hosting summary",
+      "listings": "Listings",
+      "upcomingReservations": "Upcoming reservations",
+      "earnings": "Total earnings",
+      "earningsHint": "Confirmed stays, after guest service fees",
+      "rating": "Overall rating",
+      "noReviews": "No reviews yet",
+      "noRating": "–",
+      "reviewCountOne": "{{count}} review",
+      "reviewCountOther": "{{count}} reviews"
+    },
+    "tabs": {
+      "listings": "Listings",
+      "reservations": "Reservations"
+    },
+    "listings": {
+      "emptyTitle": "You don't have any listings yet",
+      "emptyDescription": "Create your first listing and start welcoming guests.",
+      "photoAlt": "Cover photo of {{title}}",
+      "perNight": "{{price}} night",
+      "newBadge": "New",
+      "upcomingOne": "1 upcoming reservation",
+      "upcomingOther": "{{count}} upcoming reservations",
+      "noUpcoming": "No upcoming reservations",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "editLabel": "Edit {{title}}",
+      "deleteLabel": "Delete {{title}}",
+      "viewLabel": "View {{title}} as a guest",
+      "showMore": "Show more listings"
+    },
+    "reservations": {
+      "tabs": {
+        "upcoming": "Upcoming",
+        "past": "Past",
+        "cancelled": "Cancelled"
+      },
+      "empty": {
+        "upcoming": "You don't have any upcoming reservations.",
+        "past": "Completed stays will show up here.",
+        "cancelled": "Cancelled reservations will show up here."
+      },
+      "guest": "Guest",
+      "listing": "Listing",
+      "dates": "Dates",
+      "payout": "Payout",
+      "nightsOne": "{{count}} night",
+      "nightsOther": "{{count}} nights",
+      "cancelledBadge": "Cancelled",
+      "showMore": "Show more reservations"
+    },
+    "deleteDialog": {
+      "title": "Delete this listing?",
+      "description": "{{title}} will be removed from Airbnb along with its photos, reviews and past reservations. This can't be undone.",
+      "blockedTitle": "This listing can't be deleted yet",
+      "blockedDescriptionOne": "{{title}} has 1 upcoming reservation. You can delete it once that stay is over or cancelled.",
+      "blockedDescriptionOther": "{{title}} has {{count}} upcoming reservations. You can delete it once those stays are over or cancelled.",
+      "keep": "Keep listing",
+      "confirm": "Delete listing",
+      "deleting": "Deleting…",
+      "close": "Got it"
+    },
+    "form": {
+      "createTitle": "Create your listing",
+      "editTitle": "Edit your listing",
+      "stepOf": "Step {{current}} of {{total}}",
+      "back": "Back",
+      "next": "Next",
+      "publish": "Publish listing",
+      "publishing": "Publishing…",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "exit": "Exit",
+      "notFoundTitle": "We couldn't open this listing",
+      "notFoundDescription": "It may have been deleted, or it belongs to another host.",
+      "backToListings": "Back to listings",
+      "editSteps": "Jump to a section",
+      "stepLabels": {
+        "propertyType": "Property type",
+        "location": "Location",
+        "basics": "Basics",
+        "amenities": "Amenities",
+        "photos": "Photos",
+        "description": "Title & description",
+        "price": "Price"
+      },
+      "steps": {
+        "propertyType": {
+          "title": "Which of these best describes your place?",
+          "description": "Guests use this to find the kind of stay they want."
+        },
+        "location": {
+          "title": "Where's your place located?",
+          "description": "Your address is only shared with guests after they've made a reservation."
+        },
+        "basics": {
+          "title": "Share some basics about your place",
+          "description": "You'll add more details later, like bed types."
+        },
+        "amenities": {
+          "title": "Tell guests what your place has to offer",
+          "description": "Pick everything that's available. You can add more after you publish."
+        },
+        "photos": {
+          "title": "Add some photos of your place",
+          "description": "Paste image links. The first photo is your cover; use the arrows to reorder."
+        },
+        "description": {
+          "title": "Give your place a title and description",
+          "description": "Short titles work best. Have fun with it — you can always change it later."
+        },
+        "price": {
+          "title": "Now, set your price",
+          "description": "You can change it anytime."
+        }
+      },
+      "fields": {
+        "address": "Street address",
+        "city": "City",
+        "state": "State",
+        "country": "Country",
+        "coordinates": "Map pin (optional)",
+        "coordinatesHint": "Leave empty and we'll place the listing in its city.",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "maxGuests": "Guests",
+        "bedrooms": "Bedrooms",
+        "beds": "Beds",
+        "bathrooms": "Bathrooms",
+        "decrease": "Decrease {{label}}",
+        "increase": "Increase {{label}}",
+        "photoUrl": "Photo URL",
+        "photoUrlPlaceholder": "https://images.unsplash.com/…",
+        "addPhoto": "Add",
+        "photoCount": "{{count}} / {{max}} photos",
+        "coverPhoto": "Cover photo",
+        "photoAlt": "Photo {{position}}",
+        "photoBroken": "This image couldn't be loaded",
+        "movePhotoEarlier": "Move photo {{position}} earlier",
+        "movePhotoLater": "Move photo {{position}} later",
+        "removePhoto": "Remove photo {{position}}",
+        "noPhotos": "No photos yet. Add at least one to continue.",
+        "title": "Title",
+        "titlePlaceholder": "Sea-facing villa with a private pool",
+        "description": "Description",
+        "descriptionPlaceholder": "What makes your place special? Mention the views, the neighbourhood and anything guests should know.",
+        "characterCount": "{{count}} / {{max}}",
+        "pricePerNight": "Price per night",
+        "cleaningFee": "Cleaning fee",
+        "cleaningFeeHint": "Charged once per stay.",
+        "guestPrice": "Guest price before taxes: {{amount}} a night",
+        "youEarn": "You earn {{amount}} a night",
+        "currencySymbol": "₹"
+      },
+      "errors": {
+        "propertyType": "Choose a property type.",
+        "required": "This field is required.",
+        "tooShort": "Use at least {{min}} characters.",
+        "coordinatesPair": "Add both latitude and longitude, or leave both empty.",
+        "latitude": "Latitude must be between -90 and 90.",
+        "longitude": "Longitude must be between -180 and 180.",
+        "photosRequired": "Add at least one photo.",
+        "photoInvalid": "Enter a valid image link starting with http:// or https://.",
+        "photoDuplicate": "That photo is already added.",
+        "photoLimit": "You can add up to {{max}} photos.",
+        "photoBroken": "Remove or replace photos that couldn't be loaded.",
+        "priceRange": "Set a price between {{min}} and {{max}}.",
+        "cleaningFeeRange": "Cleaning fee can be up to {{max}}."
+      }
+    }
   },
   "toast": {
     "successDefault": "Saved successfully",

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, type MouseEvent } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import { LISTING_IMAGE_SIZES } from "@/constants";
 import { cn } from "@/lib/utils";
 
@@ -65,7 +65,7 @@ const PhotoCarousel = ({ photos, alt, isEager = false }: PhotoCarouselProps) => 
       >
         {photos.map((url, index) => (
           <div key={url} className="relative h-full w-full shrink-0">
-            <Image
+            <RemoteImage
               src={url}
               alt={t("listings.card.photoAlt", {
                 title: alt,

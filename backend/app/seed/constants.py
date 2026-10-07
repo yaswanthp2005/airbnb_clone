@@ -35,18 +35,6 @@ AMENITY_DEFINITIONS: tuple[tuple[str, str], ...] = (
     ("Garden", "flower-2"),
 )
 
-PROPERTY_TYPES: tuple[str, ...] = (
-    "Villa",
-    "Apartment",
-    "Cabin",
-    "Houseboat",
-    "Treehouse",
-    "Beachfront",
-    "Farmhouse",
-    "Heritage haveli",
-    "Camping",
-)
-
 REVIEW_COMMENTS: tuple[str, ...] = (
     "Wonderful stay — exactly as pictured. Host was very responsive.",
     "Great location and spotless rooms. Would book again.",

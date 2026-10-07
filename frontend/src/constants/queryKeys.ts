@@ -29,6 +29,14 @@ export const queryKeys = {
     all: ["wishlist"] as const,
     list: () => [...queryKeys.wishlist.all, "list"] as const,
   },
+  host: {
+    all: ["host"] as const,
+    listings: () => [...queryKeys.host.all, "listings"] as const,
+    listing: (id: string | number) => [...queryKeys.host.all, "listing", id] as const,
+    bookings: (tab: string) => [...queryKeys.host.all, "bookings", tab] as const,
+    stats: () => [...queryKeys.host.all, "stats"] as const,
+    listingOptions: () => [...queryKeys.host.all, "listingOptions"] as const,
+  },
   bookings: {
     all: ["bookings"] as const,
     list: (tab: string) => [...queryKeys.bookings.all, "list", tab] as const,
