@@ -22,31 +22,37 @@ Monorepo: **`frontend/`** (Vercel) · **`backend/`** (Render)
 
 ## Screenshots
 
-Visual walkthrough for evaluators (add your PNGs under [`docs/screenshots/`](docs/screenshots/) — see [how to add screenshots](docs/screenshots/README.md)).
+Visual walkthrough for evaluators
 
 ### Home & explore
 
-![Home — destinations and popular stays](./docs/screenshots/home-explore.png)
+<img width="1470" height="803" alt="image" src="https://github.com/user-attachments/assets/17ce1751-f885-4e4f-843f-6f79713eff35" />
+
 
 ### Search results & map
 
-![Search — grid, sort, filters, and interactive map pins](./docs/screenshots/search-map.png)
+<img width="1470" height="805" alt="image" src="https://github.com/user-attachments/assets/d46eef31-d4b9-45cc-a313-2f7f09313202" />
+
 
 ### Listing detail
 
-![Listing detail — gallery, booking card, reviews, map](./docs/screenshots/listing-detail.png)
+<img width="1470" height="802" alt="image" src="https://github.com/user-attachments/assets/12cbc394-2113-4b24-ad89-b5e2aabb9460" />
+
 
 ### Booking checkout (mocked payment)
 
-![Checkout — trip details and card form](./docs/screenshots/booking-checkout.png)
+<img width="1470" height="803" alt="image" src="https://github.com/user-attachments/assets/c453f6c0-4bb7-4396-9409-d2dd82b578ca" />
+
 
 ### My trips
 
-![Trips — upcoming, cancel, and review flows](./docs/screenshots/trips.png)
+<img width="1469" height="801" alt="image" src="https://github.com/user-attachments/assets/0754099e-8eba-4191-b3ce-f37790cb90d1" />
+
 
 ### Host dashboard
 
-![Hosting — stats, listings, and reservations](./docs/screenshots/hosting-dashboard.png)
+<img width="1470" height="802" alt="image" src="https://github.com/user-attachments/assets/20620c1b-f98e-4b34-a3f6-1b927c2e517f" />
+
 
 ---
 
