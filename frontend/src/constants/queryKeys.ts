@@ -14,8 +14,9 @@ export const queryKeys = {
     propertyTypes: () => [...queryKeys.listings.all, "propertyTypes"] as const,
     locations: (query: string) =>
       [...queryKeys.listings.all, "locations", query] as const,
+    details: () => [...queryKeys.listings.all, "detail"] as const,
     detail: (id: string | number) =>
-      [...queryKeys.listings.all, "detail", id] as const,
+      [...queryKeys.listings.details(), id] as const,
     reviews: (id: string | number) =>
       [...queryKeys.listings.all, "reviews", id] as const,
     unavailableDates: (id: string | number) =>

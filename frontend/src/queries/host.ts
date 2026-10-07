@@ -20,8 +20,7 @@ import {
 import {
   HOST_BOOKINGS_PAGE_SIZE,
   HOST_LISTINGS_PAGE_SIZE,
-  HOST_OPTIONS_STALE_TIME_MS,
-  HOST_STALE_TIME_MS,
+  HOST_ACTIVITY_STALE_TIME_MS,
 } from "@/constants";
 import { queryKeys } from "@/constants/queryKeys";
 import type { HostBookingTab, HostListing, HostListingInput } from "@/types/host";
@@ -41,14 +40,13 @@ export const useHostListingsInfinite = () =>
     initialPageParam: FIRST_PAGE,
     getNextPageParam: lastPage =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
-    staleTime: HOST_STALE_TIME_MS,
+    staleTime: HOST_ACTIVITY_STALE_TIME_MS,
   });
 
 export const useHostListing = (listingId: number) =>
   useQuery({
     queryKey: queryKeys.host.listing(listingId),
     queryFn: () => getHostListing(listingId),
-    staleTime: HOST_STALE_TIME_MS,
     retry: false,
   });
 
@@ -60,21 +58,20 @@ export const useHostBookingsInfinite = (tab: HostBookingTab) =>
     initialPageParam: FIRST_PAGE,
     getNextPageParam: lastPage =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,
-    staleTime: HOST_STALE_TIME_MS,
+    staleTime: HOST_ACTIVITY_STALE_TIME_MS,
   });
 
 export const useHostStats = () =>
   useQuery({
     queryKey: queryKeys.host.stats(),
     queryFn: getHostStats,
-    staleTime: HOST_STALE_TIME_MS,
+    staleTime: HOST_ACTIVITY_STALE_TIME_MS,
   });
 
 export const useHostListingOptions = () =>
   useQuery({
     queryKey: queryKeys.host.listingOptions(),
     queryFn: getHostListingOptions,
-    staleTime: HOST_OPTIONS_STALE_TIME_MS,
   });
 
 /**
