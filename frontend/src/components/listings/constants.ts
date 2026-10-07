@@ -9,6 +9,9 @@ export const LISTING_MAP_GRID_CLASS_NAME =
 
 export const NEXT_PAGE_SKELETON_COUNT = 5;
 
+/** Listing cards open the listing in a new tab, keeping the results where they were. */
+export const LISTING_LINK_TARGET_PROPS = { target: "_blank", rel: "noopener" } as const;
+
 export const EMPTY_LISTING_FILTERS: ListingFilters = {
   propertyType: [],
   amenities: [],

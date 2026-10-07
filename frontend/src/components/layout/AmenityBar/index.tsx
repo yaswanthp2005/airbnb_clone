@@ -11,7 +11,7 @@ import { countActiveFilters, toggleValue } from "@/components/listings/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 import { cn } from "@/lib/utils";
-import { useListingFilterOptions } from "@/queries/listings";
+import { useListingFilterOptions, useSearchAmenities } from "@/queries/listings";
 
 import AmenityTab from "./AmenityTab";
 import { AMENITY_TAB_SKELETON_COUNT } from "./constants";
@@ -53,11 +53,20 @@ const ScrollArrow = ({ direction, isVisible, onClick }: ScrollArrowProps) => {
 
 const AmenityBar = () => {
   const { filters, setFilters } = useListingFilters();
-  const { data: filterOptions, isPending } = useListingFilterOptions();
+  const { data: filterOptions } = useListingFilterOptions();
+  const { data: searchAmenities, isPending } = useSearchAmenities(filters);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const activeFilterCount = countActiveFilters(filters);
   const { ref, canScrollLeft, canScrollRight, scrollByStep } =
     useHorizontalScroll<HTMLDivElement>();
+
+  // Selected amenities stay visible even when no listing in the search offers them, so they can be removed.
+  const selectedElsewhere = (filterOptions?.amenities ?? []).filter(
+    amenity =>
+      filters.amenities.includes(amenity.id) &&
+      !searchAmenities?.some(searchAmenity => searchAmenity.id === amenity.id),
+  );
+  const amenities = [...selectedElsewhere, ...(searchAmenities ?? [])];
 
   const handleToggle = (amenityId: number) => {
     setFilters({ ...filters, amenities: toggleValue(filters.amenities, amenityId) });
@@ -86,7 +95,7 @@ const AmenityBar = () => {
                     <Skeleton className="h-3 w-14" />
                   </div>
                 ))
-              : filterOptions?.amenities.map(amenity => (
+              : amenities.map(amenity => (
                   <AmenityTab
                     key={amenity.id}
                     amenity={amenity}

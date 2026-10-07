@@ -1,6 +1,7 @@
 import apiClient from "@/api/client";
 import { apiRoutes } from "@/constants/routes";
 import type {
+  Amenity,
   ListingDetail,
   ListingFilterOptions,
   ListingFilters,
@@ -23,6 +24,10 @@ type RequestOptions = {
 
 type FilterOptionsResponseBody = {
   data: ListingFilterOptions;
+};
+
+type AmenitiesResponseBody = {
+  data: Amenity[];
 };
 
 type PropertyTypesResponseBody = {
@@ -54,7 +59,7 @@ export type GetUnavailableDatesParams = {
 };
 
 /** Infants and pets don't count towards a listing's guest capacity. */
-const toListingsQuery = ({ adults, children, ...params }: GetListingsParams) => ({
+const toListingsQuery = ({ adults, children, ...params }: ListingFilters & Partial<GetListingsParams>) => ({
   ...params,
   infants: undefined,
   pets: undefined,
@@ -75,6 +80,14 @@ export const getListings = async (
 export const getListingFilterOptions = async (): Promise<ListingFilterOptions> => {
   const { data } = await apiClient.get<FilterOptionsResponseBody>(
     apiRoutes.listingFilterOptions,
+  );
+  return data.data;
+};
+
+/** Amenities offered by at least one listing in the search (the amenity filter is ignored). */
+export const getSearchAmenities = async (filters: ListingFilters): Promise<Amenity[]> => {
+  const { data } = await apiClient.get<AmenitiesResponseBody>(
+    buildUrl({ path: apiRoutes.listingAmenities, query: toListingsQuery(filters) }),
   );
   return data.data;
 };

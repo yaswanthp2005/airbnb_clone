@@ -7,7 +7,8 @@ import { t } from "@/common/i18n";
 import { useDismiss } from "@/hooks/useDismiss";
 import { cn } from "@/lib/utils";
 
-import type { GuestKey, SearchSection } from "../constants";
+import { SEARCH_HIGHLIGHT_DURATION_CLASS_NAME, type GuestKey, type SearchSection } from "../constants";
+import { useSlidingHighlight } from "../hooks/useSlidingHighlight";
 import { useWhereOptions } from "../hooks/useWhereOptions";
 import {
   formatDateRange,
@@ -43,6 +44,7 @@ const SearchForm = ({
 
   const isWhereActive = activeSection === "where";
   const where = useWhereOptions(draft.location, isWhereActive);
+  const highlight = useSlidingHighlight(activeSection);
 
   useDismiss(formRef, activeSection !== null, () => onActiveSectionChange(null));
 
@@ -101,7 +103,18 @@ const SearchForm = ({
         isAnyActive ? "bg-surface-strong" : "bg-surface",
       )}
     >
+      <span
+        aria-hidden="true"
+        style={{ width: highlight.box.width, transform: `translateX(${highlight.box.left}px)` }}
+        className={cn(
+          "pointer-events-none absolute inset-y-0 left-0 rounded-full bg-surface-raised shadow-card ease-out motion-reduce:transition-none",
+          SEARCH_HIGHLIGHT_DURATION_CLASS_NAME,
+          highlight.box.canSlide ? "transition-[transform,width,opacity]" : "transition-opacity",
+          highlight.box.isVisible ? "opacity-100" : "opacity-0",
+        )}
+      />
       <Segment
+        ref={highlight.register("where")}
         isActive={isWhereActive}
         isAnyActive={isAnyActive}
         className="flex-1 md:flex-[1.2]"
@@ -137,6 +150,7 @@ const SearchForm = ({
       <SegmentDivider isHidden={activeSection === "where" || activeSection === "when"} />
 
       <Segment
+        ref={highlight.register("when")}
         isActive={activeSection === "when"}
         isAnyActive={isAnyActive}
         className="flex-1"
@@ -160,6 +174,7 @@ const SearchForm = ({
       <SegmentDivider isHidden={activeSection === "when" || activeSection === "who"} />
 
       <Segment
+        ref={highlight.register("who")}
         isActive={activeSection === "who"}
         isAnyActive={isAnyActive}
         className="flex-[1.4] md:flex-1"

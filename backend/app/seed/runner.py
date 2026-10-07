@@ -22,14 +22,19 @@ from app.models import (
 from app.models.booking import BOOKING_STATUS_CANCELLED, BOOKING_STATUS_CONFIRMED
 from app.seed.constants import (
     AMENITY_DEFINITIONS,
+    BUILDING_AMENITIES,
+    BUILDING_PROPERTY_TYPES,
+    COAST_AMENITIES,
     DEMO_GUEST_EMAIL,
     DEMO_PASSWORD,
+    HILL_AMENITIES,
+    LISTING_AMENITY_COUNT_RANGE,
     LISTING_PHOTO_COUNT_RANGE,
     REVIEW_COMMENTS,
     property_type_photo_urls,
     unsplash_url,
 )
-from app.seed.data import CITY_SEEDS, DESTINATION_SEEDS, SEED_USERS
+from app.seed.data import CITY_SEEDS, DESTINATION_SEEDS, SEED_USERS, Landscape
 from app.services.pricing import quote_stay
 from app.services.review_service import refresh_listing_rating
 
@@ -70,6 +75,17 @@ def _listing_description(
             f"to share recommendations.",
         )
     )
+
+
+def _amenity_pool(amenities: list[Amenity], landscape: Landscape, property_type: str) -> list[Amenity]:
+    excluded = set()
+    if landscape != "coast":
+        excluded |= COAST_AMENITIES
+    if landscape != "hills":
+        excluded |= HILL_AMENITIES
+    if property_type not in BUILDING_PROPERTY_TYPES:
+        excluded |= BUILDING_AMENITIES
+    return [amenity for amenity in amenities if amenity.name not in excluded]
 
 
 def run_seed(db: Session) -> bool:
@@ -166,8 +182,9 @@ def run_seed(db: Session) -> bool:
                     ListingPhoto(listing_id=listing.id, url=url, position=position)
                 )
 
-            amenity_count = rng.randint(8, 12)
-            chosen_amenities = rng.sample(amenities, k=amenity_count)
+            amenity_pool = _amenity_pool(amenities, city_seed.landscape, property_type)
+            amenity_count = min(rng.randint(*LISTING_AMENITY_COUNT_RANGE), len(amenity_pool))
+            chosen_amenities = rng.sample(amenity_pool, k=amenity_count)
             for amenity in chosen_amenities:
                 db.add(
                     ListingAmenity(listing_id=listing.id, amenity_id=amenity.id)

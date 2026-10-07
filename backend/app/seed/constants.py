@@ -229,6 +229,13 @@ AMENITY_DEFINITIONS: tuple[tuple[str, str], ...] = (
     ("Garden", "flower-2"),
 )
 
+# Amenities that only make sense in some places, so each search shows its own set.
+COAST_AMENITIES = frozenset({"Sea view", "Beach access"})
+HILL_AMENITIES = frozenset({"Mountain view", "Fireplace"})
+BUILDING_AMENITIES = frozenset({"Elevator", "Gym"})
+BUILDING_PROPERTY_TYPES = frozenset({"Apartment", "Loft", "Palace"})
+LISTING_AMENITY_COUNT_RANGE = (8, 12)
+
 REVIEW_COMMENTS: tuple[str, ...] = (
     "Wonderful stay — exactly as pictured. Host was very responsive.",
     "Great location and spotless rooms. Would book again.",

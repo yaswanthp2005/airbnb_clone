@@ -39,6 +39,10 @@ export const EMPTY_GUEST_COUNTS: GuestCounts = {
   pets: 0,
 };
 
+export const SEARCH_PILL_ICON_SIZE_PX = 32;
+/** How long the white highlight takes to slide between Where, When and Who. */
+export const SEARCH_HIGHLIGHT_DURATION_CLASS_NAME = "duration-300";
+
 export const CALENDAR_MONTHS = 2;
 export const CALENDAR_MAX_MONTHS_AHEAD = 12;
 

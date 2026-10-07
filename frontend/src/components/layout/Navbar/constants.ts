@@ -1,3 +1,4 @@
+import { HOMES_ICON_URL } from "@/constants/images";
 import { comingSoonRoute, routes } from "@/constants/routes";
 
 const HEADER_TAB_ICON_BASE_URL =
@@ -22,7 +23,7 @@ export const HEADER_TABS: HeaderTab[] = [
   {
     key: "homes",
     labelKey: "nav.tabs.homes",
-    iconUrl: `${HEADER_TAB_ICON_BASE_URL}/a32adab1-f9df-47e1-a411-bdff91b579c3.png?im_w=240`,
+    iconUrl: HOMES_ICON_URL,
     route: routes.search,
   },
   {

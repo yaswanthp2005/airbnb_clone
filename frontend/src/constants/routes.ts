@@ -46,6 +46,7 @@ export const apiRoutes = {
   authMe: "/auth/me",
   listings: "/listings",
   listingFilterOptions: "/listings/filter-options",
+  listingAmenities: "/listings/amenities",
   listingPropertyTypes: "/listings/property-types",
   listingLocations: "/listings/locations",
   listingDetail: "/listings/:id",
