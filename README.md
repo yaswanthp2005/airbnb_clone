@@ -128,6 +128,18 @@ cd frontend && npm run lint && npm run typecheck && npm run build
 cd backend && python -m compileall -q app
 ```
 
+### Backend tests
+
+Pytest uses a **temporary SQLite file** (no demo seed) so tests do not touch `airbnb.db`.
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+pytest
+```
+
+Coverage includes pricing quotes, listing slugs, booking overlap / back-to-back stays, auth, and a few HTTP endpoints under `backend/tests/`.
+
 ## Environment variables
 
 ### Backend (`backend/.env`, or Render env vars)
