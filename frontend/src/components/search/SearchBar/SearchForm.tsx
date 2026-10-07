@@ -48,7 +48,9 @@ const SearchForm = ({
 
   useEffect(() => {
     if (isWhereActive) {
-      inputRef.current?.focus();
+      // The bar lives in the sticky header and may still be animating open; scrolling it
+      // "into view" would jump the page to the top.
+      inputRef.current?.focus({ preventScroll: true });
     }
   }, [isWhereActive]);
 
