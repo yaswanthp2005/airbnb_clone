@@ -185,6 +185,11 @@
       "showStays": "Show stays",
       "showStaysOne": "Show 1 stay",
       "showStaysOther": "Show {{count}} stays"
+    },
+    "map": {
+      "label": "Map of stays",
+      "loading": "Loading map…",
+      "pinLabel": "{{price}} night · {{title}}"
     }
   },
   "auth": {
@@ -562,7 +567,8 @@
       "title": "Where you'll be",
       "place": "{{city}}, {{state}}, {{country}}",
       "exactLocationNote": "Exact location provided after booking.",
-      "mapTitle": "Map showing the approximate location of {{city}}"
+      "mapTitle": "Map showing the approximate location of {{city}}",
+      "viewLargerMap": "View larger map"
     },
     "unavailable": {
       "title": "We can't find this place",

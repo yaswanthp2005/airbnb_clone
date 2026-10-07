@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { t } from "@/common/i18n";
 import PageContainer from "@/components/layout/PageContainer";
 import { routes } from "@/constants/routes";
-import { setHostMode } from "@/utils/hostMode";
+import { hostModeFlag } from "@/utils/storedFlag";
 
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
@@ -14,7 +14,7 @@ const HostNavbar = () => {
   const router = useRouter();
 
   const switchToTraveling = () => {
-    setHostMode(false);
+    hostModeFlag.set(false);
     router.push(routes.home);
   };
 

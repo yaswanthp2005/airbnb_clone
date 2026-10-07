@@ -1,0 +1,80 @@
+/* Leaflet's CSS is unlayered, so it beats Tailwind's layered utilities; keep overrides here. */
+
+.leaflet-container {
+  font-family: inherit;
+}
+
+.price-pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.price-pin:hover,
+.price-pin--active {
+  background: var(--color-ink);
+  color: #fff;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.home-pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: var(--color-ink);
+  color: #fff;
+  box-shadow: 0 0 0 6px rgba(255, 56, 92, 0.25), 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.listing-map-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.listing-map-popup .leaflet-popup-content {
+  margin: 0;
+  width: 280px !important;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Leaflet resets popup paragraphs; hand them back to the card's Tailwind classes. */
+.listing-map-popup .leaflet-popup-content p {
+  margin: revert-layer;
+}
+
+.listing-map-popup .leaflet-popup-tip-container {
+  display: none;
+}
+
+/* Approximate-area circle; CSS because SVG attributes can't read theme variables. */
+.location-radius {
+  stroke: var(--color-brand);
+  stroke-width: 2;
+  fill: var(--color-brand);
+  fill-opacity: 0.12;
+}

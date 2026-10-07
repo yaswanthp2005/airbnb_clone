@@ -196,6 +196,8 @@ def to_listing_card(listing: Listing, is_wishlisted: bool) -> ListingCardOut:
         city=listing.city,
         state=listing.state,
         country=listing.country,
+        latitude=float(listing.latitude),
+        longitude=float(listing.longitude),
         price_per_night=listing.price_per_night,
         bedrooms=listing.bedrooms,
         beds=listing.beds,
