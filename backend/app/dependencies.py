@@ -29,7 +29,10 @@ def _user_from_token(db: Session, token: str) -> Optional[User]:
     except (TypeError, ValueError):
         return None
 
-    return get_user_by_id(db, user_id)
+    user = get_user_by_id(db, user_id)
+    if not user or user.email != payload.get("email"):
+        return None
+    return user
 
 
 def get_optional_user(

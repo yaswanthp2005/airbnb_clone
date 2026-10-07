@@ -17,9 +17,11 @@ from app.models import (
     User,
     WishlistItem,
 )
+from app.models.booking import BOOKING_STATUS_CANCELLED, BOOKING_STATUS_CONFIRMED
 from app.models.listing import PROPERTY_TYPES
 from app.seed.constants import (
     AMENITY_DEFINITIONS,
+    DEMO_GUEST_EMAIL,
     DEMO_PASSWORD,
     REVIEW_COMMENTS,
     SEED_PHOTO_URLS,
@@ -29,7 +31,11 @@ from app.services.pricing import quote_stay
 from app.services.review_service import refresh_listing_rating
 
 REVIEW_POSTED_HOUR = 10
-RNG = random.Random(42)
+# Fixed seed: every fresh database (e.g. after a free-tier restart) gets the same demo data.
+RANDOM_SEED = 42
+DEMO_GUEST_UPCOMING_LISTING_INDEX = 8  # first listing without seeded future bookings
+DEMO_GUEST_UPCOMING_DAYS_AHEAD = 14
+DEMO_GUEST_UPCOMING_NIGHTS = 3
 
 
 def _booking_total(nightly_price: int, nights: int, cleaning_fee: int) -> tuple[int, int, int]:
@@ -63,11 +69,13 @@ def _listing_description(
     )
 
 
-def run_seed(db: Session) -> None:
+def run_seed(db: Session) -> bool:
+    """Seed an empty database; returns False (and does nothing) if users already exist."""
     existing_users = db.scalar(select(func.count()).select_from(User))
     if existing_users and existing_users > 0:
-        return
+        return False
 
+    rng = random.Random(RANDOM_SEED)
     password_hash = hash_password(DEMO_PASSWORD)
     users_by_email: dict[str, User] = {}
 
@@ -87,7 +95,7 @@ def run_seed(db: Session) -> None:
 
     hosts = [users_by_email[u.email] for u in SEED_USERS if u.is_host]
     guests = [users_by_email[u.email] for u in SEED_USERS if not u.is_host]
-    demo_guest = users_by_email["guest@demo.in"]
+    demo_guest = users_by_email[DEMO_GUEST_EMAIL]
     booking_guests = [g for g in guests if g.id != demo_guest.id]
 
     amenities: list[Amenity] = []
@@ -103,16 +111,16 @@ def run_seed(db: Session) -> None:
         for local_idx in range(city_seed.listing_count):
             property_type = PROPERTY_TYPES[listing_index % len(PROPERTY_TYPES)]
             host = hosts[listing_index % len(hosts)]
-            price = RNG.randint(15, 500) * 100  # ₹1,500 – ₹50,000 in steps; cap at 25000
+            price = rng.randint(15, 500) * 100  # ₹1,500 – ₹50,000 in steps; cap at 25000
             price = min(price, 25000)
             price = max(price, 1500)
-            cleaning = RNG.choice([0, 500, 750, 1000, 1500])
-            lat_jitter = RNG.uniform(-0.08, 0.08)
-            lng_jitter = RNG.uniform(-0.08, 0.08)
-            bedrooms = RNG.randint(1, 4)
-            beds = max(bedrooms, RNG.randint(1, 5))
-            bathrooms = RNG.randint(1, 3)
-            max_guests = RNG.randint(2, 10)
+            cleaning = rng.choice([0, 500, 750, 1000, 1500])
+            lat_jitter = rng.uniform(-0.08, 0.08)
+            lng_jitter = rng.uniform(-0.08, 0.08)
+            bedrooms = rng.randint(1, 4)
+            beds = max(bedrooms, rng.randint(1, 5))
+            bathrooms = rng.randint(1, 3)
+            max_guests = rng.randint(2, 10)
 
             title = f"{property_type} in {city_seed.city} — {local_idx + 1}"
             description = _listing_description(
@@ -132,7 +140,7 @@ def run_seed(db: Session) -> None:
                 country="India",
                 state=city_seed.state,
                 city=city_seed.city,
-                address=f"{RNG.randint(1, 120)} {city_seed.city} Heritage Lane",
+                address=f"{rng.randint(1, 120)} {city_seed.city} Heritage Lane",
                 latitude=round(city_seed.latitude + lat_jitter, 6),
                 longitude=round(city_seed.longitude + lng_jitter, 6),
                 price_per_night=price,
@@ -152,8 +160,8 @@ def run_seed(db: Session) -> None:
                     ListingPhoto(listing_id=listing.id, url=url, position=position)
                 )
 
-            amenity_count = RNG.randint(8, 12)
-            chosen_amenities = RNG.sample(amenities, k=amenity_count)
+            amenity_count = rng.randint(8, 12)
+            chosen_amenities = rng.sample(amenities, k=amenity_count)
             for amenity in chosen_amenities:
                 db.add(
                     ListingAmenity(listing_id=listing.id, amenity_id=amenity.id)
@@ -167,12 +175,12 @@ def run_seed(db: Session) -> None:
     today = date.today()
 
     for idx, listing in enumerate(listings):
-        review_count = RNG.randint(4, 12)
+        review_count = rng.randint(4, 12)
 
         for review_idx in range(review_count):
             guest = booking_guests[review_idx % len(booking_guests)]
-            nights = RNG.randint(2, 6)
-            check_in = today - timedelta(days=RNG.randint(30, 400))
+            nights = rng.randint(2, 6)
+            check_in = today - timedelta(days=rng.randint(30, 400))
             check_out = check_in + timedelta(days=nights)
             service_fee, total_price, _ = _booking_total(
                 listing.price_per_night, nights, listing.cleaning_fee
@@ -183,17 +191,17 @@ def run_seed(db: Session) -> None:
                 guest_id=guest.id,
                 check_in=check_in,
                 check_out=check_out,
-                guests=min(listing.max_guests, RNG.randint(1, 4)),
+                guests=min(listing.max_guests, rng.randint(1, 4)),
                 nightly_price=listing.price_per_night,
                 cleaning_fee=listing.cleaning_fee,
                 service_fee=service_fee,
                 total_price=total_price,
-                status="confirmed",
+                status=BOOKING_STATUS_CONFIRMED,
             )
             db.add(booking)
             db.flush()
 
-            rating = RNG.choices(
+            rating = rng.choices(
                 population=[3, 4, 4, 4, 5, 5, 5],
                 k=1,
             )[0]
@@ -233,13 +241,13 @@ def run_seed(db: Session) -> None:
                 cleaning_fee=listing.cleaning_fee,
                 service_fee=service_fee,
                 total_price=total_price,
-                status="confirmed",
+                status=BOOKING_STATUS_CONFIRMED,
                 )
             )
 
         if idx < 8:
-            nights = RNG.randint(2, 5)
-            check_in = today + timedelta(days=RNG.randint(7, 90))
+            nights = rng.randint(2, 5)
+            check_in = today + timedelta(days=rng.randint(7, 90))
             check_out = check_in + timedelta(days=nights)
             guest = booking_guests[idx % len(booking_guests)]
             service_fee, total_price, _ = _booking_total(
@@ -251,18 +259,18 @@ def run_seed(db: Session) -> None:
                     guest_id=guest.id,
                     check_in=check_in,
                     check_out=check_out,
-                    guests=min(listing.max_guests, RNG.randint(1, 3)),
+                    guests=min(listing.max_guests, rng.randint(1, 3)),
                     nightly_price=listing.price_per_night,
                     cleaning_fee=listing.cleaning_fee,
                     service_fee=service_fee,
                     total_price=total_price,
-                    status="confirmed",
+                    status=BOOKING_STATUS_CONFIRMED,
                 )
             )
 
         if idx % 5 == 0:
-            nights = RNG.randint(1, 4)
-            check_in = today - timedelta(days=RNG.randint(5, 25))
+            nights = rng.randint(1, 4)
+            check_in = today - timedelta(days=rng.randint(5, 25))
             check_out = check_in + timedelta(days=nights)
             if check_out >= today:
                 check_out = today - timedelta(days=1)
@@ -282,13 +290,34 @@ def run_seed(db: Session) -> None:
                     cleaning_fee=listing.cleaning_fee,
                     service_fee=service_fee,
                     total_price=total_price,
-                    status="cancelled" if idx % 10 == 0 else "confirmed",
+                    status=BOOKING_STATUS_CANCELLED if idx % 10 == 0 else BOOKING_STATUS_CONFIRMED,
                 )
             )
 
-    for guest_idx, guest in enumerate(guests):
-        sample_listings = RNG.sample(listings, k=6)
+    upcoming_listing = listings[DEMO_GUEST_UPCOMING_LISTING_INDEX]
+    check_in = today + timedelta(days=DEMO_GUEST_UPCOMING_DAYS_AHEAD)
+    service_fee, total_price, _ = _booking_total(
+        upcoming_listing.price_per_night, DEMO_GUEST_UPCOMING_NIGHTS, upcoming_listing.cleaning_fee
+    )
+    db.add(
+        Booking(
+            listing_id=upcoming_listing.id,
+            guest_id=demo_guest.id,
+            check_in=check_in,
+            check_out=check_in + timedelta(days=DEMO_GUEST_UPCOMING_NIGHTS),
+            guests=min(upcoming_listing.max_guests, 2),
+            nightly_price=upcoming_listing.price_per_night,
+            cleaning_fee=upcoming_listing.cleaning_fee,
+            service_fee=service_fee,
+            total_price=total_price,
+            status=BOOKING_STATUS_CONFIRMED,
+        )
+    )
+
+    for guest in guests:
+        sample_listings = rng.sample(listings, k=6)
         for listing in sample_listings:
             db.add(WishlistItem(user_id=guest.id, listing_id=listing.id))
 
     db.commit()
+    return True

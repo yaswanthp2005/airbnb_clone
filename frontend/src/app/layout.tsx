@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 
 import en from "@/common/i18n/en.json";
+import { inter } from "@/app/fonts";
 import Providers from "@/app/providers";
 import AppHeader from "@/components/layout/AppHeader";
 import Footer from "@/components/layout/Footer";
@@ -9,12 +9,6 @@ import MobileTabBar from "@/components/layout/MobileTabBar";
 import { THEME_BROWSER_COLORS } from "@/constants/theme";
 
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: en.common.appName,

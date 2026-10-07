@@ -32,7 +32,7 @@ def register_user(db: Session, payload: RegisterRequest) -> tuple[UserPublic, st
     db.commit()
     db.refresh(user)
 
-    token = create_access_token(str(user.id))
+    token = create_access_token(str(user.id), user.email)
     return _user_public(user), token
 
 
@@ -44,7 +44,7 @@ def login_user(db: Session, payload: LoginRequest) -> tuple[UserPublic, str]:
             detail="Invalid email or password",
         )
 
-    token = create_access_token(str(user.id))
+    token = create_access_token(str(user.id), user.email)
     return _user_public(user), token
 
 
