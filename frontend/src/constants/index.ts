@@ -10,7 +10,7 @@ export const STORAGE_KEYS = {
 const DEFAULT_API_URL = "http://localhost:8000";
 const API_VERSION_PREFIX = "/api/v1";
 
-/** Backend origin from `NEXT_PUBLIC_API_URL` (inlined at build time), e.g. `https://airbnb-clone-api.onrender.com`. */
+/** Backend origin from `NEXT_PUBLIC_API_URL` (inlined at build time), e.g. `https://airbnb-clone-api-kpno.onrender.com`. */
 export const API_BASE_URL = `${(process.env.NEXT_PUBLIC_API_URL || DEFAULT_API_URL).replace(/\/+$/, "")}${API_VERSION_PREFIX}`;
 
 export const DEFAULT_PAGE_SIZE = 20;
