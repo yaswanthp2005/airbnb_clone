@@ -7,6 +7,7 @@ import type {
   ListingSummary,
   LocationSuggestion,
   PaginatedResponse,
+  PropertyTypeSummary,
   Review,
 } from "@/types/listing";
 import { buildUrl } from "@/utils/buildUrl";
@@ -22,6 +23,10 @@ type RequestOptions = {
 
 type FilterOptionsResponseBody = {
   data: ListingFilterOptions;
+};
+
+type PropertyTypesResponseBody = {
+  data: PropertyTypeSummary[];
 };
 
 type LocationSuggestionsResponseBody = {
@@ -67,11 +72,16 @@ export const getListings = async (
   return data;
 };
 
-export const getListingFilterOptions = async (
-  category?: string,
-): Promise<ListingFilterOptions> => {
+export const getListingFilterOptions = async (): Promise<ListingFilterOptions> => {
   const { data } = await apiClient.get<FilterOptionsResponseBody>(
-    buildUrl({ path: apiRoutes.listingFilterOptions, query: { category } }),
+    apiRoutes.listingFilterOptions,
+  );
+  return data.data;
+};
+
+export const getPropertyTypes = async (): Promise<PropertyTypeSummary[]> => {
+  const { data } = await apiClient.get<PropertyTypesResponseBody>(
+    apiRoutes.listingPropertyTypes,
   );
   return data.data;
 };

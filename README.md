@@ -21,7 +21,8 @@ A full-stack Airbnb clone: browse and search stays across India, filter them, vi
 
 ## Features
 
-- **Explore:** category bar, infinite scroll, filters (price histogram, property type, bedrooms, amenities), and a split list/map view with ₹ price pins when a category is picked.
+- **Home:** All / Homes / Experiences / Services tabs, "Destinations for you", "Popular homes in {city}" and "Browse by type of stay" rows (with "Guest favourite" badges). Every card opens the results for that city or type.
+- **Results (`/search`):** split list/map view with ₹ price pins, infinite scroll, amenity tabs in the header that toggle the amenity filter, and a Filters modal (price histogram, property type, bedrooms, amenities).
 - **Search:** Where (debounced destination suggestions) → When (range calendar) → Who (guest steppers), all stored in the URL.
 - **Listing detail:** photo mosaic + gallery, amenities, reviews with rating breakdown, location map, availability calendar and a live price breakdown.
 - **Booking:** mocked checkout with card validation, double-booking protection, confirmation page, and trips (upcoming / past / cancelled) with cancellation and reviews for past stays.
@@ -286,6 +287,16 @@ erDiagram
         int listing_id PK,FK
         datetime created_at
     }
+
+    destinations {
+        int id PK
+        string city UK
+        string state
+        string country
+        string tagline
+        string image_url
+        int position
+    }
 ```
 
 ### Schema notes
@@ -299,6 +310,7 @@ erDiagram
 | `bookings` | `status` ∈ `confirmed`, `cancelled` (check constraint); `check_out > check_in` (check constraint); prices are snapshotted at booking time. Index on `(listing_id, check_in, check_out)` for overlap checks. Overlap rule: `new_check_in < existing_check_out AND new_check_out > existing_check_in` (back-to-back stays allowed). |
 | `reviews` | `rating` 1–5 (check constraint); unique `booking_id` (one review per stay, only after checkout). |
 | `wishlist_items` | Composite primary key `(user_id, listing_id)`. |
+| `destinations` | Featured cities on the home page, ordered by `position`. Not linked by a foreign key: a destination is shown only while some listing has that `city`. |
 
 Deleting a user or listing cascades to dependent rows (photos, bookings, reviews, wishlist links).
 
@@ -313,7 +325,9 @@ The same seed runs on every empty database, so every fresh boot gives the same d
 
 - 6 users (3 hosts, 3 guests). See [demo credentials](#demo-credentials).
 - 36 listings across Goa, Jaipur, Udaipur, Mumbai, Bengaluru, Manali, Kochi, Delhi, Rishikesh, Pondicherry and Darjeeling.
-- 5 photos and 8–12 amenities per listing, priced from ₹1,500 to ₹25,000 a night.
+- 5 photos per listing from a photo set for its property type, 8–12 amenities, priced from ₹1,500 to ₹25,000 a night.
+- 11 featured destinations with a tagline and photo. They are seeded separately whenever the table is empty, so existing databases get them too.
+- Listings rated 4.5+ with at least 5 reviews are shown as "Guest favourite".
 - 4–12 reviewed past stays per listing, plus future bookings that block dates and some cancelled stays.
 - Wishlists for every guest.
 - `guest@demo.in` has a completed stay with no review yet (try the review flow) and an upcoming trip (try cancelling).
@@ -335,9 +349,11 @@ Auth: `Authorization: Bearer <jwt>` from register/login. "Optional" endpoints wo
 | POST | `/auth/register` | – | Create an account → `{ access_token, user }` |
 | POST | `/auth/login` | – | Log in → `{ access_token, user }` |
 | GET | `/auth/me` | Required | Current user |
-| GET | `/listings` | Optional | Search/browse. Query: `location`, `check_in`, `check_out`, `guests`, `category`, `min_price`, `max_price`, `property_type` (repeatable), `amenities` (repeatable ids), `bedrooms`, `sort` (`recommended`, `price_asc`, `price_desc`, `rating_desc`, `newest`), `page`, `page_size` |
-| GET | `/listings/filter-options` | – | Price bounds + histogram, property types, amenities (query `category`) |
+| GET | `/listings` | Optional | Search/browse. Query: `location`, `check_in`, `check_out`, `guests`, `min_price`, `max_price`, `property_type` (repeatable), `amenities` (repeatable ids), `bedrooms`, `sort` (`recommended`, `price_asc`, `price_desc`, `rating_desc`, `newest`), `page`, `page_size` |
+| GET | `/listings/filter-options` | – | Price bounds + histogram, property types, amenities |
 | GET | `/listings/locations` | – | Destination suggestions (query `q`, `limit`) |
+| GET | `/listings/property-types` | – | Property types with listing count and a cover photo → `{ data }` |
+| GET | `/destinations` | – | Featured destinations that have listings → `{ data }` |
 | GET | `/listings/{id}` | Optional | Listing detail: photos, amenities, host, rating breakdown |
 | GET | `/listings/{id}/reviews` | – | Paginated reviews, newest first |
 | GET | `/listings/{id}/unavailable-dates` | – | Booked nights (query `start_date`, `end_date`) |
@@ -395,7 +411,8 @@ All seeded accounts use the password **`Demo@12345`**. You can also register a n
 Run this against a freshly started backend (or right after a Render restart):
 
 - [ ] **Register:** user menu → Sign up → name, email, password → "Account created successfully" toast; avatar initial in the header.
-- [ ] **Search:** Where "Goa" → pick dates → 2 adults → Search; the URL has `location`, `check_in`, `check_out`, `adults` and only Goa stays show.
+- [ ] **Home:** destination, popular-homes and property-type rows load; a destination card opens `/search?location=…` with the map on the right.
+- [ ] **Search:** Where "Goa" → pick dates → 2 adults → Search; the results open on `/search`, the URL has `location`, `check_in`, `check_out`, `adults` and only Goa stays show.
 - [ ] **Filter:** Filters → pick a property type → "Show N stays"; every card has that type and the URL has `property_type`.
 - [ ] **View a listing:** open a card; the dates and guests carry over; photos, reviews, map and price breakdown load.
 - [ ] **Book:** Reserve → card `4242 4242 4242 4242`, `12/30`, `123`, PIN `403001` → Confirm and pay → "Your reservation is confirmed" + confirmation page.

@@ -1,4 +1,31 @@
+import { Balloon, ConciergeBell, Earth, House, type LucideIcon } from "lucide-react";
+
 import { comingSoonRoute, routes } from "@/constants/routes";
+
+export type HeaderTab = {
+  key: string;
+  labelKey: string;
+  icon: LucideIcon;
+  route: string;
+};
+
+/** Experiences and services aren't built yet; their tabs lead to "Coming soon". */
+export const HEADER_TABS: HeaderTab[] = [
+  { key: "all", labelKey: "nav.tabs.all", icon: Earth, route: routes.home },
+  { key: "homes", labelKey: "nav.tabs.homes", icon: House, route: routes.search },
+  {
+    key: "experiences",
+    labelKey: "nav.tabs.experiences",
+    icon: Balloon,
+    route: comingSoonRoute("experiences"),
+  },
+  {
+    key: "services",
+    labelKey: "nav.tabs.services",
+    icon: ConciergeBell,
+    route: comingSoonRoute("services"),
+  },
+];
 
 export type UserMenuAction = "login" | "signup" | "logout";
 

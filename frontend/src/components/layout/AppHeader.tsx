@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
-import CategoryBar from "@/components/layout/CategoryBar";
+import AmenityBar from "@/components/layout/AmenityBar";
 import MobileHeader from "@/components/layout/MobileHeader";
 import Navbar from "@/components/layout/Navbar";
 import HostNavbar from "@/components/layout/Navbar/HostNavbar";
@@ -27,6 +27,8 @@ const AppHeader = () => {
   const pathname = usePathname();
   const isCollapsed = useScrollCollapse();
   const isHome = pathname === routes.home;
+  const isSearchPage = pathname === routes.search;
+  const isExplore = isHome || isSearchPage;
   const isNarrowPage = NARROW_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix));
   const isListingPage = pathname.startsWith(LISTING_ROUTE_PREFIX);
   const isHostingPage =
@@ -95,12 +97,12 @@ const AppHeader = () => {
         ref={headerRef}
         className={cn(
           "sticky top-0 z-40 bg-surface transition-shadow",
-          isHome && isCollapsed && "shadow-header",
+          isExplore && isCollapsed && "shadow-header",
           // On phones the listing page overlays its own back/share/save on the photos.
           isListingPage && "max-md:hidden",
         )}
       >
-        <MobileHeader isHome={isHome} />
+        <MobileHeader isExplore={isExplore} />
         <div className="hidden border-b border-hairline md:block">
           <Navbar
             isExpanded={isExpanded}
@@ -110,9 +112,9 @@ const AppHeader = () => {
             containerWidth={isNarrowPage ? "narrow" : "default"}
           />
         </div>
-        {isHome ? (
+        {isSearchPage ? (
           <Suspense fallback={<div className="h-[78px]" />}>
-            <CategoryBar />
+            <AmenityBar />
           </Suspense>
         ) : null}
       </header>

@@ -23,7 +23,14 @@
     "helpCentre": "Help Centre",
     "logIn": "Log in",
     "signUp": "Sign up",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "tabs": {
+      "label": "Browse",
+      "all": "All",
+      "homes": "Homes",
+      "experiences": "Experiences",
+      "services": "Services"
+    }
   },
   "search": {
     "anywhere": "Anywhere",
@@ -80,32 +87,12 @@
       "clearAll": "Clear all"
     }
   },
-  "categories": {
-    "label": "Categories",
-    "scrollLeft": "Previous categories",
-    "scrollRight": "Next categories",
+  "amenityBar": {
+    "label": "Filter by amenity",
+    "scrollLeft": "Previous amenities",
+    "scrollRight": "Next amenities",
     "filters": "Filters",
-    "filtersApplied": "Filters, {{count}} applied",
-    "trending": "Trending",
-    "beachfront": "Beachfront",
-    "cabins": "Cabins",
-    "amazingViews": "Amazing views",
-    "villas": "Villas",
-    "treehouses": "Treehouses",
-    "farms": "Farms",
-    "rooms": "Rooms",
-    "camping": "Camping",
-    "lake": "Lake",
-    "amazingPools": "Amazing pools",
-    "houseboats": "Houseboats",
-    "heritage": "Heritage",
-    "mansions": "Mansions",
-    "countryside": "Countryside",
-    "tropical": "Tropical",
-    "skiing": "Skiing",
-    "islands": "Islands",
-    "desert": "Desert",
-    "arctic": "Arctic"
+    "filtersApplied": "Filters, {{count}} applied"
   },
   "footer": {
     "support": "Support",
@@ -148,7 +135,18 @@
     "backHome": "Back to home"
   },
   "home": {
-    "listingsLoading": "Loading stays"
+    "listingsLoading": "Loading stays",
+    "destinationsTitle": "Destinations for you",
+    "popularIn": "Popular homes in {{city}}",
+    "browseByType": "Browse by type of stay",
+    "previous": "Previous",
+    "next": "Next",
+    "staysOne": "1 stay",
+    "staysOther": "{{count}} stays",
+    "card": {
+      "title": "{{propertyType}} in {{city}}",
+      "priceForOneNight": "{{price}} for 1 night"
+    }
   },
   "listings": {
     "card": {
@@ -162,11 +160,16 @@
       "previousPhoto": "Previous photo",
       "nextPhoto": "Next photo",
       "saveToWishlist": "Save to wishlist",
-      "removeFromWishlist": "Remove from wishlist"
+      "removeFromWishlist": "Remove from wishlist",
+      "guestFavourite": "Guest favourite"
     },
+    "resultsOne": "1 stay",
+    "resultsOther": "{{count}} stays",
+    "resultsInOne": "1 stay in {{location}}",
+    "resultsInOther": "{{count}} stays in {{location}}",
     "empty": {
       "title": "No exact matches",
-      "description": "Try changing or removing some of your filters, or browse a different category.",
+      "description": "Try changing or removing some of your filters, or search a different destination.",
       "noListings": "There are no stays to show right now. Check back soon.",
       "removeFilters": "Remove all filters"
     },

@@ -4,11 +4,19 @@ from datetime import date, timedelta
 from typing import Optional
 
 from fastapi import HTTPException, status
-from sqlalchemy import ColumnElement, Select, case, false, func, or_, select
+from sqlalchemy import ColumnElement, Select, case, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.orm.interfaces import ORMOption
 
-from app.models import Amenity, Booking, Listing, ListingAmenity, Review, WishlistItem
+from app.models import (
+    Amenity,
+    Booking,
+    Listing,
+    ListingAmenity,
+    ListingPhoto,
+    Review,
+    WishlistItem,
+)
 from app.models.user import User
 from app.schemas.listing import (
     DEFAULT_AVAILABILITY_WINDOW_DAYS,
@@ -21,6 +29,7 @@ from app.schemas.listing import (
     ListingSort,
     LocationSuggestion,
     LocationSuggestionParams,
+    PropertyTypeSummary,
     RatingCount,
     UnavailableDatesParams,
 )
@@ -35,26 +44,8 @@ RATING_SCALE = (5, 4, 3, 2, 1)
 
 LIKE_ESCAPE = "\\"
 
-DEFAULT_CATEGORY = "trending"
-
-# Frontend category keys → seeded property types. Unmapped keys match nothing.
-CATEGORY_PROPERTY_TYPES: dict[str, tuple[str, ...]] = {
-    "beachfront": ("Beachfront",),
-    "cabins": ("Cabin",),
-    "villas": ("Villa",),
-    "treehouses": ("Treehouse",),
-    "farms": ("Farmhouse",),
-    "rooms": ("Apartment",),
-    "camping": ("Camping",),
-    "lake": ("Houseboat",),
-    "houseboats": ("Houseboat",),
-    "heritage": ("Heritage haveli",),
-    "mansions": ("Villa", "Heritage haveli"),
-    "countryside": ("Farmhouse", "Cabin"),
-    "tropical": ("Beachfront", "Villa"),
-    "islands": ("Beachfront",),
-    "desert": ("Heritage haveli", "Camping"),
-}
+GUEST_FAVOURITE_MIN_RATING = 4.5
+GUEST_FAVOURITE_MIN_REVIEWS = 5
 
 SORT_ORDER = {
     ListingSort.recommended: (
@@ -66,15 +57,6 @@ SORT_ORDER = {
     ListingSort.rating_desc: (Listing.rating_avg.desc(),),
     ListingSort.newest: (Listing.created_at.desc(),),
 }
-
-
-def _filter_by_category(stmt: Select, category: Optional[str]) -> Select:
-    if not category or category == DEFAULT_CATEGORY:
-        return stmt
-    property_types = CATEGORY_PROPERTY_TYPES.get(category)
-    if not property_types:
-        return stmt.where(false())
-    return stmt.where(Listing.property_type.in_(property_types))
 
 
 def _filter_by_price(
@@ -163,7 +145,6 @@ def _filter_by_guests(stmt: Select, guests: Optional[int]) -> Select:
 
 def _filtered_listings(params: ListingFilterParams) -> Select:
     stmt = select(Listing)
-    stmt = _filter_by_category(stmt, params.category)
     stmt = _filter_by_price(stmt, params.min_price, params.max_price)
     stmt = _filter_by_property_type(stmt, params.property_type)
     stmt = _filter_by_bedrooms(stmt, params.bedrooms)
@@ -188,6 +169,13 @@ def _wishlisted_ids(
     return set(rows)
 
 
+def _is_guest_favourite(listing: Listing) -> bool:
+    return (
+        float(listing.rating_avg) >= GUEST_FAVOURITE_MIN_RATING
+        and listing.review_count >= GUEST_FAVOURITE_MIN_REVIEWS
+    )
+
+
 def to_listing_card(listing: Listing, is_wishlisted: bool) -> ListingCardOut:
     return ListingCardOut(
         id=listing.id,
@@ -204,6 +192,7 @@ def to_listing_card(listing: Listing, is_wishlisted: bool) -> ListingCardOut:
         max_guests=listing.max_guests,
         rating_avg=float(listing.rating_avg),
         review_count=listing.review_count,
+        is_guest_favourite=_is_guest_favourite(listing),
         photos=[photo.url for photo in listing.photos],
         is_wishlisted=is_wishlisted,
     )
@@ -349,18 +338,11 @@ def _price_histogram(prices: list[int], min_price: int, max_price: int) -> list[
     return buckets
 
 
-def get_filter_options(db: Session, category: Optional[str]) -> ListingFilterOptions:
-    overall_min, overall_max = db.execute(
-        select(func.min(Listing.price_per_night), func.max(Listing.price_per_night))
-    ).one()
-    min_price = overall_min or 0
-    max_price = overall_max or 0
+def get_filter_options(db: Session) -> ListingFilterOptions:
+    prices = list(db.scalars(select(Listing.price_per_night)))
+    min_price = min(prices, default=0)
+    max_price = max(prices, default=0)
 
-    category_prices = list(
-        db.scalars(
-            _filter_by_category(select(Listing.price_per_night), category)
-        )
-    )
     property_types = list(
         db.scalars(
             select(Listing.property_type).distinct().order_by(Listing.property_type)
@@ -371,10 +353,42 @@ def get_filter_options(db: Session, category: Optional[str]) -> ListingFilterOpt
     return ListingFilterOptions(
         min_price=min_price,
         max_price=max_price,
-        price_histogram=_price_histogram(category_prices, min_price, max_price),
+        price_histogram=_price_histogram(prices, min_price, max_price),
         property_types=property_types,
         amenities=[AmenityOut.model_validate(amenity) for amenity in amenities],
     )
+
+
+def list_property_types(db: Session) -> list[PropertyTypeSummary]:
+    """Each property type with its listing count; the cover is its top-recommended listing's first photo."""
+    counts: dict[str, int] = {}
+    cover_listing_ids: dict[str, int] = {}
+    rows = db.execute(
+        select(Listing.id, Listing.property_type).order_by(
+            *SORT_ORDER[ListingSort.recommended], Listing.id.asc()
+        )
+    )
+    for listing_id, property_type in rows:
+        counts[property_type] = counts.get(property_type, 0) + 1
+        cover_listing_ids.setdefault(property_type, listing_id)
+
+    covers: dict[int, str] = {}
+    photos = db.execute(
+        select(ListingPhoto.listing_id, ListingPhoto.url)
+        .where(ListingPhoto.listing_id.in_(cover_listing_ids.values()))
+        .order_by(ListingPhoto.position.asc(), ListingPhoto.id.asc())
+    )
+    for listing_id, url in photos:
+        covers.setdefault(listing_id, url)
+
+    return [
+        PropertyTypeSummary(
+            property_type=property_type,
+            listing_count=count,
+            cover_photo=covers.get(cover_listing_ids[property_type]),
+        )
+        for property_type, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    ]
 
 
 def suggest_locations(

@@ -1,0 +1,1 @@
+export const AMENITY_TAB_SKELETON_COUNT = 12;

@@ -1,17 +1,17 @@
 "use client";
 
-import type { MouseEvent } from "react";
 import Link from "next/link";
-import { Heart, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 import { t } from "@/common/i18n";
 import { listingRoute } from "@/constants/routes";
-import { useWishlistToggle } from "@/hooks/useWishlistToggle";
 import { cn } from "@/lib/utils";
 import type { ListingSummary } from "@/types/listing";
 import { formatPrice } from "@/utils/formatPrice";
 
+import GuestFavouriteBadge from "./GuestFavouriteBadge";
 import PhotoCarousel from "./PhotoCarousel";
+import WishlistButton from "./WishlistButton";
 
 type ListingCardProps = {
   listing: ListingSummary;
@@ -25,7 +25,6 @@ type ListingCardProps = {
 const RATING_DECIMALS = 2;
 
 const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingCardProps) => {
-  const toggleWishlist = useWishlistToggle();
   const location = t("listings.card.location", {
     city: listing.city,
     state: listing.state,
@@ -39,12 +38,6 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
 
   const cardHref = href ?? listingRoute(listing.id);
 
-  const handleWishlistClick = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    toggleWishlist(listing.id, listing.isWishlisted);
-  };
-
   return (
     <article data-listing-id={listing.id} className="group relative flex flex-col gap-3">
       <Link
@@ -55,25 +48,8 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
 
       <div className="relative">
         <PhotoCarousel photos={listing.photos} alt={listing.title} href={cardHref} isEager={isEager} />
-        <button
-          type="button"
-          onClick={handleWishlistClick}
-          aria-pressed={listing.isWishlisted}
-          aria-label={t(
-            listing.isWishlisted
-              ? "listings.card.removeFromWishlist"
-              : "listings.card.saveToWishlist",
-          )}
-          className="absolute right-3 top-3 z-20 transition-transform hover:scale-110"
-        >
-          <Heart
-            className={cn(
-              "size-6 stroke-on-photo stroke-2 drop-shadow-sm",
-              listing.isWishlisted ? "fill-brand" : "fill-photo-scrim/50",
-            )}
-            aria-hidden="true"
-          />
-        </button>
+        {listing.isGuestFavourite ? <GuestFavouriteBadge /> : null}
+        <WishlistButton listingId={listing.id} isWishlisted={listing.isWishlisted} />
       </div>
 
       <div className={cn("flex flex-col text-[15px] leading-5", bodyClassName)}>

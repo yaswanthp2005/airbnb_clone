@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { latLngBounds } from "leaflet";
+import { latLngBounds, type Map as LeafletMap } from "leaflet";
 import { MapContainer, useMap, ZoomControl } from "react-leaflet";
 
 import OsmTileLayer from "@/components/map/OsmTileLayer";
@@ -54,6 +54,26 @@ const InvalidateOnResize = () => {
   return null;
 };
 
+/**
+ * Leaflet 1.9 finishes a zoom animation on a 250ms timer that outlives `map.remove()` and then
+ * throws on the removed pane, e.g. when leaving the results right after a refit.
+ */
+const FinishZoomOnUnload = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    const finishZoom = () => {
+      (map as LeafletMap & { _animatingZoom: boolean })._animatingZoom = false;
+    };
+    map.on("unload", finishZoom);
+    return () => {
+      map.off("unload", finishZoom);
+    };
+  }, [map]);
+
+  return null;
+};
+
 const ListingsMap = ({ listings, resultsKey, hoveredListingId, listingHref }: ListingsMapProps) => {
   const [selectedListingId, setSelectedListingId] = useState<number | null>(null);
 
@@ -68,6 +88,7 @@ const ListingsMap = ({ listings, resultsKey, hoveredListingId, listingHref }: Li
       <ZoomControl position="topright" />
       <FitToResults listings={listings} resultsKey={resultsKey} />
       <InvalidateOnResize />
+      <FinishZoomOnUnload />
       {listings.map(listing => (
         <PricePin
           key={listing.id}

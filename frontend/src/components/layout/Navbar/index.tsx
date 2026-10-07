@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 
 import { HEADER_MORPH_TRANSITION_CLASS_NAME } from "./constants";
 import Logo from "./Logo";
-import StaysTab from "./StaysTab";
+import HeaderTabs from "./HeaderTabs";
 import UserMenu from "./UserMenu";
 
 type NavbarProps = {
@@ -58,7 +58,7 @@ const Navbar = ({
               !isExpanded && "pointer-events-none scale-50 opacity-0",
             )}
           >
-            <StaysTab />
+            <HeaderTabs />
           </div>
           {/* translate-y = distance between the h-20 row's centre and the h-16 bar's centre below it. */}
           <div
@@ -108,14 +108,17 @@ const Navbar = ({
         )}
       >
         {/* No overflow-hidden: it would clip the search panels that drop below the bar. */}
-        <div className="min-h-0">
+        {/* The collapsed bar still overflows below the header, so the whole subtree must ignore clicks. */}
+        <div
+          inert={!isExpanded}
+          className={cn("min-h-0 min-w-0", !isExpanded && "pointer-events-none")}
+        >
           <div className="pb-5">
             <div
-              inert={!isExpanded}
               className={cn(
                 "flex justify-center transition-[opacity,translate,scale]",
                 HEADER_MORPH_TRANSITION_CLASS_NAME,
-                !isExpanded && "pointer-events-none -translate-y-18 scale-x-45 scale-y-75 opacity-0",
+                !isExpanded && "-translate-y-18 scale-x-45 scale-y-75 opacity-0",
               )}
             >
               <Suspense fallback={<div className="h-16 w-[850px] max-w-full" />}>

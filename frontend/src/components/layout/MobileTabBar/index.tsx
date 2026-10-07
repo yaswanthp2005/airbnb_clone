@@ -12,7 +12,9 @@ import { cn } from "@/lib/utils";
 import { MOBILE_TABS, TAB_BAR_HIDDEN_PREFIXES } from "./constants";
 
 const isTabActive = (pathname: string, route: string) =>
-  route === routes.home ? pathname === route : pathname === route || pathname.startsWith(`${route}/`);
+  route === routes.home
+    ? pathname === route || pathname === routes.search
+    : pathname === route || pathname.startsWith(`${route}/`);
 
 /** Phone-only bottom navigation; slides away while scrolling down, back on scroll up. */
 const MobileTabBar = () => {

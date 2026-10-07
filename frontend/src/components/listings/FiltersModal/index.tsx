@@ -40,9 +40,7 @@ type FiltersPanelProps = Omit<FiltersModalProps, "open" | "onOpenChange"> & {
 
 const FiltersPanel = ({ filters, onApply, onClose, dragHandleProps }: FiltersPanelProps) => {
   const [draft, setDraft] = useState<ListingFilters>(filters);
-  const { data: options, isPending: isOptionsPending } = useListingFilterOptions(
-    filters.category,
-  );
+  const { data: options, isPending: isOptionsPending } = useListingFilterOptions();
 
   const debouncedDraft = useDebouncedValue(draft, FILTERS_PREVIEW_DEBOUNCE_MS);
   const { data: resultCount, isFetching: isCounting } = useListingsCount(debouncedDraft);

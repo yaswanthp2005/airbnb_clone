@@ -7,12 +7,14 @@ import { t } from "@/common/i18n";
 import PageContainer from "@/components/layout/PageContainer";
 import FiltersModal from "@/components/listings/FiltersModal";
 import { useListingFilters } from "@/components/listings/hooks/useListingFilters";
-import { countActiveFilters } from "@/components/listings/utils";
+import { countActiveFilters, toggleValue } from "@/components/listings/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 import { cn } from "@/lib/utils";
+import { useListingFilterOptions } from "@/queries/listings";
 
-import CategoryTab from "./CategoryTab";
-import { CATEGORIES, DEFAULT_CATEGORY_KEY } from "./constants";
-import { useHorizontalScroll } from "./hooks/useHorizontalScroll";
+import AmenityTab from "./AmenityTab";
+import { AMENITY_TAB_SKELETON_COUNT } from "./constants";
 
 type ScrollArrowProps = {
   direction: "left" | "right";
@@ -36,7 +38,7 @@ const ScrollArrow = ({ direction, isVisible, onClick }: ScrollArrowProps) => {
       <button
         type="button"
         tabIndex={isVisible ? 0 : -1}
-        aria-label={t(direction === "left" ? "categories.scrollLeft" : "categories.scrollRight")}
+        aria-label={t(direction === "left" ? "amenityBar.scrollLeft" : "amenityBar.scrollRight")}
         onClick={onClick}
         className={cn(
           "flex size-7 items-center justify-center rounded-full border border-hairline/80 bg-surface text-ink transition-shadow hover:shadow-pill-hover",
@@ -49,19 +51,16 @@ const ScrollArrow = ({ direction, isVisible, onClick }: ScrollArrowProps) => {
   );
 };
 
-const CategoryBar = () => {
+const AmenityBar = () => {
   const { filters, setFilters } = useListingFilters();
+  const { data: filterOptions, isPending } = useListingFilterOptions();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const activeKey = filters.category ?? DEFAULT_CATEGORY_KEY;
   const activeFilterCount = countActiveFilters(filters);
   const { ref, canScrollLeft, canScrollRight, scrollByStep } =
     useHorizontalScroll<HTMLDivElement>();
 
-  const handleSelect = (key: string) => {
-    setFilters({
-      ...filters,
-      category: key === DEFAULT_CATEGORY_KEY ? undefined : key,
-    });
+  const handleToggle = (amenityId: number) => {
+    setFilters({ ...filters, amenities: toggleValue(filters.amenities, amenityId) });
   };
 
   return (
@@ -75,18 +74,26 @@ const CategoryBar = () => {
           />
           <div
             ref={ref}
-            role="tablist"
-            aria-label={t("categories.label")}
+            role="group"
+            aria-label={t("amenityBar.label")}
+            aria-busy={isPending}
             className="scrollbar-none flex gap-6 overflow-x-auto md:gap-8"
           >
-            {CATEGORIES.map(category => (
-              <CategoryTab
-                key={category.key}
-                category={category}
-                isActive={category.key === activeKey}
-                onSelect={handleSelect}
-              />
-            ))}
+            {isPending
+              ? Array.from({ length: AMENITY_TAB_SKELETON_COUNT }, (_, index) => (
+                  <div key={index} className="flex shrink-0 flex-col items-center gap-2 pb-3 pt-1">
+                    <Skeleton className="size-6 rounded-md" />
+                    <Skeleton className="h-3 w-14" />
+                  </div>
+                ))
+              : filterOptions?.amenities.map(amenity => (
+                  <AmenityTab
+                    key={amenity.id}
+                    amenity={amenity}
+                    isActive={filters.amenities.includes(amenity.id)}
+                    onToggle={handleToggle}
+                  />
+                ))}
           </div>
           <ScrollArrow
             direction="right"
@@ -100,8 +107,8 @@ const CategoryBar = () => {
           onClick={() => setIsFiltersOpen(true)}
           aria-label={
             activeFilterCount > 0
-              ? t("categories.filtersApplied", { count: activeFilterCount })
-              : t("categories.filters")
+              ? t("amenityBar.filtersApplied", { count: activeFilterCount })
+              : t("amenityBar.filters")
           }
           className={cn(
             "relative mb-2 flex h-12 shrink-0 items-center gap-2 rounded-xl border px-4 text-xs font-semibold text-ink transition-colors hover:border-ink hover:bg-surface-muted",
@@ -109,7 +116,7 @@ const CategoryBar = () => {
           )}
         >
           <SlidersHorizontal className="size-4" aria-hidden="true" />
-          <span className="hidden md:inline">{t("categories.filters")}</span>
+          <span className="hidden md:inline">{t("amenityBar.filters")}</span>
           {activeFilterCount > 0 ? (
             <span
               aria-hidden="true"
@@ -131,4 +138,4 @@ const CategoryBar = () => {
   );
 };
 
-export default CategoryBar;
+export default AmenityBar;

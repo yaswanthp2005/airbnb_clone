@@ -6,13 +6,13 @@ from sqlalchemy.orm import Session
 from app.dependencies import get_db_session, get_optional_user
 from app.models.user import User
 from app.schemas.listing import (
-    FilterOptionsParams,
     ListingCardOut,
     ListingDetailResponse,
     ListingFilterOptionsResponse,
     ListingFilterParams,
     LocationSuggestionParams,
     LocationSuggestionsResponse,
+    PropertyTypeSummariesResponse,
     UnavailableDatesParams,
     UnavailableDatesResponse,
 )
@@ -23,6 +23,7 @@ from app.services.listing_service import (
     get_listing_detail,
     get_unavailable_dates,
     list_listings,
+    list_property_types,
     suggest_locations,
 )
 from app.services.review_service import list_listing_reviews
@@ -42,11 +43,13 @@ def index(
 
 
 @router.get("/filter-options", response_model=ListingFilterOptionsResponse)
-def filter_options(
-    params: Annotated[FilterOptionsParams, Query()],
-    db: Session = Depends(get_db_session),
-) -> ListingFilterOptionsResponse:
-    return ListingFilterOptionsResponse(data=get_filter_options(db, params.category))
+def filter_options(db: Session = Depends(get_db_session)) -> ListingFilterOptionsResponse:
+    return ListingFilterOptionsResponse(data=get_filter_options(db))
+
+
+@router.get("/property-types", response_model=PropertyTypeSummariesResponse)
+def property_types(db: Session = Depends(get_db_session)) -> PropertyTypeSummariesResponse:
+    return PropertyTypeSummariesResponse(data=list_property_types(db))
 
 
 @router.get("/locations", response_model=LocationSuggestionsResponse)

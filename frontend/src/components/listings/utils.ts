@@ -48,7 +48,6 @@ export const filtersFromSearchParams = (
   }
 
   return {
-    category: searchParams.get(LISTING_FILTER_PARAMS.category) ?? undefined,
     minPrice,
     maxPrice,
     propertyType: uniqueSorted(
@@ -78,7 +77,6 @@ export const filtersToQuery = (filters: ListingFilters) => ({
   children: filters.children,
   infants: filters.infants,
   pets: filters.pets,
-  category: filters.category,
   minPrice: filters.minPrice,
   maxPrice: filters.maxPrice,
   propertyType: uniqueSorted(filters.propertyType),
@@ -112,7 +110,7 @@ export const hasSearchCriteria = (filters: ListingFilters): boolean =>
       filters.pets,
   );
 
-/** Resets what the Filters modal controls, keeping category and the search bar's values. */
+/** Resets what the Filters modal controls, keeping the search bar's values. */
 export const clearModalFilters = (filters: ListingFilters): ListingFilters => ({
   ...filters,
   minPrice: undefined,
