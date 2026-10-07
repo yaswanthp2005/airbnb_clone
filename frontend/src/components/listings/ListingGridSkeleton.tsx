@@ -6,13 +6,17 @@ import ListingCardSkeleton from "./ListingCardSkeleton";
 
 type ListingGridSkeletonProps = {
   count?: number;
+  className?: string;
 };
 
-const ListingGridSkeleton = ({ count = DEFAULT_PAGE_SIZE }: ListingGridSkeletonProps) => (
+const ListingGridSkeleton = ({
+  count = DEFAULT_PAGE_SIZE,
+  className = LISTING_GRID_CLASS_NAME,
+}: ListingGridSkeletonProps) => (
   <div
     role="status"
     aria-label={t("home.listingsLoading")}
-    className={LISTING_GRID_CLASS_NAME}
+    className={className}
   >
     {Array.from({ length: count }, (_, index) => (
       <ListingCardSkeleton key={index} />

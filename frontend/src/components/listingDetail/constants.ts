@@ -66,11 +66,9 @@ export const PHOTO_GRID_SIZES = "(min-width: 768px) 50vw, 100vw";
 export const PHOTO_GRID_SMALL_SIZES = "(min-width: 768px) 25vw, 1px";
 export const GALLERY_PHOTO_SIZES = "(min-width: 768px) 768px, 100vw";
 
-export const OSM_EMBED_URL = "https://www.openstreetmap.org/export/embed.html";
-/** Half-width of the map's bounding box, in degrees. */
-export const MAP_BBOX_DELTA = 0.03;
-export const MAP_LAYER = "mapnik";
-export const MAP_COORDINATE_DECIMALS = 6;
+export const LOCATION_MAP_ZOOM = 13;
+/** Approximate area shown instead of the exact address (revealed after booking). */
+export const LOCATION_RADIUS_METERS = 1200;
 
 /** Content + booking card columns; below `lg` the card becomes the bottom bar. */
 export const DETAIL_COLUMNS_CLASS_NAME =

@@ -18,11 +18,13 @@ type ListingCardProps = {
   isEager?: boolean;
   /** Defaults to the plain listing route. */
   href?: string;
+  /** Extra classes for the text below the photos (e.g. padding inside a map popup). */
+  bodyClassName?: string;
 };
 
 const RATING_DECIMALS = 2;
 
-const ListingCard = ({ listing, isEager = false, href }: ListingCardProps) => {
+const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingCardProps) => {
   const toggleWishlist = useWishlistToggle();
   const location = t("listings.card.location", {
     city: listing.city,
@@ -42,7 +44,7 @@ const ListingCard = ({ listing, isEager = false, href }: ListingCardProps) => {
   };
 
   return (
-    <article className="group relative flex flex-col gap-3">
+    <article data-listing-id={listing.id} className="group relative flex flex-col gap-3">
       <Link
         href={href ?? listingRoute(listing.id)}
         aria-label={listing.title}
@@ -72,7 +74,7 @@ const ListingCard = ({ listing, isEager = false, href }: ListingCardProps) => {
         </button>
       </div>
 
-      <div className="flex flex-col text-[15px] leading-5">
+      <div className={cn("flex flex-col text-[15px] leading-5", bodyClassName)}>
         <div className="flex items-start justify-between gap-2">
           <h3 className="truncate font-semibold text-ink">{location}</h3>
           <span className="flex shrink-0 items-center gap-1 text-ink">

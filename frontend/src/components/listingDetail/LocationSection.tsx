@@ -1,55 +1,51 @@
-import { t } from "@/common/i18n";
-import type { ListingDetail } from "@/types/listing";
-import { buildUrl } from "@/utils/buildUrl";
+import { ExternalLink } from "lucide-react";
 
-import {
-  MAP_BBOX_DELTA,
-  MAP_COORDINATE_DECIMALS,
-  MAP_LAYER,
-  OSM_EMBED_URL,
-  SECTION_IDS,
-} from "./constants";
+import { t } from "@/common/i18n";
+import { OSM_SITE_URL } from "@/constants/map";
+import type { ListingDetail } from "@/types/listing";
+
+import { LOCATION_MAP_ZOOM, SECTION_IDS } from "./constants";
+import LocationMap from "./locationMap";
 
 type LocationSectionProps = {
   listing: Pick<ListingDetail, "city" | "state" | "country" | "latitude" | "longitude">;
 };
 
-const toCoordinate = (value: number) => value.toFixed(MAP_COORDINATE_DECIMALS);
-
-const mapEmbedUrl = (latitude: number, longitude: number) =>
-  buildUrl({
-    path: OSM_EMBED_URL,
-    query: {
-      bbox: [
-        longitude - MAP_BBOX_DELTA,
-        latitude - MAP_BBOX_DELTA,
-        longitude + MAP_BBOX_DELTA,
-        latitude + MAP_BBOX_DELTA,
-      ].map(toCoordinate),
-      layer: MAP_LAYER,
-      marker: [latitude, longitude].map(toCoordinate),
-    },
-  });
+/** OSM view centred on the area, without a marker, so the exact spot stays private. */
+const largerMapUrl = (latitude: number, longitude: number) =>
+  `${OSM_SITE_URL}#map=${LOCATION_MAP_ZOOM}/${latitude}/${longitude}`;
 
 const LocationSection = ({ listing }: LocationSectionProps) => (
   <section id={SECTION_IDS.location} className="border-t border-hairline py-12">
     <h2 className="text-[22px] font-semibold text-ink">{t("listingDetail.location.title")}</h2>
-    <div className="mt-6 h-[320px] overflow-hidden rounded-xl bg-surface-muted md:h-[480px]">
-      <iframe
-        title={t("listingDetail.location.mapTitle", { city: listing.city })}
-        src={mapEmbedUrl(listing.latitude, listing.longitude)}
-        loading="lazy"
-        className="size-full border-0"
-      />
+    <div
+      role="img"
+      aria-label={t("listingDetail.location.mapTitle", { city: listing.city })}
+      className="relative isolate mt-6 h-[320px] overflow-hidden rounded-xl bg-surface-muted md:h-[480px]"
+    >
+      <LocationMap latitude={listing.latitude} longitude={listing.longitude} />
     </div>
-    <p className="mt-6 text-base font-semibold text-ink">
-      {t("listingDetail.location.place", {
-        city: listing.city,
-        state: listing.state,
-        country: listing.country,
-      })}
-    </p>
-    <p className="mt-1 text-base text-ink-muted">{t("listingDetail.location.exactLocationNote")}</p>
+    <div className="mt-6 flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+      <div>
+        <p className="text-base font-semibold text-ink">
+          {t("listingDetail.location.place", {
+            city: listing.city,
+            state: listing.state,
+            country: listing.country,
+          })}
+        </p>
+        <p className="mt-1 text-base text-ink-muted">{t("listingDetail.location.exactLocationNote")}</p>
+      </div>
+      <a
+        href={largerMapUrl(listing.latitude, listing.longitude)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink underline underline-offset-4"
+      >
+        {t("listingDetail.location.viewLargerMap")}
+        <ExternalLink className="size-3.5" aria-hidden="true" />
+      </a>
+    </div>
   </section>
 );
 

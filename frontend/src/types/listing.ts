@@ -13,6 +13,8 @@ export type ListingSummary = {
   city: string;
   state: string;
   country: string;
+  latitude: number;
+  longitude: number;
   pricePerNight: number;
   bedrooms: number;
   beds: number;

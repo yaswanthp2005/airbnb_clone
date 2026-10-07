@@ -18,6 +18,8 @@ import { useScrollCollapse } from "@/hooks/useScrollCollapse";
 import { cn } from "@/lib/utils";
 
 const SCROLL_INTENT_EVENTS = ["wheel", "touchmove"] as const;
+/** Live header height, for sticky content below it (e.g. the explore map). */
+const HEADER_HEIGHT_CSS_VAR = "--app-header-height";
 const NARROW_ROUTE_PREFIXES = [LISTING_ROUTE_PREFIX, BOOK_ROUTE_PREFIX, BOOKING_ROUTE_PREFIX];
 
 const AppHeader = () => {
@@ -45,6 +47,19 @@ const AppHeader = () => {
     setActiveSearchSection(section);
   };
 
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) {
+      return;
+    }
+    const root = document.documentElement;
+    const observer = new ResizeObserver(() =>
+      root.style.setProperty(HEADER_HEIGHT_CSS_VAR, `${header.offsetHeight}px`),
+    );
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, [isHostingPage]);
+
   // Scroll *intent* (not `scroll`) so the header's own height change can't close it.
   useEffect(() => {
     if (activeSearchSection === null) {
@@ -66,7 +81,7 @@ const AppHeader = () => {
 
   if (isHostingPage) {
     return (
-      <header className="sticky top-0 z-40 border-b border-hairline bg-white">
+      <header ref={headerRef} className="sticky top-0 z-40 border-b border-hairline bg-white">
         <HostNavbar />
       </header>
     );

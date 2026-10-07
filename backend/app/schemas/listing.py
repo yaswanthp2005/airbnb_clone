@@ -117,6 +117,8 @@ class ListingCardOut(BaseModel):
     city: str
     state: str
     country: str
+    latitude: float
+    longitude: float
     price_per_night: int
     bedrooms: int
     beds: int
