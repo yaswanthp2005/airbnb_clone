@@ -60,6 +60,7 @@ def _upcoming_counts(db: Session, listing_ids: list[int]) -> dict[int, int]:
 def _to_host_listing(listing: Listing, upcoming_booking_count: int) -> HostListingOut:
     return HostListingOut(
         id=listing.id,
+        slug=listing.slug,
         title=listing.title,
         description=listing.description,
         property_type=listing.property_type,
@@ -242,6 +243,7 @@ def _to_host_booking(booking: Booking) -> HostBookingOut:
         id=booking.id,
         listing=HostBookingListingOut(
             id=listing.id,
+            slug=listing.slug,
             title=listing.title,
             city=listing.city,
             photo_url=listing.photos[0].url if listing.photos else None,

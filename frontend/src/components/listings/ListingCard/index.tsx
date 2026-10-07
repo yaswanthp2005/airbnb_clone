@@ -37,7 +37,7 @@ const ListingCard = ({ listing, isEager = false, href, bodyClassName }: ListingC
   const hasReviews = listing.reviewCount > 0;
   const rating = listing.ratingAvg.toFixed(RATING_DECIMALS);
 
-  const cardHref = href ?? listingRoute(listing.id);
+  const cardHref = href ?? listingRoute(listing.slug);
 
   return (
     <article data-listing-id={listing.id} className="group relative flex flex-col gap-3">

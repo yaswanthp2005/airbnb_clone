@@ -1,7 +1,8 @@
 "use client";
 
-import { divIcon } from "leaflet";
-import { Circle, MapContainer, Marker } from "react-leaflet";
+import { useEffect } from "react";
+import { divIcon, type Map as LeafletMap } from "leaflet";
+import { Circle, MapContainer, Marker, useMap, ZoomControl } from "react-leaflet";
 
 import OsmTileLayer from "@/components/map/OsmTileLayer";
 
@@ -22,28 +23,52 @@ const homeIcon = divIcon({
   html: `<span class="home-pin">${HOUSE_SVG}</span>`,
 });
 
-/** Non-interactive map: the guest only needs the neighbourhood, not to explore. */
+const FinishZoomOnUnload = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    const finishZoom = () => {
+      (map as LeafletMap & { _animatingZoom: boolean })._animatingZoom = false;
+    };
+    map.on("unload", finishZoom);
+    return () => {
+      map.off("unload", finishZoom);
+    };
+  }, [map]);
+
+  return null;
+};
+
+const InvalidateOnResize = () => {
+  const map = useMap();
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => map.invalidateSize());
+    observer.observe(map.getContainer());
+    return () => observer.disconnect();
+  }, [map]);
+
+  return null;
+};
+
 const LocationMap = ({ latitude, longitude }: LocationMapProps) => (
   <MapContainer
     center={[latitude, longitude]}
     zoom={LOCATION_MAP_ZOOM}
     zoomControl={false}
-    dragging={false}
-    scrollWheelZoom={false}
-    doubleClickZoom={false}
-    touchZoom={false}
-    boxZoom={false}
-    keyboard={false}
     className="size-full"
   >
     <OsmTileLayer />
+    <ZoomControl position="topright" />
+    <InvalidateOnResize />
+    <FinishZoomOnUnload />
     <Circle
       center={[latitude, longitude]}
       radius={LOCATION_RADIUS_METERS}
       interactive={false}
       className="location-radius"
     />
-    <Marker position={[latitude, longitude]} icon={homeIcon} interactive={false} keyboard={false} />
+    <Marker position={[latitude, longitude]} icon={homeIcon} />
   </MapContainer>
 );
 

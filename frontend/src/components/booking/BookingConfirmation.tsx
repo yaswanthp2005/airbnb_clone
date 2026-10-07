@@ -71,7 +71,7 @@ const ConfirmationContent = ({ booking }: { booking: Booking }) => {
       </p>
 
       <article className="mt-10 overflow-hidden rounded-xl border border-hairline">
-        <Link href={listingRoute(listing.id)} className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
+        <Link href={listingRoute(listing.slug)} className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
           <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg bg-surface-muted sm:w-40">
             {listing.photoUrl ? (
               <RemoteImage

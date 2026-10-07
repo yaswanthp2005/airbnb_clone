@@ -60,6 +60,7 @@ def _to_booking_out(booking: Booking, today: date) -> BookingOut:
         id=booking.id,
         listing=BookingListingOut(
             id=listing.id,
+            slug=listing.slug,
             title=listing.title,
             property_type=listing.property_type,
             city=listing.city,

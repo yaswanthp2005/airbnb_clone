@@ -219,8 +219,12 @@
     "passwordConfirmationPlaceholder": "Confirm password",
     "modal": {
       "openLabel": "Log in or sign up",
-      "loginTitle": "Log in",
-      "registerTitle": "Sign up",
+      "loginTitle": "Log in or sign up",
+      "registerTitle": "Log in or sign up",
+      "welcomeTitle": "Welcome to Airbnb",
+      "continueWithGoogle": "Continue with Google",
+      "continueWithApple": "Continue with Apple",
+      "or": "or",
       "switchToRegister": "Create an account",
       "switchToLogin": "Log in instead"
     },

@@ -51,7 +51,7 @@ const useInvalidateAfterBookingChange = () => {
     queryClient.setQueryData(queryKeys.bookings.detail(booking.id), booking);
     void queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all });
     void queryClient.invalidateQueries({
-      queryKey: queryKeys.listings.unavailableDates(booking.listing.id),
+      queryKey: queryKeys.listings.unavailableDates(booking.listing.slug),
     });
     void queryClient.invalidateQueries({
       queryKey: queryKeys.listings.all,
@@ -70,7 +70,8 @@ export const useCreateBooking = () => {
     onError: (error, input) => {
       if (isAxiosError(error) && error.response?.status === HTTP_STATUS.conflict) {
         void queryClient.invalidateQueries({
-          queryKey: queryKeys.listings.unavailableDates(input.listingId),
+          queryKey: queryKeys.listings.all,
+          predicate: query => query.queryKey.includes("unavailableDates"),
         });
       }
     },

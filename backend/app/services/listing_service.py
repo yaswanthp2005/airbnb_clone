@@ -179,6 +179,7 @@ def _is_guest_favourite(listing: Listing) -> bool:
 def to_listing_card(listing: Listing, is_wishlisted: bool) -> ListingCardOut:
     return ListingCardOut(
         id=listing.id,
+        slug=listing.slug,
         title=listing.title,
         property_type=listing.property_type,
         city=listing.city,
@@ -232,6 +233,15 @@ def get_listing_or_404(db: Session, listing_id: int, *options: ORMOption) -> Lis
     return listing
 
 
+def get_listing_by_slug_or_404(db: Session, slug: str, *options: ORMOption) -> Listing:
+    listing = db.scalar(select(Listing).where(Listing.slug == slug).options(*options))
+    if listing is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=LISTING_NOT_FOUND_MESSAGE
+        )
+    return listing
+
+
 def _host_out(db: Session, host: User) -> ListingHostOut:
     listing_count, review_count, rating_avg = db.execute(
         select(
@@ -267,11 +277,11 @@ def _rating_breakdown(db: Session, listing_id: int) -> list[RatingCount]:
 
 
 def get_listing_detail(
-    db: Session, listing_id: int, user: Optional[User]
+    db: Session, listing_slug: str, user: Optional[User]
 ) -> ListingDetailOut:
-    listing = get_listing_or_404(
+    listing = get_listing_by_slug_or_404(
         db,
-        listing_id,
+        listing_slug,
         selectinload(Listing.photos),
         selectinload(Listing.amenity_links).selectinload(ListingAmenity.amenity),
         selectinload(Listing.host),
@@ -281,6 +291,7 @@ def get_listing_detail(
     )
     return ListingDetailOut(
         id=listing.id,
+        slug=listing.slug,
         title=listing.title,
         description=listing.description,
         property_type=listing.property_type,
@@ -306,10 +317,11 @@ def get_listing_detail(
 
 
 def get_unavailable_dates(
-    db: Session, listing_id: int, params: UnavailableDatesParams
+    db: Session, listing_slug: str, params: UnavailableDatesParams
 ) -> list[date]:
     """Booked nights: a stay from check_in to check_out occupies every night before check_out."""
-    get_listing_or_404(db, listing_id)
+    listing = get_listing_by_slug_or_404(db, listing_slug)
+    listing_id = listing.id
     start = params.start_date or date.today()
     end = params.end_date or start + timedelta(days=DEFAULT_AVAILABILITY_WINDOW_DAYS)
 

@@ -1,6 +1,7 @@
 from app.models.amenity import Amenity
 from app.models.booking import Booking
 from app.models.destination import Destination
+from app.models import listing_events  # noqa: F401 — register slug hook
 from app.models.listing import Listing
 from app.models.listing_amenity import ListingAmenity
 from app.models.listing_photo import ListingPhoto

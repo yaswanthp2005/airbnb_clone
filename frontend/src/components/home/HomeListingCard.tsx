@@ -31,7 +31,7 @@ const HomeListingCard = ({ listing }: HomeListingCardProps) => {
       className={cn("relative flex shrink-0 snap-start flex-col gap-2", HOME_CARD_WIDTH_CLASS_NAME)}
     >
       <Link
-        href={listingRoute(listing.id)}
+        href={listingRoute(listing.slug)}
         {...LISTING_LINK_TARGET_PROPS}
         aria-label={title}
         className="group flex flex-col gap-2"
