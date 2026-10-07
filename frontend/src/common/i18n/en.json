@@ -10,7 +10,7 @@
   },
   "nav": {
     "stays": "Stays",
-    "hostYourHome": "Airbnb your home",
+    "becomeHost": "Become a host",
     "switchToHosting": "Switch to hosting",
     "switchToTraveling": "Switch to traveling",
     "languageAndRegion": "Choose a language and region",
@@ -105,7 +105,7 @@
       "disabilitySupport": "Disability support",
       "cancellationOptions": "Cancellation options",
       "neighbourhoodConcern": "Report neighbourhood concern",
-      "hostYourHome": "Airbnb your home",
+      "becomeHost": "Become a host",
       "airCoverForHosts": "AirCover for Hosts",
       "hostingResources": "Hosting resources",
       "communityForum": "Community forum",

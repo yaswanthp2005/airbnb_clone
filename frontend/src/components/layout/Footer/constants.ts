@@ -30,7 +30,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     titleKey: "footer.hosting",
     links: [
-      { labelKey: "footer.links.hostYourHome", href: routes.hosting },
+      { labelKey: "footer.links.becomeHost", href: routes.hosting },
       soon("footer.links.airCoverForHosts", "aircover-for-hosts"),
       soon("footer.links.hostingResources", "hosting-resources"),
       soon("footer.links.communityForum", "community-forum"),

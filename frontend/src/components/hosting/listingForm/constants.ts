@@ -1,7 +1,12 @@
 import {
   Building2,
+  Caravan,
   Castle,
+  Crown,
+  Globe,
+  Hotel,
   House,
+  HouseHeart,
   Landmark,
   Sailboat,
   Tent,
@@ -9,6 +14,7 @@ import {
   TreePine,
   Trees,
   Umbrella,
+  Warehouse,
   type LucideIcon,
 } from "lucide-react";
 
@@ -61,6 +67,12 @@ export const PROPERTY_TYPE_ICONS: Record<string, LucideIcon> = {
   Farmhouse: Tractor,
   "Heritage haveli": Landmark,
   Camping: Tent,
+  Cottage: HouseHeart,
+  Bungalow: Hotel,
+  Loft: Warehouse,
+  "Tiny home": Caravan,
+  Dome: Globe,
+  Palace: Crown,
 };
 export const FALLBACK_PROPERTY_TYPE_ICON = House;
 

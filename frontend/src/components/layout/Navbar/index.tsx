@@ -86,7 +86,7 @@ const Navbar = ({
               onClick={() => requireAuth(() => router.push(routes.hosting))}
               className={`${roundHoverClass} hidden whitespace-nowrap px-4 py-3 lg:inline-flex`}
             >
-              {t("nav.hostYourHome")}
+              {t("nav.becomeHost")}
             </button>
           )}
           <button
