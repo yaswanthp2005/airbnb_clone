@@ -3,6 +3,7 @@ export const STORAGE_KEYS = {
   authUserId: "authUserId",
   authUserName: "authUserName",
   authEmail: "authEmail",
+  hostMode: "hostMode",
 } as const;
 
 export const API_BASE_URL =
@@ -50,6 +51,12 @@ export const REVIEWS_PAGE_SIZE = 6;
 export const BOOKINGS_PAGE_SIZE = 12;
 export const WISHLIST_PAGE_SIZE = 20;
 export const BOOKINGS_STALE_TIME_MS = 60 * 1000;
+
+export const HOST_LISTINGS_PAGE_SIZE = 12;
+export const HOST_BOOKINGS_PAGE_SIZE = 12;
+export const HOST_STALE_TIME_MS = 60 * 1000;
+/** Listing options (property types, amenities) rarely change. */
+export const HOST_OPTIONS_STALE_TIME_MS = 30 * 60 * 1000;
 
 export const HTTP_STATUS = {
   unauthorized: 401,

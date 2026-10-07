@@ -1,5 +1,6 @@
 import type { AuthUser } from "@/types/auth";
 import { STORAGE_KEYS } from "@/constants";
+import { setHostMode } from "@/utils/hostMode";
 import {
   clearAuthStorage,
   getStorageItem,
@@ -30,4 +31,5 @@ export const readStoredAuthUser = (): AuthUser | null => {
 
 export const clearAuthSession = (): void => {
   clearAuthStorage();
+  setHostMode(false);
 };

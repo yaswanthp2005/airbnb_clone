@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback } from "react";
-import Image from "next/image";
 import { ChevronLeft } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +46,7 @@ const GalleryPhotos = ({ title, photos, startIndex }: GalleryPhotosProps) => {
             isWidePhoto(index) ? "col-span-2 aspect-[3/2]" : "aspect-square",
           )}
         >
-          <Image
+          <RemoteImage
             src={url}
             alt={t("listingDetail.photos.alt", {
               title,

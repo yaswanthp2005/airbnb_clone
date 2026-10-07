@@ -27,6 +27,19 @@ if TYPE_CHECKING:
     from app.models.wishlist_item import WishlistItem
 
 
+PROPERTY_TYPES: tuple[str, ...] = (
+    "Villa",
+    "Apartment",
+    "Cabin",
+    "Houseboat",
+    "Treehouse",
+    "Beachfront",
+    "Farmhouse",
+    "Heritage haveli",
+    "Camping",
+)
+
+
 class Listing(Base):
     __tablename__ = "listings"
     __table_args__ = (

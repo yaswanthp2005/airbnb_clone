@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import { pluralize } from "@/components/listingDetail/utils";
 import { formatDateRange } from "@/components/search/utils";
 import { bookingRoute } from "@/constants/routes";
@@ -24,7 +24,7 @@ const TripCard = ({ booking, onCancel }: TripCardProps) => {
       <Link href={bookingRoute(booking.id)} className="group block">
         <div className="relative aspect-[3/2] w-full overflow-hidden bg-surface-muted">
           {listing.photoUrl ? (
-            <Image
+            <RemoteImage
               src={listing.photoUrl}
               alt={listing.title}
               fill

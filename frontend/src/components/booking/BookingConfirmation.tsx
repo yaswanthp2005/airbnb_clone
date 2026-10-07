@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { CircleCheck, CircleX } from "lucide-react";
 
 import { t } from "@/common/i18n";
+import RemoteImage from "@/components/common/RemoteImage";
 import PageContainer from "@/components/layout/PageContainer";
 import PriceBreakdownList from "@/components/listingDetail/BookingCard/PriceBreakdownList";
 import { pluralize } from "@/components/listingDetail/utils";
@@ -78,7 +78,7 @@ const ConfirmationContent = ({ booking }: { booking: Booking }) => {
         <Link href={listingRoute(listing.id)} className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
           <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg bg-surface-muted sm:w-40">
             {listing.photoUrl ? (
-              <Image
+              <RemoteImage
                 src={listing.photoUrl}
                 alt={listing.title}
                 fill

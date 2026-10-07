@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 
 import CategoryBar from "@/components/layout/CategoryBar";
 import Navbar from "@/components/layout/Navbar";
+import HostNavbar from "@/components/layout/Navbar/HostNavbar";
 import type { SearchSection } from "@/components/search/constants";
 import {
   BOOK_ROUTE_PREFIX,
   BOOKING_ROUTE_PREFIX,
+  HOSTING_ROUTE_PREFIX,
   LISTING_ROUTE_PREFIX,
   routes,
 } from "@/constants/routes";
@@ -23,6 +25,8 @@ const AppHeader = () => {
   const isCollapsed = useScrollCollapse();
   const isHome = pathname === routes.home;
   const isNarrowPage = NARROW_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix));
+  const isHostingPage =
+    pathname === HOSTING_ROUTE_PREFIX || pathname.startsWith(`${HOSTING_ROUTE_PREFIX}/`);
   const headerRef = useRef<HTMLElement>(null);
   const [activeSearchSection, setActiveSearchSection] = useState<SearchSection | null>(null);
   const [isSearchForcedOpen, setIsSearchForcedOpen] = useState(false);
@@ -59,6 +63,14 @@ const AppHeader = () => {
         window.removeEventListener(type, handleScrollIntent),
       );
   }, [activeSearchSection, handleActiveSearchSectionChange]);
+
+  if (isHostingPage) {
+    return (
+      <header className="sticky top-0 z-40 border-b border-hairline bg-white">
+        <HostNavbar />
+      </header>
+    );
+  }
 
   return (
     <>

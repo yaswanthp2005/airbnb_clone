@@ -12,6 +12,7 @@ from app.core.init_db import init_database
 from app.routers.auth import router as auth_router
 from app.routers.bookings import router as bookings_router
 from app.routers.health import router as health_router
+from app.routers.host import router as host_router
 from app.routers.listings import router as listings_router
 from app.routers.wishlist import router as wishlist_router
 
@@ -42,6 +43,7 @@ app.include_router(auth_router, prefix="/api/v1")
 app.include_router(listings_router, prefix="/api/v1")
 app.include_router(bookings_router, prefix="/api/v1")
 app.include_router(wishlist_router, prefix="/api/v1")
+app.include_router(host_router, prefix="/api/v1")
 
 VALIDATION_FAILED_MESSAGE = "Validation failed"
 
@@ -51,6 +53,9 @@ def _validation_message(errors: list[dict]) -> str:
     first = errors[0] if errors else {}
     if first.get("type") == "value_error" and first.get("ctx", {}).get("error"):
         return str(first["ctx"]["error"])
+    field = next((part for part in reversed(first.get("loc", ())) if isinstance(part, str)), None)
+    if field and field != "body" and first.get("msg"):
+        return f"{field.replace('_', ' ').capitalize()}: {first['msg']}"
     return VALIDATION_FAILED_MESSAGE
 
 

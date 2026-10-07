@@ -17,10 +17,10 @@ from app.models import (
     User,
     WishlistItem,
 )
+from app.models.listing import PROPERTY_TYPES
 from app.seed.constants import (
     AMENITY_DEFINITIONS,
     DEMO_PASSWORD,
-    PROPERTY_TYPES,
     REVIEW_COMMENTS,
     SEED_PHOTO_URLS,
 )
