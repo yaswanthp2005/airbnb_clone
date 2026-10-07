@@ -10,6 +10,7 @@ from app.core.security import hash_password
 from app.models import (
     Amenity,
     Booking,
+    Destination,
     Listing,
     ListingAmenity,
     ListingPhoto,
@@ -24,9 +25,10 @@ from app.seed.constants import (
     DEMO_GUEST_EMAIL,
     DEMO_PASSWORD,
     REVIEW_COMMENTS,
-    SEED_PHOTO_URLS,
+    property_type_photo_urls,
+    unsplash_url,
 )
-from app.seed.data import CITY_SEEDS, SEED_USERS
+from app.seed.data import CITY_SEEDS, DESTINATION_SEEDS, SEED_USERS
 from app.services.pricing import quote_stay
 from app.services.review_service import refresh_listing_rating
 
@@ -155,7 +157,9 @@ def run_seed(db: Session) -> bool:
             db.add(listing)
             db.flush()
 
-            for position, url in enumerate(SEED_PHOTO_URLS):
+            # Types are assigned round-robin, so this counts earlier listings of the same type.
+            photo_rotation = listing_index // len(PROPERTY_TYPES)
+            for position, url in enumerate(property_type_photo_urls(property_type, photo_rotation)):
                 db.add(
                     ListingPhoto(listing_id=listing.id, url=url, position=position)
                 )
@@ -319,5 +323,23 @@ def run_seed(db: Session) -> bool:
         for listing in sample_listings:
             db.add(WishlistItem(user_id=guest.id, listing_id=listing.id))
 
+    db.commit()
+    return True
+
+
+def seed_destinations(db: Session) -> bool:
+    """Seed featured destinations when the table is empty (also for databases seeded before it existed)."""
+    if db.scalar(select(func.count()).select_from(Destination)):
+        return False
+    for position, seed in enumerate(DESTINATION_SEEDS):
+        db.add(
+            Destination(
+                city=seed.city,
+                state=seed.state,
+                tagline=seed.tagline,
+                image_url=unsplash_url(seed.photo_id),
+                position=position,
+            )
+        )
     db.commit()
     return True

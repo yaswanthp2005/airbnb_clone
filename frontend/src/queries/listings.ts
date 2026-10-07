@@ -13,6 +13,7 @@ import {
   getListings,
   getListingUnavailableDates,
   getLocationSuggestions,
+  getPropertyTypes,
   type GetUnavailableDatesParams,
 } from "@/api/listings";
 import {
@@ -65,13 +66,18 @@ export const useLocationSuggestions = (query: string, enabled = true) =>
     staleTime: LOCATION_SUGGESTIONS_STALE_TIME_MS,
   });
 
-export const useListingFilterOptions = (category?: string, enabled = true) =>
+export const useListingFilterOptions = () =>
   useQuery({
-    queryKey: queryKeys.listings.filterOptions(category),
-    queryFn: () => getListingFilterOptions(category),
-    enabled,
-    placeholderData: keepPreviousData,
+    queryKey: queryKeys.listings.filterOptions(),
+    queryFn: getListingFilterOptions,
     staleTime: LISTING_FILTER_OPTIONS_STALE_TIME_MS,
+  });
+
+export const usePropertyTypes = () =>
+  useQuery({
+    queryKey: queryKeys.listings.propertyTypes(),
+    queryFn: getPropertyTypes,
+    staleTime: LISTINGS_STALE_TIME_MS,
   });
 
 export const useListing = (listingId: number) =>

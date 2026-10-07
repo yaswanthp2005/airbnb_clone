@@ -22,6 +22,14 @@ class CitySeed:
     listing_count: int
 
 
+@dataclass(frozen=True)
+class DestinationSeed:
+    city: str
+    state: str
+    tagline: str
+    photo_id: str
+
+
 SEED_USERS: tuple[SeedUser, ...] = (
     SeedUser(
         name="Arjun Mehta",
@@ -85,4 +93,19 @@ CITY_SEEDS: tuple[CitySeed, ...] = (
     CitySeed("Rishikesh", "Uttarakhand", 30.0869, 78.2676, 3),
     CitySeed("Pondicherry", "Puducherry", 11.9416, 79.8083, 3),
     CitySeed("Darjeeling", "West Bengal", 27.0410, 88.2663, 2),
+)
+
+# Home page "Destinations for you", in display order.
+DESTINATION_SEEDS: tuple[DestinationSeed, ...] = (
+    DestinationSeed("Goa", "Goa", "For beach lovers", "1582972236019-ea4af5ffe587"),
+    DestinationSeed("Jaipur", "Rajasthan", "Top destination", "1524230507669-5ff97982bb5e"),
+    DestinationSeed("Mumbai", "Maharashtra", "For city lovers", "1595658658481-d53d3f999875"),
+    DestinationSeed("Bengaluru", "Karnataka", "For café hopping", "1596176530529-78163a4f7af2"),
+    DestinationSeed("Udaipur", "Rajasthan", "For lakeside palaces", "1589901164570-f9de6556e1c1"),
+    DestinationSeed("Manali", "Himachal Pradesh", "For nature lovers", "1597167231350-d057a45dc868"),
+    DestinationSeed("Kochi", "Kerala", "For backwaters and seafood", "1645680149311-5a00ae5a2b2a"),
+    DestinationSeed("Delhi", "Delhi", "For history buffs", "1587474260584-136574528ed5"),
+    DestinationSeed("Rishikesh", "Uttarakhand", "For yoga and rafting", "1712510817140-917938f92e5b"),
+    DestinationSeed("Pondicherry", "Puducherry", "For French Quarter charm", "1569157087866-f4a8e9250605"),
+    DestinationSeed("Darjeeling", "West Bengal", "For tea gardens and views", "1545324367-8997ba3b801e"),
 )

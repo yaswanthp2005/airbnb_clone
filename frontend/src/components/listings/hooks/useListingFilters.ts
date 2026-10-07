@@ -25,7 +25,7 @@ export const useListingFilters = () => {
   const setFilters = useCallback(
     (nextFilters: ListingFilters, { scrollToTop = false }: SetFiltersOptions = {}) => {
       router.push(
-        buildUrl({ path: routes.home, query: filtersToQuery(nextFilters) }),
+        buildUrl({ path: routes.search, query: filtersToQuery(nextFilters) }),
         { scroll: scrollToTop },
       );
     },

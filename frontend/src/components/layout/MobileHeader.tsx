@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 import Logo from "./Navbar/Logo";
 
 type MobileHeaderProps = {
-  isHome: boolean;
+  isExplore: boolean;
 };
 
-/** Phone header: the explore page gets the search pill; other pages a slim logo bar. */
-const MobileHeader = ({ isHome }: MobileHeaderProps) => (
-  <div className={cn("md:hidden", !isHome && "border-b border-hairline")}>
-    {isHome ? (
+/** Phone header: home and search results get the search pill; other pages get a slim logo bar. */
+const MobileHeader = ({ isExplore }: MobileHeaderProps) => (
+  <div className={cn("md:hidden", !isExplore && "border-b border-hairline")}>
+    {isExplore ? (
       <div className="px-6 pb-1 pt-4">
         <Suspense fallback={<div className="h-[50px] rounded-full bg-surface-muted" />}>
           <MobileSearch variant="pill" />

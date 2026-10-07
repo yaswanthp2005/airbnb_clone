@@ -10,14 +10,12 @@ import { MAP_SPLIT_MEDIA_QUERY } from "@/constants/map";
 import { listingRoute } from "@/constants/routes";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { cn } from "@/lib/utils";
 import { useListingsInfinite } from "@/queries/listings";
 import type { ListingSummary } from "@/types/listing";
 import { buildUrl } from "@/utils/buildUrl";
 
 import {
   EMPTY_LISTING_FILTERS,
-  LISTING_GRID_CLASS_NAME,
   LISTING_MAP_GRID_CLASS_NAME,
   NEXT_PAGE_SKELETON_COUNT,
 } from "./constants";
@@ -49,8 +47,6 @@ const ListingsFeed = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useListingsInfinite(filters);
-  // Browsing a category shows the map beside the cards; the default "Trending" view is list-only.
-  const isSplitView = Boolean(filters.category);
   // The layout is CSS-driven (no shift after hydration); this only avoids mounting a hidden map.
   const isMapVisible = useMediaQuery(MAP_SPLIT_MEDIA_QUERY);
   const [hoveredListingId, setHoveredListingId] = useState<number | null>(null);
@@ -65,7 +61,7 @@ const ListingsFeed = () => {
     (listing: ListingSummary) => buildUrl({ path: listingRoute(listing.id), query: listingQuery }),
     [listingQuery],
   );
-  const gridClassName = isSplitView ? LISTING_MAP_GRID_CLASS_NAME : LISTING_GRID_CLASS_NAME;
+  const total = data?.pages[0]?.total ?? 0;
 
   const sentinelRef = useIntersectionObserver<HTMLDivElement>({
     onIntersect: fetchNextPage,
@@ -75,7 +71,7 @@ const ListingsFeed = () => {
 
   const renderResults = (): ReactNode => {
     if (isPending) {
-      return <ListingGridSkeleton className={gridClassName} />;
+      return <ListingGridSkeleton className={LISTING_MAP_GRID_CLASS_NAME} />;
     }
 
     if (isError && listings.length === 0) {
@@ -90,10 +86,7 @@ const ListingsFeed = () => {
     }
 
     if (listings.length === 0) {
-      const hasAnyFilter =
-        countActiveFilters(filters) > 0 ||
-        Boolean(filters.category) ||
-        hasSearchCriteria(filters);
+      const hasAnyFilter = countActiveFilters(filters) > 0 || hasSearchCriteria(filters);
 
       return (
         <ListingsEmptyState
@@ -109,14 +102,22 @@ const ListingsFeed = () => {
 
     return (
       <>
-        <div className={gridClassName}>
+        <h1 className="mb-6 text-sm font-semibold text-ink">
+          {filters.location
+            ? t(total === 1 ? "listings.resultsInOne" : "listings.resultsInOther", {
+                count: total,
+                location: filters.location,
+              })
+            : t(total === 1 ? "listings.resultsOne" : "listings.resultsOther", { count: total })}
+        </h1>
+        <div className={LISTING_MAP_GRID_CLASS_NAME}>
           {listings.map((listing, index) => (
             <HoverableListingCard
               key={listing.id}
               listing={listing}
               href={listingHref(listing)}
               isEager={index < LISTING_EAGER_IMAGE_COUNT}
-              onHoverChange={isSplitView && isMapVisible ? setHoveredListingId : undefined}
+              onHoverChange={isMapVisible ? setHoveredListingId : undefined}
             />
           ))}
           {isFetchingNextPage
@@ -132,29 +133,23 @@ const ListingsFeed = () => {
   };
 
   return (
-    <div
-      className={cn(
-        isSplitView && "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-start lg:gap-8",
-      )}
-    >
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-start lg:gap-8">
       <div>{renderResults()}</div>
-      {isSplitView ? (
-        <aside
-          aria-label={t("listings.map.label")}
-          className="sticky isolate top-[calc(var(--app-header-height)+1rem)] hidden h-[calc(100dvh-var(--app-header-height)-2rem)] overflow-hidden rounded-xl border border-hairline lg:block"
-        >
-          {isMapVisible ? (
-            <ListingsMap
-              listings={listings}
-              resultsKey={filtersKey}
-              hoveredListingId={hoveredListingId}
-              listingHref={listingHref}
-            />
-          ) : (
-            <MapSkeleton />
-          )}
-        </aside>
-      ) : null}
+      <aside
+        aria-label={t("listings.map.label")}
+        className="sticky isolate top-[calc(var(--app-header-height)+1rem)] hidden h-[calc(100dvh-var(--app-header-height)-2rem)] overflow-hidden rounded-xl border border-hairline lg:block"
+      >
+        {isMapVisible ? (
+          <ListingsMap
+            listings={listings}
+            resultsKey={filtersKey}
+            hoveredListingId={hoveredListingId}
+            listingHref={listingHref}
+          />
+        ) : (
+          <MapSkeleton />
+        )}
+      </aside>
     </div>
   );
 };

@@ -38,7 +38,6 @@ def _split_csv(value: Any) -> Any:
 
 
 class ListingFilterParams(BaseModel):
-    category: Optional[str] = Field(default=None, max_length=40)
     min_price: Optional[int] = Field(default=None, ge=0)
     max_price: Optional[int] = Field(default=None, ge=0)
     property_type: list[str] = Field(default_factory=list)
@@ -106,8 +105,14 @@ class LocationSuggestionsResponse(BaseModel):
     data: list[LocationSuggestion]
 
 
-class FilterOptionsParams(BaseModel):
-    category: Optional[str] = Field(default=None, max_length=40)
+class PropertyTypeSummary(BaseModel):
+    property_type: str
+    listing_count: int
+    cover_photo: Optional[str] = None
+
+
+class PropertyTypeSummariesResponse(BaseModel):
+    data: list[PropertyTypeSummary]
 
 
 class ListingCardOut(BaseModel):
@@ -125,6 +130,7 @@ class ListingCardOut(BaseModel):
     max_guests: int
     rating_avg: float
     review_count: int
+    is_guest_favourite: bool
     photos: list[str]
     is_wishlisted: bool
 

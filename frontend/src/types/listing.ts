@@ -21,8 +21,15 @@ export type ListingSummary = {
   maxGuests: number;
   ratingAvg: number;
   reviewCount: number;
+  isGuestFavourite: boolean;
   photos: string[];
   isWishlisted: boolean;
+};
+
+export type PropertyTypeSummary = {
+  propertyType: string;
+  listingCount: number;
+  coverPhoto?: string | null;
 };
 
 export type ListingSort =
@@ -33,7 +40,6 @@ export type ListingSort =
   | "newest";
 
 export type ListingFilters = {
-  category?: string;
   minPrice?: number;
   maxPrice?: number;
   propertyType: string[];
