@@ -60,8 +60,8 @@ export const formValuesToInput = (values: ListingFormValues): HostListingInput =
   city: values.city.trim(),
   state: values.state.trim(),
   country: values.country.trim(),
-  latitude: toNumberOrNull(values.latitude),
-  longitude: toNumberOrNull(values.longitude),
+  latitude: Number(values.latitude),
+  longitude: Number(values.longitude),
   maxGuests: values.maxGuests,
   bedrooms: values.bedrooms,
   beds: values.beds,
@@ -125,26 +125,21 @@ export const validateStep = (
       return compact({
         propertyType: values.propertyType ? undefined : t("hosting.form.errors.propertyType"),
       });
-    case "location": {
-      const hasLatitude = values.latitude.trim() !== "";
-      const hasLongitude = values.longitude.trim() !== "";
-      const pairError =
-        hasLatitude !== hasLongitude ? t("hosting.form.errors.coordinatesPair") : undefined;
+    case "location":
       return compact({
         address: textError(values.address, LISTING_LIMITS.addressMin),
         city: textError(values.city, LISTING_LIMITS.placeMin),
         state: textError(values.state, LISTING_LIMITS.placeMin),
         country: textError(values.country, LISTING_LIMITS.placeMin),
         latitude:
-          pairError ??
-          (hasLatitude
-            ? coordinateError(values.latitude, COORDINATE_LIMITS.latitude, "latitude")
-            : undefined),
-        longitude: hasLongitude
-          ? coordinateError(values.longitude, COORDINATE_LIMITS.longitude, "longitude")
-          : undefined,
+          values.latitude.trim() === ""
+            ? t("hosting.form.errors.required")
+            : coordinateError(values.latitude, COORDINATE_LIMITS.latitude, "latitude"),
+        longitude:
+          values.longitude.trim() === ""
+            ? t("hosting.form.errors.required")
+            : coordinateError(values.longitude, COORDINATE_LIMITS.longitude, "longitude"),
       });
-    }
     case "basics":
       return compact(
         Object.fromEntries(

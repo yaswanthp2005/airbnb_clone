@@ -4,7 +4,7 @@ from datetime import date, datetime
 from typing import Any, Optional
 from urllib.parse import urlparse
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator
 
 from app.models.listing import PROPERTY_TYPES
 from app.schemas.booking import BookingStatus, BookingTab
@@ -37,7 +37,7 @@ def _strip(value: Any) -> Any:
 
 
 class HostListingIn(BaseModel):
-    """Create / full replace (PUT). Coordinates are optional; the service can place the city."""
+    """Create / full replace (PUT)."""
 
     title: str = Field(min_length=TITLE_MIN_LENGTH, max_length=TITLE_MAX_LENGTH)
     description: str = Field(min_length=DESCRIPTION_MIN_LENGTH, max_length=DESCRIPTION_MAX_LENGTH)
@@ -46,8 +46,8 @@ class HostListingIn(BaseModel):
     city: str = Field(min_length=PLACE_MIN_LENGTH, max_length=PLACE_MAX_LENGTH)
     state: str = Field(min_length=PLACE_MIN_LENGTH, max_length=PLACE_MAX_LENGTH)
     country: str = Field(default="India", min_length=PLACE_MIN_LENGTH, max_length=PLACE_MAX_LENGTH)
-    latitude: Optional[float] = Field(default=None, ge=-90, le=90)
-    longitude: Optional[float] = Field(default=None, ge=-180, le=180)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
     price_per_night: int = Field(ge=MIN_PRICE_PER_NIGHT, le=MAX_PRICE_PER_NIGHT)
     cleaning_fee: int = Field(default=0, ge=0, le=MAX_CLEANING_FEE)
     max_guests: int = Field(ge=1, le=MAX_LISTING_GUESTS)
@@ -89,12 +89,6 @@ class HostListingIn(BaseModel):
     @classmethod
     def dedupe_amenities(cls, value: list[int]) -> list[int]:
         return list(dict.fromkeys(value))
-
-    @model_validator(mode="after")
-    def check_coordinates(self) -> "HostListingIn":
-        if (self.latitude is None) != (self.longitude is None):
-            raise ValueError("Latitude and longitude must be provided together")
-        return self
 
 
 class HostListingOut(BaseModel):
