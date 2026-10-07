@@ -136,7 +136,8 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    /* Hash links (e.g. `#reviews`) land below the sticky h-20 header. */
+    @apply scroll-pt-20 font-sans;
   }
 }
 

@@ -15,11 +15,12 @@ import TripCard from "./TripCard";
 type TripsListProps = {
   tab: BookingTab;
   onCancel: (booking: Booking) => void;
+  onReview: (booking: Booking) => void;
 };
 
 const GRID_CLASS_NAME = "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
 
-const TripsList = ({ tab, onCancel }: TripsListProps) => {
+const TripsList = ({ tab, onCancel, onReview }: TripsListProps) => {
   const { data, isPending, isError, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useMyBookingsInfinite(tab);
 
@@ -75,7 +76,7 @@ const TripsList = ({ tab, onCancel }: TripsListProps) => {
       <ul className={GRID_CLASS_NAME}>
         {bookings.map(booking => (
           <li key={booking.id} className="flex">
-            <TripCard booking={booking} onCancel={onCancel} />
+            <TripCard booking={booking} onCancel={onCancel} onReview={onReview} />
           </li>
         ))}
       </ul>

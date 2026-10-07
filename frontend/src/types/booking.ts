@@ -2,6 +2,12 @@ export type BookingStatus = "confirmed" | "cancelled";
 
 export type BookingTab = "upcoming" | "past" | "cancelled";
 
+/** The guest's own review of a stay. */
+export type BookingReview = {
+  id: number;
+  rating: number;
+};
+
 export type BookingListing = {
   id: number;
   title: string;
@@ -28,6 +34,9 @@ export type Booking = {
   totalPrice: number;
   status: BookingStatus;
   canCancel: boolean;
+  /** Stay is over and not reviewed yet. */
+  canReview: boolean;
+  review: BookingReview | null;
   createdAt: string;
 };
 

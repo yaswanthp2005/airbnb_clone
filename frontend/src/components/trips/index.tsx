@@ -9,11 +9,13 @@ import type { Booking, BookingTab } from "@/types/booking";
 
 import CancelTripDialog from "./CancelTripDialog";
 import { DEFAULT_TRIP_TAB, TRIP_TABS } from "./constants";
+import ReviewDialog from "./ReviewDialog";
 import TripsList from "./TripsList";
 
 const Trips = () => {
   const [tab, setTab] = useState<BookingTab>(DEFAULT_TRIP_TAB);
   const [bookingToCancel, setBookingToCancel] = useState<Booking | null>(null);
+  const [bookingToReview, setBookingToReview] = useState<Booking | null>(null);
 
   return (
     <PageContainer className="pb-16 pt-8 md:pt-12">
@@ -32,11 +34,12 @@ const Trips = () => {
         </TabsList>
         {TRIP_TABS.map(value => (
           <TabsContent key={value} value={value}>
-            <TripsList tab={value} onCancel={setBookingToCancel} />
+            <TripsList tab={value} onCancel={setBookingToCancel} onReview={setBookingToReview} />
           </TabsContent>
         ))}
       </Tabs>
       <CancelTripDialog booking={bookingToCancel} onClose={() => setBookingToCancel(null)} />
+      <ReviewDialog booking={bookingToReview} onClose={() => setBookingToReview(null)} />
     </PageContainer>
   );
 };

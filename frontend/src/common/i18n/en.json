@@ -250,6 +250,32 @@
       "keep": "Keep reservation",
       "confirm": "Cancel reservation",
       "cancelling": "Cancelling…"
+    },
+    "leaveReview": "Leave a review",
+    "yourRating": "Your rating",
+    "ratedLabel": "You rated this stay {{rating}} out of 5",
+    "seeReview": "See it on the listing",
+    "reviewDialog": {
+      "title": "How was your stay?",
+      "description": "{{title}} · {{dates}}",
+      "ratingLabel": "Overall rating",
+      "ratings": {
+        "1": "Terrible",
+        "2": "Poor",
+        "3": "Okay",
+        "4": "Good",
+        "5": "Excellent"
+      },
+      "starOne": "{{count}} star",
+      "starOther": "{{count}} stars",
+      "commentLabel": "Tell future guests about your stay",
+      "commentPlaceholder": "What did you love? Anything the host could do better?",
+      "characterCount": "{{count}} / {{max}}",
+      "ratingRequired": "Choose a star rating.",
+      "commentTooShort": "Write at least {{min}} characters.",
+      "cancel": "Cancel",
+      "submit": "Post review",
+      "submitting": "Posting…"
     }
   },
   "hosting": {

@@ -26,6 +26,7 @@ from app.seed.constants import (
 )
 from app.seed.data import CITY_SEEDS, SEED_USERS
 from app.services.pricing import quote_stay
+from app.services.review_service import refresh_listing_rating
 
 REVIEW_POSTED_HOUR = 10
 RNG = random.Random(42)
@@ -167,7 +168,6 @@ def run_seed(db: Session) -> None:
 
     for idx, listing in enumerate(listings):
         review_count = RNG.randint(4, 12)
-        ratings: list[int] = []
 
         for review_idx in range(review_count):
             guest = booking_guests[review_idx % len(booking_guests)]
@@ -197,7 +197,6 @@ def run_seed(db: Session) -> None:
                 population=[3, 4, 4, 4, 5, 5, 5],
                 k=1,
             )[0]
-            ratings.append(rating)
 
             db.add(
                 Review(
@@ -213,9 +212,8 @@ def run_seed(db: Session) -> None:
                     ),
                 )
             )
-        if ratings:
-            listing.review_count = len(ratings)
-            listing.rating_avg = Decimal(str(round(sum(ratings) / len(ratings), 2)))
+        db.flush()
+        refresh_listing_rating(db, listing)
 
         if idx == 0:
             nights = 3

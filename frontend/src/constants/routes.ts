@@ -58,6 +58,7 @@ export const apiRoutes = {
   bookingCancel: "/bookings/:id/cancel",
   wishlist: "/wishlist",
   wishlistItem: "/wishlist/:id",
+  reviews: "/reviews",
   hostListings: "/host/listings",
   hostListing: "/host/listings/:id",
   hostBookings: "/host/bookings",
